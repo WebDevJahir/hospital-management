@@ -1,0 +1,9 @@
+{
+    "Admin": true,
+    "Patient": true,
+    "Monitoring": true,
+    "Lab": true,
+    "Accounts": true,
+    "Report": true,
+    "Communication": true
+}

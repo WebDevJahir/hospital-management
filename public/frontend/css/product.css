@@ -1,0 +1,11 @@
+.card:hover {
+    -webkit-box-shadow: 0 4px 15px rgba(153, 153, 153, 0.3);
+    box-shadow: 0 4px 15px rgba(153, 153, 153, 0.3);
+    -webkit-transition: .3s;
+    transition: .3s
+}
+
+/*
+     quantity field css
+     Author:  Murtaja Ahmed Noyeem;
+*/

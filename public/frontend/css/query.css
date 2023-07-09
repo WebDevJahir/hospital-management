@@ -1,0 +1,423 @@
+@media (min-width: 1200px) {
+  .nav-area ul .sub-menu-another {
+    width: 985px;
+  }
+}
+@media only screen and (max-width: 1200px) {
+  #product .prod-main-desk-row {
+    flex-direction: column;
+  }
+
+  #product .xzoom-container {
+    display: none;
+  }
+  #product .prod-main-photo-content {
+    display: block;
+  }
+}
+@media only screen and (max-width: 992px) {
+  .shopping-cart-main .shopping-cart-content-box {
+    flex-direction: column;
+  }
+  #categoryArea .category-m-cont > .row .ca-mbl-categ-main-col {
+    display: none;
+  }
+  #categoryArea .category-extra-options {
+    display: none;
+  }
+  #product .prod-main-desk-row-col--2 {
+    padding: 25px 0;
+  }
+  #product .p-d-m-main .col-8 {
+    margin: 0 auto;
+    /* text-align: center; */
+  }
+
+  .review-ratings-section .container > .row div[class*='col-'] {
+    display: none;
+  }
+  .review-ratings-section .review-ratings__content {
+    flex-direction: column;
+  }
+  .share-reactions-btn-content .share-reactions-content {
+    flex-direction: column;
+    justify-content: center;
+  }
+  .share-reactions-content .copy-fl-item {
+    margin-top: 10px;
+  }
+  .food-banner-section .food-banner-form-box .form-row-box {
+    flex-direction: column;
+  }
+  .sell-more .category-grocery-main-img {
+    display: none;
+  }
+  .sell-more .category-grocery-mbl-img {
+    background-image: url('../img/categ-groc-img-1.png');
+    width: 93.6vw;
+    height: 24vw;
+    background-position: center;
+    background-size: cover;
+  }
+  .sell-more .category-grocery-mbl-img a:link,
+  .sell-more .category-grocery-mbl-img a:visited {
+    font-size: 15px;
+    padding: 3px 15px;
+  }
+  .sell-more .categ-grocery-prod-content-box .categ-groc-row {
+    flex-direction: column;
+    border-radius: 5px;
+  }
+  .category-different-sticky .category-different-item-box,
+  .category-different-sticky .category-different-newsfeed-link {
+    display: none;
+  }
+  .newsfeed-content-info {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  body {
+    margin-bottom: 62px;
+  }
+  #product .quantity-fn {
+    display: inline-block;
+  }
+  #product .p-d-m-main .form-group-quant {
+    text-align: center;
+  }
+  .sell-more-content-box .grocery-advertise-content {
+    height: 150px;
+    margin-bottom: 70px;
+  }
+  .career-banner-content-box .row div[class*='col-'] {
+    margin-bottom: 15px;
+  }
+  .career-main-job-content-box .job-cont-head {
+    flex-direction: column;
+  }
+  .banner-grocery .slider__carousel--img img {
+    height: 100%;
+  }
+  .sell-more .sell-more-img {
+    height: 100%;
+  }
+
+  .top-brands-home .top-brands-hm-content-box a:link,
+  .top-brands-home .top-brands-hm-content-box a:visited {
+    width: 130px;
+    height: 130px;
+  }
+  .top-brands-home .tp-br-hm-cont-carou a i {
+    font-size: 30px;
+    width: 80px;
+    height: 80px;
+    padding-top: 26px;
+  }
+  .top-brands-home .top-brand-hm-img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .vendor-section-content-main {
+    display: none;
+  }
+  .vend-sec-cont-main-mbl {
+    display: block;
+  }
+  #categoryArea
+    .carousel-content-item
+    .slider__carousel
+    .slider__carousel--img
+    img {
+    height: 25rem;
+    border-radius: 12px;
+  }
+  .deals-anoth-mbl-nav-menu,
+  .preorder-home-page--mbl {
+    display: block;
+  }
+  .sale-heading-area {
+    padding: 10px 0;
+  }
+  .mbl-categories-menu .nav-link {
+    font-size: 16px;
+  }
+  #searchbar,
+  #categoryArea .row .ca-mbl-categ-main-col,
+  .category-different-sticky,
+  .diff-category {
+    display: none;
+  }
+
+  #categoryArea .row .ca-mbl-caro-main-ban {
+    margin: 0 auto;
+  }
+
+  #categoryArea::before,
+  #categoryArea::after {
+    display: none;
+  }
+  .category-different-sticky.sticky-top,
+  .preorder-home-page-main {
+    display: none;
+  }
+  .searchbar-mbl-section,
+  .deals-offer-mbl-box,
+  .mbl-menu-content-box,
+  .mbl-categories-menu,
+  .diff-categ-fo-mbl {
+    display: block;
+  }
+  .career-content-banner .career-banner-form-box .col-jobs-se-box-mbl {
+    text-align: right;
+  }
+  .popular-restaurant-section .popular-rest-disc-voucher p {
+    font-size: 8px;
+  }
+  .sticky-ch,
+  .back-ch-place {
+    display: none;
+  }
+  .place-order-ch {
+    justify-content: center;
+  }
+  .checkout-section .shipment-area .sh-table {
+    display: none;
+  }
+  .checkout-section .td-mbl-area-m-prod {
+    display: block;
+  }
+  .shopping-cart-main .cart-prod-gift .cart-prod-fr-gf {
+    display: none;
+  }
+  /* #product .product-another-info {
+    display: none;
+  } */
+  .review-ratings-section .customer-all-imgs-link,
+  .review-ratings-section .read-reviews-divider .heading-read-reviews,
+  .heading-review-customer {
+    text-align: center;
+  }
+  .review-ratings-section .read-reviews-divider .read-reviews-item {
+    justify-content: center;
+  }
+  #product .container > .row {
+    margin-right: -15px !important;
+    margin-left: -15px !important;
+  }
+  #relatedCategory .related-categ-features-col,
+  .vendor-product-profile .row > .col-md-2 {
+    display: none;
+  }
+  .vendor-product-profile .row > .col-md-10 {
+    margin: 0 auto;
+  }
+
+  .category-different-sticky.sticky-top {
+    top: 152px;
+  }
+
+  .nav-link-item-name-main {
+    display: none;
+  }
+
+  .nav-link-item-icon-mbl {
+    display: block;
+  }
+
+  .back-scroll-btn,
+  .side-nav-main {
+    display: none;
+  }
+
+  .footer .footer-down-link,
+  .footer .footer__foot--text {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .explore-opportunities-section .text-explore-sub {
+    padding: 0;
+  }
+  .explore-opportunities-section .explore-sub-text-cont {
+    padding: 0;
+  }
+  .explore-opportunities-section .explore-main-col {
+    padding: 0;
+  }
+
+  .seller-learn-heading {
+    text-align: center;
+  }
+  .seller-learn-more .learn-more-seller-main,
+  .seller-learn-more .additional-seller-link {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .banner-seller-section .banner-seller-content-box .banner-seller-header {
+    font-size: 30px;
+  }
+
+  .food-banner-section .food-banner-content-box .food-banner-main-text {
+    font-size: 28px;
+  }
+  .food-banner-section .food-banner-content-box .food-banner-small-text {
+    font-size: 11px;
+  }
+  .people-recent-category .browsing-history {
+    flex-wrap: wrap;
+  }
+
+  #product .review,
+  #product .brand,
+  #product .sold-info,
+  #product .ratings-response {
+    flex-direction: column;
+  }
+
+  #product .review div,
+  #product .brand div {
+    display: none;
+  }
+
+  #product {
+    background-color: #fff;
+  }
+
+  #product .container > .row {
+    margin-right: -15px !important;
+    margin-left: -15px !important;
+  }
+
+  .carousel-inner img {
+    height: 100%;
+  }
+
+  .owl-carousel .owl-nav button.owl-next,
+  .owl-carousel .owl-nav button.owl-prev {
+    display: none;
+  }
+
+  #searchbar .searchbar-for-mobile {
+    display: block;
+  }
+
+  #searchbar .searchbar-for-desk {
+    display: none;
+  }
+
+  #searchbar .header-shopping-car-img img {
+    display: none;
+  }
+  #collection .shadow-md span img:nth-child(2),
+  #collection .shadow-md span img:nth-child(3) {
+    display: none;
+  }
+
+  .im-app {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  h1 {
+    font-size: 28px !important;
+    font-weight: bold !important;
+  }
+  .h-mb-area-naming {
+    display: block;
+  }
+  h2 {
+    font-size: 16px !important;
+    font-weight: bold !important;
+  }
+
+  h3 {
+    font-size: 15px !important;
+    font-weight: bold !important;
+  }
+
+  h4 {
+    font-size: 14px !important;
+    font-weight: bold !important;
+  }
+
+  #hospice-mall .thumb-wrapper .img-box img {
+    width: 122px;
+    height: 122px;
+  }
+  #flash-sale .thumb-wrapper img {
+    width: 115px;
+    height: 115px;
+  }
+
+  .categories-all .all-categories-product-col a img {
+    width: 122px;
+    height: 122px;
+  }
+
+  button {
+    font-size: 12px !important;
+  }
+  .collection-fo-mbl {
+    display: block;
+  }
+  .collection-fo-lg {
+    display: none;
+  }
+
+  .food-banner-section .btn-find-rest {
+    margin-top: 10px;
+  }
+  .item-price {
+    display: none;
+  }
+  .item-price-mbl {
+    display: flex;
+  }
+
+  #flash-sale .thumb-wrapper .thumb-content h6 {
+    display: none;
+  }
+
+  #flash-sale .thumb-wrapper .item-mbl-price-d {
+    display: block;
+  }
+
+  #categoryArea
+    .carousel-content-item
+    .slider__carousel
+    .slider__carousel--img
+    img {
+    height: 15rem;
+    border-radius: 12px;
+  }
+  .mbl-categories-menu .nav-link {
+    font-size: 11px;
+  }
+}
+
+@media only screen and (max-width: 448px) {
+  .related-category-sorting .related-category-row {
+    flex-direction: column;
+    justify-content: center;
+  }
+  #product .product-get-coupons {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {
+    padding-top: 15px;
+  }
+  .sidenav a {
+    font-size: 18px;
+  }
+}
