@@ -6,20 +6,20 @@ use DB;
 use App\Event;
 use Exception;
 
+use App\UserRole;
 use App\Models\User;
 use App\Http\Requests;
-use App\UserRole;
-use App\UserPermission;
 use App\ForgetPassword;
+use App\UserPermission;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Nahid\SslWSms\Facades\Sms;
-use Validator, Redirect, Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
 
 
 class AuthController extends Controller
@@ -117,18 +117,14 @@ class AuthController extends Controller
     return redirect()->back()->withErrors(['log_in' => ['Username or password error.']]);
   }
 
-
-
-
   public function dashboard()
   {
 
     if (Auth::check()) {
 
-      $events = Event::get();
-      return view('dashboard.dashboard', compact('events'));
+      return view('dashboard.dashboard');
     }
-    return Redirect::to("login")->withErrors(['log_in' => ['Opps! You do not have access']]);
+    return Redirect::to("admin-login")->withErrors(['log_in' => ['Opps! You do not have access']]);
   }
 
   public function logout()
@@ -140,15 +136,8 @@ class AuthController extends Controller
     } else {
       Session::flush();
       Auth::logout();
-      return Redirect('admin');
+      return Redirect('admin-login');
     }
-  }
-
-  public function userLogout()
-  {
-    Session::flush();
-    Auth::logout();
-    return Redirect('user');
   }
 
   public function postRegistration(Request $request)
