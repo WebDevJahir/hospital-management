@@ -1,0 +1,11 @@
+.custom-group-text {
+    border: 1px solid #1449ff !important;
+    background: #2091d9 !important;
+    color: white !important;
+}
+
+.icon-btn .btn {
+    padding: 3px 8px;
+    line-height: 16px;
+    font-size: 10px;
+}

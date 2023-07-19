@@ -169,7 +169,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         \Chatify\ChatifyServiceProvider::class,
-        \Meneses\LaravelMpdf\LaravelMpdfServiceProvider::class
+        
     ])->toArray(),
 
     /*
@@ -186,7 +186,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'Chatify' => Chatify\Facades\ChatifyMessenger::class,
-        'PDF' => Meneses\LaravelMpdf\Facades\LaravelMpdf::class
+       
     ])->toArray(),
 
 ];

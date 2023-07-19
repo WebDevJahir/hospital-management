@@ -12,39 +12,23 @@
     <link rel="shortcut icon" href="{{ asset('/assets/img/logo.png') }}" />
     <!-- Title -->
     <title>@yield('title')</title>
-    <!-- *************
-   ************ Common Css Files *************
-  ************ -->
-    <!-- Bootstrap css -->
-    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
 
-    <!--Select Tool-->
-    <link rel="stylesheet" href="{{ asset('assets/vendor/bs-select/bs-select.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}" />
+
     <!-- Main css -->
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
     <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" data-auto-replace-svg="nest"></script>
     <!-- Icomoon Font Icons css -->
     <link rel="stylesheet" href="{{ asset('assets/fonts/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/lightbox.css') }}">
-
-    <!-- *************
-   ************ Vendor Css Files *************
-  ************ -->
-    <!-- DateRange css -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/daterange/daterange.css') }}" />
     <!-- Data Tables -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/dataTables.bs4.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/dataTables.bs4-custom.css') }}" />
-    <link href="{{ asset('assets/vendor/datatables/buttons.bs.css') }}" rel="stylesheet" />
-    <!-- C3 CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/vendor/c3/c3.min.css') }}" />
-    <!-- Steps Wizard CSS -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/wizard/jquery.steps.css') }}" />
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="{{ asset('js/jquery.validate.js') }}"></script>
-    <script src="{{ asset('js/matrix.form_validation.js') }}"></script>
-    <script src="{{ asset('assets/vendor/wizard/jquery.steps.custom.js') }}"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     <script type="text/javascript">
@@ -917,18 +901,9 @@
     <!-- Required jQuery first, then Bootstrap Bundle JS -->
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/moment.js') }}"></script>
-    <!-- *************
-  ************ Vendor Js Files *************
- ************* -->
-    <!-- Slimscroll JS -->
-    <script src="{{ asset('assets/vendor/slimscroll/slimscroll.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/slimscroll/custom-scrollbar.js') }}"></script>
-    <!-- Daterange -->
-    <script src="{{ asset('assets/vendor/daterange/daterange.js') }}"></script>
-    <script src="{{ asset('assets/vendor/daterange/custom-daterange.js') }}"></script>
-    <!-- Circliful JS -->
-    <script src="{{ asset('assets/vendor/circliful/circliful.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/circliful/circliful.custom.js') }}"></script>
+    <script src="{{ asset('assets/js/sweet-alert.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/main.js') }}"></script>
+
     <!-- Data Tables -->
     <script src="{{ asset('assets/vendor/datatables/dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/datatables/dataTables.bootstrap.min.js') }}"></script>
@@ -936,41 +911,21 @@
     <!-- Custom Data tables -->
     <script src="{{ asset('assets/vendor/datatables/custom/custom-datatables.js') }}"></script>
     <script src="{{ asset('assets/vendor/datatables/custom/fixedHeader.js') }}"></script>
-    <!-- Download / CSV / Copy / Print -->
-    <script src="{{ asset('assets/vendor/datatables/buttons.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/datatables/jszip.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/datatables/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/datatables/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('assets/vendor/datatables/html5.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/datatables/buttons.print.min.js') }}"></script>
-    <!-- Peity JS -->
-    <script src="{{ asset('assets/vendor/peity/peity.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/peity/custom-peity.js') }}"></script>
-    <!-- D3 JS -->
-    <script src="{{ asset('assets/vendor/d3/d3.min.js') }}"></script>
-    <!-- C3 Graphs -->
-    <script src="{{ asset('assets/vendor/c3/c3.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/c3/custom/bar-graph-one.js') }}"></script>
-    <!-- JVector Map -->
-    <script src="{{ asset('assets/vendor/jvectormap/jquery-jvectormap-2.0.3.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/jvectormap/world-mill-en.js') }}"></script>
-    <script src="{{ asset('assets/vendor/jvectormap/gdp-data.js') }}"></script>
-    <script src="{{ asset('assets/vendor/jvectormap/custom/world-map-markers.js') }}"></script>
+
     <!-- Steps wizard JS -->
     <script src="{{ asset('assets/vendor/wizard/jquery.steps.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/wizard/jquery.steps.custom.js') }}"></script>
-    <!-- Select tool-->
-    <script src="{{ asset('assets/vendor/bs-select/bs-select.min.js') }}"></script>
-    <!-- Main Js Required -->
-    <script src="{{ asset('assets/js/main.js') }}"></script>
+
     <script src="{{ asset('js/lightbox.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script type="text/javascript">
-        $('.select2').select2();
-        $.fn.modal.Constructor.prototype.enforceFocus = function() {};
-    </script>
-    <!-- Manual Scipt -->
     @yield('script')
+    @if (Session::has('success'))
+        <script>
+            Toast.fire({
+                icon: "success",
+                title: "{{ Session::get('success') }}",
+            });
+        </script>
+    @endif
 
 </body>
 

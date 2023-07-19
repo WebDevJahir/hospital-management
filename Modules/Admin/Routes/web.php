@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Admin\Http\Controllers\IncomeHeadController;
+use Modules\Admin\Http\Controllers\IncomeSubCategoryController;
+use Modules\Admin\Http\Controllers\ProjectController;
 use Modules\Admin\Http\Controllers\StaffController;
 
 /*
@@ -22,4 +25,12 @@ Route::prefix('admin')->group(function () {
     Route::get('edit-staff', [StaffController::class, 'editStaff']);
     Route::post('update-staff/{id}', [StaffController::class, 'updateStaff']);
     Route::post('delete-staff', [StaffController::class, 'deleteStaff']);
+    //income head
+    Route::resources([
+        'income-head' => IncomeHeadController::class,
+        'income-sub-category' => IncomeSubCategoryController::class,
+        'project' => ProjectController::class,
+        'expense-head' => ExpenseHeadController::class,
+        'expense-sub-category' => ExpenseSubCategoryController::class,
+    ]);
 });
