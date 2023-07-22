@@ -3,8 +3,8 @@
 @section('main_content')
     @parent
     <!-- *************
-     ************ Main container start *************
-    ************* -->
+         ************ Main container start *************
+        ************* -->
     <div class="main-container">
         <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="basicModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -17,7 +17,7 @@
                     </div>
                     <div class="modal-body">
                         <!-- Row start -->
-                        <form action="{{ url('add-staff') }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ route('staffs.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="row gutters">
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -662,10 +662,10 @@
                         @php $permission = Session::get('permission'); @endphp
                         {{-- @dd($permission) --}}
                         <div class="table-container">
-                            <div class="t-header">staffs 
-                                    <button type="button" class="btn-info btn-rounded" data-toggle="modal"
-                                        data-target="#addModal">Add new </button>
-                                
+                            <div class="t-header">staffs
+                                <button type="button" class="btn-info btn-rounded" data-toggle="modal"
+                                    data-target="#addModal">Add new </button>
+
                             </div>
 
                             <div class="table-responsive">
@@ -705,16 +705,20 @@
                                                 <td id="staff{{ $staff->id }}"></td>
                                                 <td>
                                                     {{-- @if (in_array(13, $permission)) --}}
-                                                        <button class="btn btn-sm" style="background:inherit"
-                                                            title="Edit" onclick="editStaffView({{ $staff->id }})"
-                                                            type="submit"><i
-                                                                class="fas fa-edit text-success"></i></button>|
+                                                    <button class="btn btn-sm" style="background:inherit" title="Edit"
+                                                        onclick="editStaffView({{ $staff->id }})" type="submit"><i
+                                                            class="fas fa-edit text-success"></i></button>|
                                                     {{-- @endif --}}
                                                     {{-- @if (in_array(14, $permission)) --}}
-                                                        <button class="btn btn-sm" style="background:inherit"
-                                                            title="Delete" onclick="deleteStaffView({{ $staff->id }})"
-                                                            type="submit"><i
-                                                                class="fas fa-trash-alt text-danger"></i></button>
+                                                    <form action="{{ route('staffs.destroy', $staff->id) }}"
+                                                        method="POST" data-toggle="tooltip" title="Delete"
+                                                        class="d-inline deleteData">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                            class="btn btn-outline-danger btn-sm delete"><i
+                                                                class="fas fa-trash"></i></button>
+                                                    </form>
                                                     {{-- @endif --}}
                                                 </td>
                                             </tr>
@@ -733,8 +737,8 @@
         <!-- Content wrapper end -->
     </div>
     <!-- *************
-     ************ Main container end *************
-    ************* -->
+         ************ Main container end *************
+        ************* -->
     <!-- edit modals -->
     <div id="edit_modal_body">
 
@@ -779,40 +783,31 @@
     <script type="text/javascript">
         function editStaffView(staff_id) {
             $('#modal-body').html(null);
-            $.get('{{ url('edit-staff') }}', {
-                staff_id: staff_id
-            }, function(data) {
+            $.get("{{ route('staffs.edit', $staff->id) }}", function(data) {
                 $('#edit_modal_body').html(data);
                 $('#editStaffModal').modal();
             });
         }
 
-        function deleteStaffView(id) {
+        $('.deleteData').submit(function(e) {
+            e.preventDefault();
+            let form = this;
+            let id = $(this).data('id');
+            let url = "{{ route('staffs.destroy', ':id') }}";
+            url = url.replace(':id', id);
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
+                confirmButtonColor: '#0d6efd',
+                cancelButtonColor: '#dc3545',
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $.post('{{ url('delete-staff') }}', {
-                        _token: '{{ @csrf_token() }}',
-                        id: id
-                    }, function(data) {
-
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Staff has been deleted.',
-                        })
-                        location.reload(true)
-                    });
-
-
+                    form.submit();
                 }
-            })
-        }
+            });
+        }); //end of submit
     </script>
 @endsection

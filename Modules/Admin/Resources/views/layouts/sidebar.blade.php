@@ -30,20 +30,20 @@
                     @endif
                     @if (in_array(11, $permission))
                         <li>
-                            <a class="dropdown-item" href="{{ url('staff-list') }}"><span
+                            <a class="dropdown-item" href="{{ route('staffs.index') }}"><span
                                     class="icon-user-x"></span> Add Staff</a>
                         </li>
                     @endif
                     @if (in_array(244, $permission))
                         <li>
                             <a class="dropdown-item"
-                                href="{{ url('prescription-doctor-list') }}"><span
+                                href="{{ url('admin/prescription-doctor-list') }}"><span
                                     class="icon-user-x"></span> Add Doctor</a>
                         </li>
                     @endif
                     @if (in_array(15, $permission))
                         <li>
-                            <a class="dropdown-item" href="{{ url('attendance') }}"><span
+                            <a class="dropdown-item" href="{{ url('admin/attendance') }}"><span
                                     class="icon-check-circle"></span> Attendance</a>
                         </li>
                     @endif
