@@ -13,9 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('cities', function (Blueprint $table) {
+        Schema::create('allied_healths', function (Blueprint $table) {
             $table->id();
-            $table->string("name", 100);
+            $table->unsignedBigInteger('project_id');
+            $table->unsignedBigInteger('income_head_id');
+            $table->unsignedBigInteger('income_sub_category_id');
+            $table->string('image');
+            $table->double('charge');
             $table->timestamps();
         });
     }
@@ -27,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cities');
+        Schema::dropIfExists('allied_healths');
     }
 };

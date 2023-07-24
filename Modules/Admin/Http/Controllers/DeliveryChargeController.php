@@ -6,9 +6,11 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Admin\Entities\City;
-use Modules\Admin\Http\Requests\CityRequest;
+use Modules\Admin\Entities\DeliveryCharge;
+use Modules\Admin\Entities\PoliceStation;
+use Modules\Admin\Http\Requests\DeliveryChargeRequest;
 
-class CityController extends Controller
+class DeliveryChargeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +19,9 @@ class CityController extends Controller
     public function index()
     {
         $cities = City::all();
-        return view('admin::basic_settings.city.create', compact("cities"));
+        $police_stations = PoliceStation::all();
+        $delivery_charges = DeliveryCharge::all();
+        return view('admin::basic_settings.delivery_charge.create', compact("cities", "police_stations", "delivery_charges"));
     }
 
     /**
@@ -26,6 +30,7 @@ class CityController extends Controller
      */
     public function create()
     {
+        return view('admin::create');
     }
 
     /**
@@ -33,11 +38,11 @@ class CityController extends Controller
      * @param Request $request
      * @return Renderable
      */
-    public function store(Request $request)
+    public function store(DeliveryChargeRequest $request)
     {
         $data = $request->except("_token");
-        $city = City::create($data);
-        return redirect()->back()->with("success", "City created successfully");
+        $delivery_charge = DeliveryCharge::create($data);
+        return redirect()->back()->with("success", "Delivery Charge created successfully");
     }
 
     /**
@@ -66,11 +71,11 @@ class CityController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(City $city, CityRequest $request)
+    public function update(DeliveryCharge $delivery_charge, DeliveryChargeRequest $request)
     {
         $data = $request->except("_token");
-        $city->update($data);
-        return redirect()->back()->with("success", "City updated successfully");
+        $delivery_charge->update($data);
+        return redirect()->back()->with("success", "Delivery Charge updated successfully");
     }
 
     /**
@@ -78,9 +83,9 @@ class CityController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function destroy(City $city)
+    public function destroy(DeliveryCharge $delivery_charge)
     {
-        $city->delete();
-        return redirect()->back()->with("success", "City deleted successfully");
+        $delivery_charge->delete();
+        return redirect()->back()->with("success", "Delivery Charge deleted successfully");
     }
 }

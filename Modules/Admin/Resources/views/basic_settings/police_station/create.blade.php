@@ -1,10 +1,10 @@
 @extends('master.master')
-@section('title', 'City - Hospice Bangladesh')
+@section('title', 'Thana - Hospice Bangladesh')
 @section('main_content')
     @parent
     @php
         $form_heading = 'Add';
-        $form_url = route('city.store');
+        $form_url = route('police-station.store');
         $form_method = 'POST';
     @endphp
 
@@ -17,7 +17,7 @@
                 <div class="row gutters">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="table-container">
-                            <div class="t-header">City</div>
+                            <div class="t-header">Thana</div>
                             <hr />
                             <form action="{{ $form_url }}" method="{{ $form_method }}">
                                 @csrf
@@ -27,6 +27,17 @@
                                             <span class="input-group-text custom-group-text">Name</span>
                                             <input type="text" class="form-control" placeholder="City Name"
                                                 name="name">
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text custom-group-text">City</span>
+                                            <select class="form-control" name="city_id">
+                                                <option value="">Select City</option>
+                                                @foreach ($cities as $city)
+                                                    <option value="{{ $city->id }}">{{ $city->name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-4">
@@ -43,22 +54,25 @@
                                     <thead>
                                         <tr>
                                             <th>Name</th>
+                                            <th>City</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody id="incomeHeadTable">
-                                        @foreach ($cities as $city)
+                                        @foreach ($police_stations as $station)
                                             <tr>
-                                                <td>{{ $city->name }}</td>
+                                                <td>{{ $station->name }}</td>
+                                                <td>{{ $station->city->name }}</td>
                                                 <td>
                                                     <div class="icon-btn">
                                                         <nobr>
                                                             <a data-toggle="tooltip" title="Edit"
-                                                                onclick="edit({{ $city->id }})"
+                                                                onclick="edit({{ $station->id }})"
                                                                 class="btn btn-outline-warning btn-sm"><i
                                                                     class="fas fa-pen"></i></a>
 
-                                                            <form action="{{ route('city.destroy', $city->id) }}"
+                                                            <form
+                                                                action="{{ route('police-station.destroy', $station->id) }}"
                                                                 method="POST" data-toggle="tooltip" title="Delete"
                                                                 class="d-inline deleteData">
                                                                 @csrf
@@ -91,12 +105,13 @@
 @section('script')
     <script type="text/javascript">
         function edit(id) {
-            let cities = @json($cities);
-            cities.find(city => {
-                if (city.id == id) {
-                    $('input[name="name"]').val(city.name);
-                    $('form').data('id', city.id);
-                    let form_url = "{{ route('city.update', ':id') }}";
+            let police_stations = @json($police_stations);
+            police_stations.find(station => {
+                if (station.id == id) {
+                    $('input[name="name"]').val(station.name);
+                    $('select[name="city_id"]').val(station.city_id);
+                    $('form').data('id', station.id);
+                    let form_url = "{{ route('police-station.update', ':id') }}";
                     form_url = form_url.replace(':id', $('form').data('id'));
                     $('form').attr('action', form_url);
                     $('form').attr('method', 'POST');
