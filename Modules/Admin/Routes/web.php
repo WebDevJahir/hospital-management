@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Admin\Http\Controllers\VatController;
 use Modules\Admin\Http\Controllers\CityController;
 use Modules\Admin\Http\Controllers\StaffController;
+use Modules\Admin\Http\Controllers\BannerController;
 use Modules\Admin\Http\Controllers\CommonController;
 use Modules\Admin\Http\Controllers\DoctorController;
 use Modules\Admin\Http\Controllers\ProjectController;
@@ -51,6 +52,7 @@ Route::prefix('admin')->group(function () {
         'allied-health' => AlliedHealthController::class,
         'instrument' => InstrumentController::class,
         'product' => ProductController::class,
+        'banners' => BannerController::class,
     ]);
     Route::match(['get', 'post'], 'vat', [VatController::class, 'index'])->name('vat');
 });
