@@ -1,22 +1,23 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Admin\Http\Controllers\VatController;
+use Modules\Admin\Http\Controllers\CityController;
 use Modules\Admin\Http\Controllers\StaffController;
+use Modules\Admin\Http\Controllers\CommonController;
 use Modules\Admin\Http\Controllers\DoctorController;
 use Modules\Admin\Http\Controllers\ProjectController;
 use Modules\Admin\Http\Controllers\IncomeHeadController;
-use Modules\Admin\Http\Controllers\IncomeSubCategoryController;
+use Modules\Admin\Http\Controllers\InstrumentController;
 use Modules\Admin\Http\Controllers\ExpenseHeadController;
-use Modules\Admin\Http\Controllers\ExpenseSubCategoryController;
-use Modules\Admin\Http\Controllers\CityController;
-use Modules\Admin\Http\Controllers\CommonController;
+use Modules\Admin\Http\Controllers\AlliedHealthController;
 use Modules\Admin\Http\Controllers\PoliceStationController;
+use Modules\Admin\Http\Controllers\ServiceChargeController;
 use Modules\Admin\Http\Controllers\DeliveryChargeController;
 use Modules\Admin\Http\Controllers\MedicalSupportController;
-use Modules\Admin\Http\Controllers\ServiceChargeController;
 use Modules\Admin\Http\Controllers\MedicalProcedureController;
-use Modules\Admin\Http\Controllers\AlliedHealthController;
-use Modules\Admin\Http\Controllers\InstrumentController;
+use Modules\Admin\Http\Controllers\IncomeSubCategoryController;
+use Modules\Admin\Http\Controllers\ExpenseSubCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,7 @@ Route::prefix('admin')->group(function () {
         'instrument' => InstrumentController::class,
         'product' => ProductController::class,
     ]);
+    Route::match(['get', 'post'], 'vat', [VatController::class, 'index'])->name('vat');
 });
 
 Route::get('get-police-station', [PoliceStationController::class, 'getPoliceStation'])->name('get-police-station');
