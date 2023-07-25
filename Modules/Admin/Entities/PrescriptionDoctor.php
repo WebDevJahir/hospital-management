@@ -7,12 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PrescriptionDoctor extends Model
 {
-    use HasFactory;
-
-    protected $fillable = [];
-    
-    protected static function newFactory()
-    {
-        return \Modules\Admin\Database\factories\PrescriptionDoctorFactory::new();
-    }
+    protected $fillable = [
+        'doctor_name',
+        'status',
+        'description'
+    ];
 }

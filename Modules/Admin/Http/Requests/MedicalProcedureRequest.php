@@ -4,7 +4,7 @@ namespace Modules\Admin\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProjectInfoRequest extends FormRequest
+class MedicalProcedureRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.

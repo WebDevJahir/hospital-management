@@ -5,12 +5,17 @@ namespace Modules\Admin\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Doctor extends Model
+class PoliceStation extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'project_id',
-        
+        'name',
+        'city_id',
     ];
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
 }

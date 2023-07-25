@@ -6,6 +6,17 @@ use Modules\Admin\Http\Controllers\DoctorController;
 use Modules\Admin\Http\Controllers\ProjectController;
 use Modules\Admin\Http\Controllers\IncomeHeadController;
 use Modules\Admin\Http\Controllers\IncomeSubCategoryController;
+use Modules\Admin\Http\Controllers\ExpenseHeadController;
+use Modules\Admin\Http\Controllers\ExpenseSubCategoryController;
+use Modules\Admin\Http\Controllers\CityController;
+use Modules\Admin\Http\Controllers\CommonController;
+use Modules\Admin\Http\Controllers\PoliceStationController;
+use Modules\Admin\Http\Controllers\DeliveryChargeController;
+use Modules\Admin\Http\Controllers\MedicalSupportController;
+use Modules\Admin\Http\Controllers\ServiceChargeController;
+use Modules\Admin\Http\Controllers\MedicalProcedureController;
+use Modules\Admin\Http\Controllers\AlliedHealthController;
+use Modules\Admin\Http\Controllers\InstrumentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,34 +32,6 @@ use Modules\Admin\Http\Controllers\IncomeSubCategoryController;
 Route::prefix('admin')->group(function () {
     Route::get('/', 'AdminController@index');
 
-    //Video Consultation Doctor
-    Route::get('doctor-list', 'DoctorController@index');
-    Route::get('add-doctor', 'DoctorController@addDoctor');
-    Route::post('edit-doctor', 'DoctorController@editDoctor');
-    Route::post('update-doctor', 'DoctorController@updateDoctor');
-    Route::post('delete-doctor-view', 'DoctorController@deleteDoctorView');
-    Route::post('delete-doctor', 'DoctorController@deleteDoctor');
-
-    //Prescription Doctor
-    Route::get('prescription-doctor-list', 'DoctorController@prescriptionDoctorList');
-    Route::post('add-prescription-doctor', 'DoctorController@addPrescriptionDoctor');
-    Route::post('edit-prescription-doctor', 'DoctorController@editPrescriptionDoctor');
-    Route::post('update-prescription-doctor/{id}', 'DoctorController@updatePrescriptionDoctor');
-    Route::post('delete-prescription-doctor', 'DoctorController@deletePrescriptionDoctor');
-
-    //Attendance
-    Route::get('attendance', 'AttendanceController@staffAttendance');
-    Route::post('add-attendance', 'AttendanceController@addAttendance');
-    Route::post('attendance-report/{id}', 'AttendanceController@getReport');
-
-    //Project
-    Route::get('projects', 'ProjectInfoController@index');
-    Route::post('add-project', 'ProjectInfoController@add');
-    Route::post('delete-project-view', 'ProjectInfoController@deleteView');
-    Route::post('delete-project', 'ProjectInfoController@remove');
-    Route::post('edit-project-view', 'ProjectInfoController@editProjectView');
-    Route::post('update-project', 'ProjectInfoController@updateProject');
-
     //income head
     Route::resources([
         'staffs' => StaffController::class,
@@ -58,5 +41,19 @@ Route::prefix('admin')->group(function () {
         'project' => ProjectController::class,
         'expense-head' => ExpenseHeadController::class,
         'expense-sub-category' => ExpenseSubCategoryController::class,
+        'city' => CityController::class,
+        'police-station' => PoliceStationController::class,
+        'delivery-charge' => DeliveryChargeController::class,
+        'service-charge' => ServiceChargeController::class,
+        'medical-support' => MedicalSupportController::class,
+        'medical-procedure' => MedicalProcedureController::class,
+        'allied-health' => AlliedHealthController::class,
+        'instrument' => InstrumentController::class,
+        'product' => ProductController::class,
     ]);
 });
+
+Route::get('get-police-station', [PoliceStationController::class, 'getPoliceStation'])->name('get-police-station');
+Route::get('get-income-heads', [CommonController::class, 'getIncomeHeads'])->name('get-income-heads');
+Route::get('get-income-sub-categories', [CommonController::class, 'getIncomeSubCategories'])->name('get-income-sub-categories');
+Route::get('get-income-heads-sub-category-edit', [CommonController::class, 'getIncomeHeadsAndSubCategories'])->name('get-income-heads-sub-category-edit');

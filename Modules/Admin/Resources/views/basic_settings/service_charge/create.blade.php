@@ -1,10 +1,10 @@
 @extends('master.master')
-@section('title', 'City - Hospice Bangladesh')
+@section('title', 'Service Charge - Hospice Bangladesh')
 @section('main_content')
     @parent
     @php
         $form_heading = 'Add';
-        $form_url = route('city.store');
+        $form_url = route('service-charge.store');
         $form_method = 'POST';
     @endphp
 
@@ -17,19 +17,37 @@
                 <div class="row gutters">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="table-container">
-                            <div class="t-header">City</div>
+                            <div class="t-header">Service Charge</div>
                             <hr />
                             <form action="{{ $form_url }}" method="{{ $form_method }}">
                                 @csrf
                                 <div class="row gutters">
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Name</span>
-                                            <input type="text" class="form-control" placeholder="City Name"
-                                                name="name">
+                                            <span class="input-group-text custom-group-text">City</span>
+                                            <select class="form-control" name="city_id" id="city_id">
+                                                <option value="">Select City</option>
+                                                @foreach ($cities as $city)
+                                                    <option value="{{ $city->id }}">{{ $city->name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-4">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text custom-group-text">Police Station</span>
+                                            <select class="form-control" name="police_station_id">
+                                                <option value="">Select Police Station</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text custom-group-text">Charge</span>
+                                            <input type="text" class="form-control" placeholder="charge" name="charge">
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
                                         <div class="input-group mb-3">
                                             <button type="submit" class="btn btn-outline-primary">Save</button>
                                         </div>
@@ -42,23 +60,28 @@
                                 <table id="Example" class="table custom-table">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
+                                            <th>City</th>
+                                            <th>Police Station</th>
+                                            <th>Charge</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody id="incomeHeadTable">
-                                        @foreach ($cities as $city)
+                                        @foreach ($service_charges as $charge)
                                             <tr>
-                                                <td>{{ $city->name }}</td>
+                                                <td>{{ $charge?->city?->name }}</td>
+                                                <td>{{ $charge?->policeStation?->name }}</td>
+                                                <td>{{ $charge->charge }}</td>
                                                 <td>
                                                     <div class="icon-btn">
                                                         <nobr>
                                                             <a data-toggle="tooltip" title="Edit"
-                                                                onclick="edit({{ $city->id }})"
+                                                                onclick="edit({{ $charge->id }})"
                                                                 class="btn btn-outline-warning btn-sm"><i
                                                                     class="fas fa-pen"></i></a>
 
-                                                            <form action="{{ route('city.destroy', $city->id) }}"
+                                                            <form
+                                                                action="{{ route('service-charge.destroy', $charge->id) }}"
                                                                 method="POST" data-toggle="tooltip" title="Delete"
                                                                 class="d-inline deleteData">
                                                                 @csrf
@@ -91,12 +114,23 @@
 @section('script')
     <script type="text/javascript">
         function edit(id) {
-            let cities = @json($cities);
-            cities.find(city => {
-                if (city.id == id) {
-                    $('input[name="name"]').val(city.name);
-                    $('form').data('id', city.id);
-                    let form_url = "{{ route('city.update', ':id') }}";
+            let service_charges = @json($service_charges);
+            service_charges.find(charge => {
+                if (charge.id == id) {
+                    let police_stations = @json($police_stations);
+                    let html = '<option value="">Select Police Station</option>';
+                    $.each(police_stations, function(index, value) {
+                        if (value.city_id == charge.city_id) {
+                            html += '<option value="' + value.id + '">' + value.name + '</option>';
+                        }
+                    });
+                    $('select[name="police_station_id"]').html(html);
+                    $('input[name="name"]').val(charge.name);
+                    $('select[name="city_id"]').val(charge.city_id);
+                    $('select[name="police_station_id"]').val(charge.police_station_id);
+                    $('input[name="charge"]').val(charge.charge);
+                    $('form').data('id', charge.id);
+                    let form_url = "{{ route('service-charge.update', ':id') }}";
                     form_url = form_url.replace(':id', $('form').data('id'));
                     $('form').attr('action', form_url);
                     $('form').attr('method', 'POST');
@@ -122,6 +156,26 @@
                 }
             });
         }); //end of submit
+
+        $('#city_id').change(function() {
+            let city_id = $(this).val();
+            $.ajax({
+                url: "{{ route('get-police-station') }}",
+                type: 'GET',
+                data: {
+                    city_id: city_id
+                },
+                success: function(response) {
+                    let police_stations = response;
+                    let html = '<option value="">Select Police Station</option>';
+                    $.each(police_stations, function(index, value) {
+                        console.log(value);
+                        html += '<option value="' + value.id + '">' + value.name + '</option>';
+                    });
+                    $('select[name="police_station_id"]').html(html);
+                }
+            });
+        });
 
         $(document).ready(function() {
             $('#Example').DataTable({

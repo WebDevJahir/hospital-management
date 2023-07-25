@@ -5,10 +5,11 @@ namespace Modules\Admin\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Admin\Entities\PoliceStation;
+use Modules\Admin\Http\Requests\PoliceStationRequest;
 use Modules\Admin\Entities\City;
-use Modules\Admin\Http\Requests\CityRequest;
 
-class CityController extends Controller
+class PoliceStationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +17,9 @@ class CityController extends Controller
      */
     public function index()
     {
+        $police_stations = PoliceStation::all();
         $cities = City::all();
-        return view('admin::basic_settings.city.create', compact("cities"));
+        return view('admin::basic_settings.police_station.create', compact("police_stations", "cities"));
     }
 
     /**
@@ -26,6 +28,7 @@ class CityController extends Controller
      */
     public function create()
     {
+        return view('admin::create');
     }
 
     /**
@@ -36,8 +39,8 @@ class CityController extends Controller
     public function store(Request $request)
     {
         $data = $request->except("_token");
-        $city = City::create($data);
-        return redirect()->back()->with("success", "City created successfully");
+        $police_station = PoliceStation::create($data);
+        return redirect()->back()->with("success", "Police Station created successfully");
     }
 
     /**
@@ -66,11 +69,11 @@ class CityController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(City $city, CityRequest $request)
+    public function update(Policestation $police_station, PoliceStationRequest $request)
     {
         $data = $request->except("_token");
-        $city->update($data);
-        return redirect()->back()->with("success", "City updated successfully");
+        $police_station->update($data);
+        return redirect()->back()->with("success", "Police Station updated successfully");
     }
 
     /**
@@ -78,9 +81,15 @@ class CityController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function destroy(City $city)
+    public function destroy(Policestation $police_station)
     {
-        $city->delete();
-        return redirect()->back()->with("success", "City deleted successfully");
+        $police_station->delete();
+        return redirect()->back()->with("success", "Police Station deleted successfully");
     }
+
+    public function getPoliceStation(Request $request)
+    {
+        $police_stations = PoliceStation::where("city_id", $request->city_id)->get();
+        return response()->json($police_stations);
+    } 
 }

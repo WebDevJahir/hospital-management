@@ -1,11 +1,12 @@
 @extends('master.master')
-@section('title', 'City - Hospice Bangladesh')
+@section('title', 'Doctor - Hospice Bangladesh')
 @section('main_content')
     @parent
     @php
-        $form_heading = 'Add';
-        $form_url = route('city.store');
-        $form_method = 'POST';
+        $is_old = old('client_no') ? true : false;
+        $form_heading = !empty($doctor->id) ? 'Update' : 'Add';
+        $form_url = !empty($doctor->id) ? route('doctors.update', $doctor->id) : route('doctors.store');
+        $form_method = !empty($doctor->id) ? 'PUT' : 'POST';
     @endphp
 
     <div class="main-container">
@@ -17,7 +18,7 @@
                 <div class="row gutters">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="table-container">
-                            <div class="t-header">City</div>
+                            <div class="t-header">Doctor</div>
                             <hr />
                             <form action="{{ $form_url }}" method="{{ $form_method }}">
                                 @csrf
@@ -25,8 +26,25 @@
                                     <div class="col-4">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text custom-group-text">Name</span>
-                                            <input type="text" class="form-control" placeholder="City Name"
-                                                name="name">
+                                            <input type="text" class="form-control" placeholder="Doctor Name"
+                                                name="doctor_name">
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text custom-group-text">Status</span>
+                                            <select class="form-control" name="status">
+                                                <option selected>Select Status</option>
+                                                <option value="Active">Active</option>
+                                                <option value="Inactive">Inactive</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text custom-group-text">Description</span>
+                                            <input type="text" class="form-control" placeholder="Description"
+                                                name="description">
                                         </div>
                                     </div>
                                     <div class="col-4">
@@ -42,23 +60,26 @@
                                 <table id="Example" class="table custom-table">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
+                                            <th>Doctor Name</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody id="incomeHeadTable">
-                                        @foreach ($cities as $city)
+                                        @foreach ($doctors as $doctor)
                                             <tr>
-                                                <td>{{ $city->name }}</td>
+                                                <td>{{ $doctor->doctor_name }}</td>
+                                                <td>{{ $doctor->status }}</td>
+                                                <td>{{ $doctor->description }}</td>
+
                                                 <td>
                                                     <div class="icon-btn">
                                                         <nobr>
                                                             <a data-toggle="tooltip" title="Edit"
-                                                                onclick="edit({{ $city->id }})"
+                                                                onclick="edit({{ $doctor->id }})"
                                                                 class="btn btn-outline-warning btn-sm"><i
                                                                     class="fas fa-pen"></i></a>
-
-                                                            <form action="{{ route('city.destroy', $city->id) }}"
+                                                            <form action="{{ route('doctors.destroy', $doctor->id) }}"
                                                                 method="POST" data-toggle="tooltip" title="Delete"
                                                                 class="d-inline deleteData">
                                                                 @csrf
@@ -90,13 +111,15 @@
 
 @section('script')
     <script type="text/javascript">
-        function edit(id) {
-            let cities = @json($cities);
-            cities.find(city => {
-                if (city.id == id) {
-                    $('input[name="name"]').val(city.name);
-                    $('form').data('id', city.id);
-                    let form_url = "{{ route('city.update', ':id') }}";
+        function edit(doctor_id) {
+            let doctors = @json($doctors);
+            doctors.find(doctor => {
+                if (doctor.id == doctor_id) {
+                    $('input[name="doctor_name"]').val(doctor.doctor_name);
+                    $('select[name="status"]').val(doctor.status);
+                    $('input[name="description"]').val(doctor.description);
+                    $('form').data('id', doctor.id);
+                    let form_url = "{{ route('doctors.update', ':id') }}";
                     form_url = form_url.replace(':id', $('form').data('id'));
                     $('form').attr('action', form_url);
                     $('form').attr('method', 'POST');
@@ -108,6 +131,9 @@
         $('.deleteData').submit(function(e) {
             e.preventDefault();
             let form = this;
+            let id = $(this).data('id');
+            let url = "{{ route('doctors.destroy', ':id') }}";
+            url = url.replace(':id', id);
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -121,8 +147,7 @@
                     form.submit();
                 }
             });
-        }); //end of submit
-
+        })
         $(document).ready(function() {
             $('#Example').DataTable({
                 "order": []
