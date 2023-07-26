@@ -16,6 +16,9 @@ use Modules\Admin\Http\Controllers\ServiceChargeController;
 use Modules\Admin\Http\Controllers\MedicalProcedureController;
 use Modules\Admin\Http\Controllers\AlliedHealthController;
 use Modules\Admin\Http\Controllers\InstrumentController;
+use Modules\Admin\Http\Controllers\ProductController;
+use Modules\Admin\Http\Controllers\LabTestController;
+use Modules\Admin\Http\Controllers\EmployeeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +55,8 @@ Route::prefix('admin')->group(function () {
         'allied-health' => AlliedHealthController::class,
         'instrument' => InstrumentController::class,
         'product' => ProductController::class,
+        'lab-test' => LabTestController::class,
+        'employee' => EmployeeController::class,
     ]);
 });
 

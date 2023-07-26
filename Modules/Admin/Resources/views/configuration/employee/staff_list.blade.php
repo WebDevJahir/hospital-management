@@ -3,8 +3,8 @@
 @section('main_content')
     @parent
     <!-- *************
-     ************ Main container start *************
-    ************* -->
+         ************ Main container start *************
+        ************* -->
     <div class="main-container">
         <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="basicModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -317,8 +317,8 @@
                                                                 <span class="input-group-text" id="basic-addon1"><span
                                                                         class="icon-user-check"></span></span>
                                                             </div>
-                                                            <select class="custom-select" id="role"
-                                                                name="staff_type" required="">
+                                                            <select class="form-control" id="role" name="staff_type"
+                                                                required="">
                                                                 <option>Select type</option>
                                                                 <option value="On Call">On Call</option>
                                                                 <option value="Roster">Roster</option>
@@ -620,7 +620,7 @@
                                                                 <span class="input-group-text" id="basic-addon1"><span
                                                                         class="icon-account_box"></span></span>
                                                             </div>
-                                                            <select class="custom-select" id="status" required=""
+                                                            <select class="form-control" id="status" required=""
                                                                 name="status">
                                                                 <option value="">Select</option>
                                                                 <option value="Active">Active</option>
@@ -662,10 +662,10 @@
                         @php $permission = Session::get('permission'); @endphp
                         {{-- @dd($permission) --}}
                         <div class="table-container">
-                            <div class="t-header">staffs 
-                                    <button type="button" class="btn-info btn-rounded" data-toggle="modal"
-                                        data-target="#addModal">Add new </button>
-                                
+                            <div class="t-header">staffs
+                                <button type="button" class="btn-info btn-rounded" data-toggle="modal"
+                                    data-target="#addModal">Add new </button>
+
                             </div>
 
                             <div class="table-responsive">
@@ -705,16 +705,14 @@
                                                 <td id="staff{{ $staff->id }}"></td>
                                                 <td>
                                                     {{-- @if (in_array(13, $permission)) --}}
-                                                        <button class="btn btn-sm" style="background:inherit"
-                                                            title="Edit" onclick="editStaffView({{ $staff->id }})"
-                                                            type="submit"><i
-                                                                class="fas fa-edit text-success"></i></button>|
+                                                    <button class="btn btn-sm" style="background:inherit" title="Edit"
+                                                        onclick="editStaffView({{ $staff->id }})" type="submit"><i
+                                                            class="fas fa-edit text-success"></i></button>|
                                                     {{-- @endif --}}
                                                     {{-- @if (in_array(14, $permission)) --}}
-                                                        <button class="btn btn-sm" style="background:inherit"
-                                                            title="Delete" onclick="deleteStaffView({{ $staff->id }})"
-                                                            type="submit"><i
-                                                                class="fas fa-trash-alt text-danger"></i></button>
+                                                    <button class="btn btn-sm" style="background:inherit" title="Delete"
+                                                        onclick="deleteStaffView({{ $staff->id }})" type="submit"><i
+                                                            class="fas fa-trash-alt text-danger"></i></button>
                                                     {{-- @endif --}}
                                                 </td>
                                             </tr>
@@ -733,8 +731,8 @@
         <!-- Content wrapper end -->
     </div>
     <!-- *************
-     ************ Main container end *************
-    ************* -->
+         ************ Main container end *************
+        ************* -->
     <!-- edit modals -->
     <div id="edit_modal_body">
 
