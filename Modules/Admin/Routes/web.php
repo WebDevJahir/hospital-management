@@ -1,24 +1,27 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Admin\Http\Controllers\IncomeHeadController;
-use Modules\Admin\Http\Controllers\IncomeSubCategoryController;
-use Modules\Admin\Http\Controllers\ProjectController;
-use Modules\Admin\Http\Controllers\StaffController;
-use Modules\Admin\Http\Controllers\ExpenseHeadController;
-use Modules\Admin\Http\Controllers\ExpenseSubCategoryController;
+use Modules\Admin\Http\Controllers\VatController;
 use Modules\Admin\Http\Controllers\CityController;
+use Modules\Admin\Http\Controllers\StaffController;
+use Modules\Admin\Http\Controllers\BannerController;
 use Modules\Admin\Http\Controllers\CommonController;
+use Modules\Admin\Http\Controllers\DoctorController;
+use Modules\Admin\Http\Controllers\ProjectController;
+use Modules\Admin\Http\Controllers\IncomeHeadController;
+use Modules\Admin\Http\Controllers\InstrumentController;
+use Modules\Admin\Http\Controllers\ExpenseHeadController;
+use Modules\Admin\Http\Controllers\AlliedHealthController;
 use Modules\Admin\Http\Controllers\PoliceStationController;
+use Modules\Admin\Http\Controllers\ServiceChargeController;
 use Modules\Admin\Http\Controllers\DeliveryChargeController;
 use Modules\Admin\Http\Controllers\MedicalSupportController;
-use Modules\Admin\Http\Controllers\ServiceChargeController;
 use Modules\Admin\Http\Controllers\MedicalProcedureController;
-use Modules\Admin\Http\Controllers\AlliedHealthController;
-use Modules\Admin\Http\Controllers\InstrumentController;
 use Modules\Admin\Http\Controllers\ProductController;
 use Modules\Admin\Http\Controllers\LabTestController;
 use Modules\Admin\Http\Controllers\EmployeeController;
+use Modules\Admin\Http\Controllers\IncomeSubCategoryController;
+use Modules\Admin\Http\Controllers\ExpenseSubCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,14 +36,11 @@ use Modules\Admin\Http\Controllers\EmployeeController;
 
 Route::prefix('admin')->group(function () {
     Route::get('/', 'AdminController@index');
-    //staff
-    Route::get('staff-list', [StaffController::class, 'index']);
-    Route::post('add-staff', [StaffController::class, 'addStaff']);
-    Route::get('edit-staff', [StaffController::class, 'editStaff']);
-    Route::post('update-staff/{id}', [StaffController::class, 'updateStaff']);
-    Route::post('delete-staff', [StaffController::class, 'deleteStaff']);
+
     //income head
     Route::resources([
+        'staffs' => StaffController::class,
+        'doctors' => DoctorController::class,
         'income-head' => IncomeHeadController::class,
         'income-sub-category' => IncomeSubCategoryController::class,
         'project' => ProjectController::class,
@@ -57,7 +57,10 @@ Route::prefix('admin')->group(function () {
         'product' => ProductController::class,
         'lab-test' => LabTestController::class,
         'employee' => EmployeeController::class,
+        'banners' => BannerController::class,
+        'packages' => PackageController::class,
     ]);
+    Route::match(['get', 'post'], 'vat', [VatController::class, 'index'])->name('vat');
 });
 
 Route::get('get-police-station', [PoliceStationController::class, 'getPoliceStation'])->name('get-police-station');

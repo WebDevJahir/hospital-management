@@ -2,9 +2,11 @@
 
 namespace Modules\Admin\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Modules\Admin\Entities\Staff;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Contracts\Support\Renderable;
 
 class StaffController extends Controller
@@ -15,7 +17,7 @@ class StaffController extends Controller
         return view('admin::staff.staff_list', compact('staffs'));
     }
 
-    public function addStaff(Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|max:255',
@@ -93,13 +95,13 @@ class StaffController extends Controller
         }
     }
 
-    public function editStaff(Request $request)
+    public function edit(Request $request)
     {
         $staff = Staff::find($request->staff_id);
         return view('staff.modals.staffEditModel', compact('staff'));
     }
 
-    public function updateStaff(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'name' => 'required|max:255',
@@ -221,10 +223,11 @@ class StaffController extends Controller
         }
     }
 
-    public function deleteStaff(Request $request)
+    public function destroy(Staff $staff)
     {
-        $deleteStaff = Staff::where('id', $request->id)->first();
-        $user_delete = User::where('id', $deleteStaff->user_id)->first()->delete();
-        $deleteStaff->delete();
+        User::where('id', $staff->user_id)->first()->delete();
+        $staff->delete();
+
+        return redirect()->back()->with('success', 'Staff Deleted Successfully');
     }
 }
