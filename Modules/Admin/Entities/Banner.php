@@ -9,10 +9,8 @@ class Banner extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
-    
-    protected static function newFactory()
-    {
-        return \Modules\Admin\Database\factories\BannerFactory::new();
-    }
+    protected $fillable = [
+        'image',
+        'link',
+    ];
 }

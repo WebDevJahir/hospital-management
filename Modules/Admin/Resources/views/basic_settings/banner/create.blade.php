@@ -171,12 +171,16 @@
                                 <div class="row justify-content-center">
                                     <div class="form-group col-sm-3 col-3">
                                         <label for="sub_category_id">Banner (1200*200)</label>
-                                        <input type="file" name="banner" id="banner" class="form-control"
+                                        <input type="file" name="image" id="image" class="form-control"
                                             multiple="">
                                         <small id="emailHelp" class="form-text text-muted"></small>
                                         <button class="btn btn-success" type="submit">Save</button>
                                     </div>
-                                </div>
+                                    <div class="form-group col-sm-3 col-3">
+                                        <label for="link">Link</label>
+                                        <input type="text" name="link" id="link" class="form-control"
+                                            value="{{ $banner->link ?? '' }}">
+                                    </div>
                             </form>
                             <br>
                         </div>
@@ -186,11 +190,15 @@
                     <div class="container">
                         @foreach ($banners as $banner)
                             <div class="col-12 text-center" style="margin: 10px;">
-                                <img src="{{ asset('public/storage/' . $banner->banner ?? '') }}" alt="Inventory"
+                                <img src="{{ asset($banner->image ?? '') }}" alt="Inventory"
                                     class="img-thumbnail" data-width="100%" style="height: 100px;">
-                                <span class="btn btn-sm " style="background:inherit" title="Delete"
-                                    style=" margin-left: 10px;" onclick="deleteBanner({{ $banner->id }})"><i
-                                        class="fas fa-trash-alt text-danger"></i></span>
+                                <form action="{{ route('banners.destroy', $banner->id) }}" method="POST"
+                                    data-toggle="tooltip" title="Delete" class="d-inline deleteData">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-outline-danger btn-sm delete"><i
+                                            class="fas fa-trash"></i></button>
+                                </form>
                             </div>
                         @endforeach
                     </div>
@@ -223,10 +231,25 @@
 @endsection
 @section('script')
     <script type="text/javascript">
-        function deleteBanner(id) {
-            if (confirm('Are you sure to delete?')) {
-                location.replace('{{ url('delete-banner') }}/' + id);
-            }
-        }
+        $('.deleteData').submit(function(e) {
+            e.preventDefault();
+            let form = this;
+            let id = $(this).data('id');
+            let url = "{{ route('banners.destroy', ':id') }}";
+            url = url.replace(':id', id);
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#0d6efd',
+                cancelButtonColor: '#dc3545',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        })
     </script>
 @endsection

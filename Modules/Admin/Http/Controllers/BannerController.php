@@ -3,12 +3,17 @@
 namespace Modules\Admin\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\UploadService;
 use Illuminate\Routing\Controller;
 use Modules\Admin\Entities\Banner;
 use Illuminate\Contracts\Support\Renderable;
 
 class BannerController extends Controller
 {
+    function __construct(private UploadService $uploadFile)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      * @return Renderable
@@ -35,10 +40,11 @@ class BannerController extends Controller
      */
     public function store(Request $request)
     {
-        //store banner image in database using store() method
         $data = $request->except('_token');
-        $data['banner'] = $request->file('image')->store('banner');
+        $data['image'] = $this->uploadFile->handleFile($request->image, 'banners');
         Banner::create($data);
+
+        return back()->with('success', 'Banner created successfully.');
     }
 
     /**
@@ -48,7 +54,7 @@ class BannerController extends Controller
      */
     public function show($id)
     {
-        return view('admin::show');
+        abort(404);
     }
 
     /**
@@ -58,7 +64,7 @@ class BannerController extends Controller
      */
     public function edit($id)
     {
-        return view('admin::edit');
+        abort(404);
     }
 
     /**
@@ -69,7 +75,7 @@ class BannerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        abort(404);    
     }
 
     /**
@@ -77,8 +83,11 @@ class BannerController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function destroy($id)
+    public function destroy(Banner $banner)
     {
-        //
+        $this->uploadFile->deleteFile($banner->image);
+        $banner->delete();
+
+        return back()->with('success', 'Banner deleted successfully.');
     }
 }
