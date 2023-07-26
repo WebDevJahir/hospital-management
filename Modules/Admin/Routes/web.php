@@ -53,6 +53,7 @@ Route::prefix('admin')->group(function () {
         'instrument' => InstrumentController::class,
         'product' => ProductController::class,
         'banners' => BannerController::class,
+        'packages' => PackageController::class,
     ]);
     Route::match(['get', 'post'], 'vat', [VatController::class, 'index'])->name('vat');
 });

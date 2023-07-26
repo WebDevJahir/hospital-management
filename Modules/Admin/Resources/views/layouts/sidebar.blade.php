@@ -73,7 +73,7 @@
                     @endif
                     @if (in_array(25, $permission))
                         <li>
-                            <a class="dropdown-item" href="{{ url('add-banner') }}"><span
+                            <a class="dropdown-item" href="{{ route('banners.index') }}"><span
                                     class="icon-plus"></span>Banner</a>
                         </li>
                     @endif

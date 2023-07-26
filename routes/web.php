@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommonApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +25,7 @@ Route::get('logout',  [AuthController::class, 'logout']);
 Route::post('post-login',  [AuthController::class, 'postLogin']);
 
 Route::get('/dashboard', [AuthController::class, 'dashboard']);
+
+Route::get('get-account-head', [CommonApiController::class, 'getAccountHead']);
+Route::get('get-sub-category', [CommonApiController::class, 'getSubCategory']);
+Route::get('get-charge', [CommonApiController::class, 'getCharge']);
