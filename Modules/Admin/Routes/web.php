@@ -7,7 +7,11 @@ use Modules\Admin\Http\Controllers\StaffController;
 use Modules\Admin\Http\Controllers\BannerController;
 use Modules\Admin\Http\Controllers\CommonController;
 use Modules\Admin\Http\Controllers\DoctorController;
+use Modules\Admin\Http\Controllers\LabTestController;
+use Modules\Admin\Http\Controllers\ProductController;
 use Modules\Admin\Http\Controllers\ProjectController;
+use Modules\Admin\Http\Controllers\EmployeeController;
+use Modules\Admin\Http\Controllers\PromoCodeController;
 use Modules\Admin\Http\Controllers\IncomeHeadController;
 use Modules\Admin\Http\Controllers\InstrumentController;
 use Modules\Admin\Http\Controllers\ExpenseHeadController;
@@ -17,9 +21,6 @@ use Modules\Admin\Http\Controllers\ServiceChargeController;
 use Modules\Admin\Http\Controllers\DeliveryChargeController;
 use Modules\Admin\Http\Controllers\MedicalSupportController;
 use Modules\Admin\Http\Controllers\MedicalProcedureController;
-use Modules\Admin\Http\Controllers\ProductController;
-use Modules\Admin\Http\Controllers\LabTestController;
-use Modules\Admin\Http\Controllers\EmployeeController;
 use Modules\Admin\Http\Controllers\IncomeSubCategoryController;
 use Modules\Admin\Http\Controllers\ExpenseSubCategoryController;
 
@@ -59,6 +60,7 @@ Route::prefix('admin')->group(function () {
         'employee' => EmployeeController::class,
         'banners' => BannerController::class,
         'packages' => PackageController::class,
+        'promo-codes' => PromoCodeController::class,
     ]);
     Route::match(['get', 'post'], 'vat', [VatController::class, 'index'])->name('vat');
 });

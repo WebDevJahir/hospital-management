@@ -11,6 +11,13 @@
 |
 */
 
-Route::prefix('patient')->group(function() {
-    Route::get('/', 'PatientController@index');
+use Illuminate\Support\Facades\Route;
+use Modules\Patient\Http\Controllers\PatientController;
+
+Route::prefix('patient')->group(function () {
+    Route::get('/', 'AdminController@index');
+
+    Route::resources([
+        'patients' => PatientController::class,
+    ]);
 });
