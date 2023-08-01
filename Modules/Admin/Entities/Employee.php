@@ -11,25 +11,26 @@ class Employee extends Model
 
     protected $fillable = [
         'user_id',
-        'name',
+        'first_name',
         'last_name',
         'father_name',
         'mother_name',
+        'date_of_birth',
         'image',
         'age',
-        'sex',
+        'gender',
         'present_address',
         'permanent_address',
         'reference',
         'employee_type',
         'user_type',
         'doctor_description',
-        'parents_nid',
+        'guardian_docuemnt_no',
         'bmdc_reg_no',
         'bnc_reg_no',
-        'nid',
-        'mobile',
-        'alternative_mobile',
+        'document_no',
+        'contact_number',
+        'alternative_contact_nunber',
         'email',
         'montyly_salary',
         'hourly_salary',
@@ -53,4 +54,14 @@ class Employee extends Model
         'password',
         'text_password',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
 }

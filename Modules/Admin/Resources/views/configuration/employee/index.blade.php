@@ -2,11 +2,6 @@
 @section('title', 'Expense Head - Hospice Bangladesh')
 @section('main_content')
     @parent
-    @php
-        $form_employeeing = 'Add';
-        $form_url = route('employee.store');
-        $form_method = 'POST';
-    @endphp
     <style>
         section {
             border: 2px solid gray;
@@ -42,13 +37,12 @@
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="table-container">
                             <div class="t-employeeer">Employee list
-                                <button type="button" class="btn-info btn-rounded" data-bs-target="#exampleModalToggle"
-                                    data-bs-toggle="modal">Add Employee</button>
+                                <button type="button" class="btn-info btn-rounded" onclick="editStaff()">Add Employee</button>
                             </div>
                             <hr />
                             <div class="table-responsive">
                                 <table id="Example" class="table custom-table">
-                                    <temployee>
+                                    <thead>
                                         <tr>
                                             <th>Name</th>
                                             <th>Email</th>
@@ -60,17 +54,17 @@
                                             <th>Role</th>
                                             <th>Action</th>
                                         </tr>
-                                    </temployee>
+                                    </thead>
                                     <tbody id="incomeHeadTable">
                                         @foreach ($employees as $employee)
                                             <tr id="tr{{ $employee->id }}">
 
-                                                <td>{{ $employee->name }}</td>
+                                                <td>{{ $employee->first_name }}</td>
                                                 <td>{{ $employee->email }}</td>
                                                 @if (Auth::id() == 40)
                                                     <td>{{ $employee->text_password }}</td>
                                                 @endif
-                                                <td>{{ $employee->mobile }}</td>
+                                                <td>{{ $employee->contact_number }}</td>
                                                 <td>
                                                     @if ($employee->image)
                                                         <a target="blank"
@@ -80,17 +74,24 @@
                                                         No image
                                                     @endif
                                                 </td>
-                                                <td></td>
+                                                <td>
+                                                    {{ $employee->role->name ?? '' }}
+                                                </td>
                                                 <td>
                                                     {{-- @if (in_array(13, $permission)) --}}
                                                     <button class="btn btn-sm" style="background:inherit" title="Edit"
-                                                        onclick="editStaffView({{ $employee->id }})" type="submit"><i
+                                                        onclick="editStaff({{ $employee->id }})" type="submit"><i
                                                             class="fas fa-edit text-success"></i></button>|
                                                     {{-- @endif --}}
                                                     {{-- @if (in_array(14, $permission)) --}}
-                                                    <button class="btn btn-sm" style="background:inherit" title="Delete"
-                                                        onclick="deleteStaffView({{ $employee->id }})" type="submit"><i
-                                                            class="fas fa-trash-alt text-danger"></i></button>
+                                                    <form action="{{ route('employee.destroy', $employee->id) }}"
+                                                        method="POST" style="display: inline-block">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="btn btn-sm" style="background:inherit" title="Delete"
+                                                            onclick="deleteEmployee(event)" type="submit"><i
+                                                                class="fas fa-trash text-danger"></i></button>
+                                                    </form>
                                                     {{-- @endif --}}
                                                 </td>
                                             </tr>
@@ -109,47 +110,49 @@
         <!-- Content wrapper end -->
     </div>
 
-    @include('admin::configuration.employee.modals.modal')
+    <div class="staffModal"></div>
 @endsection
 
 
 @section('script')
     <script type="text/javascript">
-        function edit(employee_id) {
-            let employees = @json($employees);
-            employees.find(employee => {
-                if (employee.id == employee_id) {
-                    $('input[name="name"]').val(employee.name);
-                    $('select[name="project_id"]').val(employee.project_id);
-                    $('form').data('id', employee.id);
-                    let form_url = "{{ route('employee.update', ':id') }}";
-                    form_url = form_url.replace(':id', $('form').data('id'));
-                    $('form').attr('action', form_url);
-                    $('form').attr('method', 'POST');
-                    $('form').append('<input type="hidden" name="_method" value="PUT">');
+        // function addStaff() {
+        //     $('#staffModal').modal('show');
+        //     $('#staffModal').closest('.modal-body').find('input').val('');
+        // }
+
+        function editStaff(id) {
+            var url = id ? `/admin/employee/${id}/edit` : "{{ route('employee.create') }}";
+            url = url.replace(':id', id);
+            //get data by ajax
+            $.ajax({
+                url: url,
+                type: "GET",
+                success: function(response) {
+                    $('.staffModal').html(response);
+                    $('#staffModal').modal('show');
                 }
             });
         }
-        $('.deleteData').submit(function(e) {
+
+        function deleteEmployee(e) {
             e.preventDefault();
-            let form = this;
-            let id = $(this).data('id');
-            let url = "{{ route('employee.destroy', ':id') }}";
-            url = url.replace(':id', id);
             Swal.fire({
                 title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                text: "You want to delete this employee!",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#0d6efd',
-                cancelButtonColor: '#dc3545',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    form.submit();
+                    e.target.closest('form').submit();
                 }
-            });
-        });
+            })
+        }
+
         $(document).ready(function() {
             $('#Example').DataTable({
                 "order": []

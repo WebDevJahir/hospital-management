@@ -7,6 +7,8 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Admin\Entities\Employee;
+use Modules\Admin\Entities\Role;
+use Modules\Admin\Http\Requests\EmployeeRequest;
 
 class EmployeeController extends Controller
 {
@@ -17,7 +19,7 @@ class EmployeeController extends Controller
     public function index()
     {
         $employees = Employee::all();
-        $roles = UserRole::all();
+        $roles = Role::all();
         return view('admin::configuration.employee.index', compact('employees', 'roles'));
     }
 
@@ -27,7 +29,9 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        return view('admin::create');
+        $employee = new Employee();
+        $roles = Role::all();
+        return view('admin::configuration.employee.modals.modal', compact('employee', 'roles'));
     }
 
     /**
@@ -37,7 +41,10 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $data = $request->except('_token', '_method');
+        $employee = Employee::create($data);
+        return redirect()->route('admin.employee.index')->with('success', 'Employee created successfully');
     }
 
     /**
@@ -55,9 +62,10 @@ class EmployeeController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function edit($id)
+    public function edit(Employee $employee)
     {
-        return view('admin::edit');
+        $roles = Role::all();
+        return view('admin::configuration.employee.modals.modal', compact('employee', 'roles'));
     }
 
     /**
@@ -66,9 +74,11 @@ class EmployeeController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(Request $request, $id)
+    public function update(EmployeeRequest $request, Employee $employee)
     {
-        //
+        $data = $request->except('_token', '_method');
+        $employee->update($data);
+        return redirect()->route('admin.employee.index')->with('success', 'Employee updated successfully');
     }
 
     /**
@@ -78,6 +88,7 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Employee::find($id)->delete();
+        return redirect()->route('admin.employee.index')->with('success', 'Employee deleted successfully');
     }
 }

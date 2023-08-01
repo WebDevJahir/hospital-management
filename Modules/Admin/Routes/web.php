@@ -67,3 +67,4 @@ Route::get('get-police-station', [PoliceStationController::class, 'getPoliceStat
 Route::get('get-income-heads', [CommonController::class, 'getIncomeHeads'])->name('get-income-heads');
 Route::get('get-income-sub-categories', [CommonController::class, 'getIncomeSubCategories'])->name('get-income-sub-categories');
 Route::get('get-income-heads-sub-category-edit', [CommonController::class, 'getIncomeHeadsAndSubCategories'])->name('get-income-heads-sub-category-edit');
+Route::get('edit-staff/{id}', [EmployeeController::class, 'edit'])->name('edit.staff');

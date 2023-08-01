@@ -64,7 +64,7 @@
 <body>
     @php
         $user = App\Models\User::where('id', Auth::id())->first();
-        $role = App\UserRole::where('id', $user->role_id)->first();
+        $role = \Modules\Admin\Entities\Role::where('id', $user->role_id)->first();
         $userPermission = \App\UserPermission::where('role', $role->id)->first();
         if ($userPermission) {
             $permission = json_decode($userPermission->permission);
