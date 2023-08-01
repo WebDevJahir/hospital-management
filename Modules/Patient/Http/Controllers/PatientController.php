@@ -2,9 +2,13 @@
 
 namespace Modules\Patient\Http\Controllers;
 
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Admin\Entities\Package;
+use Modules\Patient\Entities\Patient;
+use Illuminate\Contracts\Support\Renderable;
+use Modules\Admin\Entities\City;
+use Modules\Admin\Entities\Upazila;
 
 class PatientController extends Controller
 {
@@ -14,7 +18,28 @@ class PatientController extends Controller
      */
     public function index()
     {
-        return view('patient::index');
+        $packages = Package::get();
+        $patients = Patient::with('package')->orderBy('id', 'desc')->get();
+        $reg_no = Patient::max('reg_no');
+        $cities = City::latest()->get();
+        // $thanas = Upazila::latest()->get();
+        $thanas = [
+            0 => [
+                'id' => 1,
+                'name' => 'Dhaka'
+            ],
+            1 => [
+                'id' => 2,
+                'name' => 'Chittagong'
+            ],
+        ];
+
+        if (!$reg_no) {
+            $reg_no = 202103;
+        } else {
+            $reg_no = $reg_no + 1;
+        }
+        return view('patient::patients.create', compact('patients', 'packages', 'reg_no', 'cities', 'thanas'));
     }
 
     /**
