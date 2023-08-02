@@ -23,16 +23,80 @@
                                 @csrf
                                 <div class="row gutters">
                                     <div class="col-4">
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Name</span>
-                                            <input type="text" class="form-control" placeholder="Category Name"
-                                                name="category_name">
+                                        <div class="form-group">
+                                            <div style="font-weight: bold;">Category</div>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <label class="input-group-text" for=""><span
+                                                            class="icon-folder-plus"></span></label>
+                                                </div>
+                                                <select class="form-control select2" data-width=90% id="category">
+                                                    @foreach ($categories as $category)
+                                                        <option value="{{ $category->id }}">{{ $category->category_name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
+                                </div>
+
+                                <div class="row gutters">
                                     <div class="col-4">
-                                        <div class="input-group mb-3">
-                                            <button type="submit" class="btn btn-outline-primary">Save</button>
+                                        <div class="form-group">
+                                            <div style="font-weight: bold;">Test Name</div>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="basic-addon1"><span
+                                                            class="icon-add-to-list"></span></span>
+                                                </div>
+                                                <input type="text" id="subCategoryName" class="form-control"
+                                                    placeholder="Sub Category Name" aria-label="Username"
+                                                    aria-describedby="basic-addon1">
+                                            </div>
                                         </div>
+                                    </div>
+                                </div>
+
+                                <div class="row gutters">
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <div style="font-weight: bold;">Normal Value</div>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="basic-addon1"><span
+                                                            class="icon-price-tag"></span></span>
+                                                </div>
+                                                <input type="number" class="form-control" id="minimum_value"
+                                                    placeholder="Minimum" aria-label="Username"
+                                                    aria-describedby="basic-addon1">
+                                                <input type="number" class="form-control" id="maximum_value"
+                                                    placeholder="Maximum" aria-label="Username"
+                                                    aria-describedby="basic-addon1">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row gutters">
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <div style="font-weight: bold;">Unit</div>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="basic-addon1"><span
+                                                            class="icon-add-to-list"></span></span>
+                                                </div>
+                                                <input type="text" id="unit" class="form-control"
+                                                    placeholder="Unit Name" aria-label="Username"
+                                                    aria-describedby="basic-addon1">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="input-group mb-3">
+                                        <button type="submit" class="btn btn-outline-primary">Save</button>
                                     </div>
                                 </div>
                             </form>
@@ -47,9 +111,9 @@
                                         </tr>
                                     </thead>
                                     <tbody id="incomeHeadTable">
-                                        @foreach ($investigationCategories as $categorie)
+                                        @foreach ($sub_categories as $categorie)
                                             <tr>
-                                                <td>{{ $categorie->category_name }}</td>
+                                                <td>{{ $categorie->sub_category_name }}</td>
                                                 <td>
                                                     <div class="icon-btn">
                                                         <nobr>
@@ -92,8 +156,8 @@
 @section('script')
     <script type="text/javascript">
         function edit(id) {
-            let investigationCategories = @json($investigationCategories);
-            investigationCategories.find(categorie => {
+            let sub_categories = @json($sub_categories);
+            sub_categories.find(categorie => {
                 if (categorie.id == id) {
                     $('input[name="category_name"]').val(categorie.category_name);
                     $('form').data('id', categorie.id);
