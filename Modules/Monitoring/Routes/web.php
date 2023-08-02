@@ -1,5 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Modules\Monitoring\Http\Controllers\InvestigationCategoryController;
+use Modules\Monitoring\Http\Controllers\InvestigationSubCategoryController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,6 +15,9 @@
 |
 */
 
-Route::prefix('monitoring')->group(function() {
-    Route::get('/', 'MonitoringController@index');
+Route::prefix('monitoring')->group(function () {
+    Route::resources([
+        'investigation-categories' => InvestigationCategoryController::class,
+        'investigation-sub-categories' => InvestigationSubCategoryController::class,
+    ]);
 });
