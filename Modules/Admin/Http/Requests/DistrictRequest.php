@@ -4,7 +4,7 @@ namespace Modules\Admin\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CityRequest extends FormRequest
+class DistrictRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.

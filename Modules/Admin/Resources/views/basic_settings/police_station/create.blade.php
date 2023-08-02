@@ -34,8 +34,8 @@
                                             <span class="input-group-text custom-group-text">City</span>
                                             <select class="form-control" name="city_id">
                                                 <option value="">Select City</option>
-                                                @foreach ($cities as $city)
-                                                    <option value="{{ $city->id }}">{{ $city->name }}</option>
+                                                @foreach ($districts as $district)
+                                                    <option value="{{ $district->id }}">{{ $district->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -54,7 +54,7 @@
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>City</th>
+                                            <th>District</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -62,7 +62,7 @@
                                         @foreach ($police_stations as $station)
                                             <tr>
                                                 <td>{{ $station->name }}</td>
-                                                <td>{{ $station->city->name }}</td>
+                                                <td>{{ $station->district->name }}</td>
                                                 <td>
                                                     <div class="icon-btn">
                                                         <nobr>
@@ -109,7 +109,7 @@
             police_stations.find(station => {
                 if (station.id == id) {
                     $('input[name="name"]').val(station.name);
-                    $('select[name="city_id"]').val(station.city_id);
+                    $('select[name="city_id"]').val(station.district_id);
                     $('form').data('id', station.id);
                     let form_url = "{{ route('police-station.update', ':id') }}";
                     form_url = form_url.replace(':id', $('form').data('id'));

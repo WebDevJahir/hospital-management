@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Admin\Entities\District;
 use Modules\Admin\Http\Controllers\VatController;
 use Modules\Admin\Http\Controllers\CityController;
 use Modules\Admin\Http\Controllers\StaffController;
@@ -19,6 +20,7 @@ use Modules\Admin\Http\Controllers\AlliedHealthController;
 use Modules\Admin\Http\Controllers\PoliceStationController;
 use Modules\Admin\Http\Controllers\ServiceChargeController;
 use Modules\Admin\Http\Controllers\DeliveryChargeController;
+use Modules\Admin\Http\Controllers\DistrictController;
 use Modules\Admin\Http\Controllers\MedicalSupportController;
 use Modules\Admin\Http\Controllers\MedicalProcedureController;
 use Modules\Admin\Http\Controllers\IncomeSubCategoryController;
@@ -47,7 +49,7 @@ Route::prefix('admin')->group(function () {
         'project' => ProjectController::class,
         'expense-head' => ExpenseHeadController::class,
         'expense-sub-category' => ExpenseSubCategoryController::class,
-        'city' => CityController::class,
+        'district' => DistrictController::class,
         'police-station' => PoliceStationController::class,
         'delivery-charge' => DeliveryChargeController::class,
         'service-charge' => ServiceChargeController::class,
@@ -61,6 +63,7 @@ Route::prefix('admin')->group(function () {
         'banners' => BannerController::class,
         'packages' => PackageController::class,
         'promo-codes' => PromoCodeController::class,
+        'patient' => PatientController::class,
     ]);
     Route::match(['get', 'post'], 'vat', [VatController::class, 'index'])->name('vat');
 });

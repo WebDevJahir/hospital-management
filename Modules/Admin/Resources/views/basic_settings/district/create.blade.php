@@ -1,10 +1,10 @@
 @extends('master.master')
-@section('title', 'City - Hospice Bangladesh')
+@section('title', 'District - Hospice Bangladesh')
 @section('main_content')
     @parent
     @php
         $form_heading = 'Add';
-        $form_url = route('city.store');
+        $form_url = route('district.store');
         $form_method = 'POST';
     @endphp
 
@@ -17,7 +17,7 @@
                 <div class="row gutters">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="table-container">
-                            <div class="t-header">City</div>
+                            <div class="t-header">District</div>
                             <hr />
                             <form action="{{ $form_url }}" method="{{ $form_method }}">
                                 @csrf
@@ -47,18 +47,18 @@
                                         </tr>
                                     </thead>
                                     <tbody id="incomeHeadTable">
-                                        @foreach ($cities as $city)
+                                        @foreach ($districts as $district)
                                             <tr>
-                                                <td>{{ $city->name }}</td>
+                                                <td>{{ $district->name }}</td>
                                                 <td>
                                                     <div class="icon-btn">
                                                         <nobr>
                                                             <a data-toggle="tooltip" title="Edit"
-                                                                onclick="edit({{ $city->id }})"
+                                                                onclick="edit({{ $district->id }})"
                                                                 class="btn btn-outline-warning btn-sm"><i
                                                                     class="fas fa-pen"></i></a>
 
-                                                            <form action="{{ route('city.destroy', $city->id) }}"
+                                                            <form action="{{ route('district.destroy', $district->id) }}"
                                                                 method="POST" data-toggle="tooltip" title="Delete"
                                                                 class="d-inline deleteData">
                                                                 @csrf
@@ -91,12 +91,12 @@
 @section('script')
     <script type="text/javascript">
         function edit(id) {
-            let cities = @json($cities);
-            cities.find(city => {
-                if (city.id == id) {
-                    $('input[name="name"]').val(city.name);
-                    $('form').data('id', city.id);
-                    let form_url = "{{ route('city.update', ':id') }}";
+            let districts = @json($districts);
+            districts.find(city => {
+                if (district.id == id) {
+                    $('input[name="name"]').val(district.name);
+                    $('form').data('id', district.id);
+                    let form_url = "{{ route('district.update', ':id') }}";
                     form_url = form_url.replace(':id', $('form').data('id'));
                     $('form').attr('action', form_url);
                     $('form').attr('method', 'POST');

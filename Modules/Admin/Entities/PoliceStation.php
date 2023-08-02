@@ -14,8 +14,8 @@ class PoliceStation extends Model
         'city_id',
     ];
 
-    public function city()
+    public function district()
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(District::class);
     }
 }

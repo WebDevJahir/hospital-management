@@ -5,10 +5,10 @@ namespace Modules\Admin\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Admin\Entities\City;
-use Modules\Admin\Http\Requests\CityRequest;
+use Modules\Admin\Entities\District;
+use Modules\Admin\Http\Requests\DistrictRequest;
 
-class CityController extends Controller
+class DistrictController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,8 @@ class CityController extends Controller
      */
     public function index()
     {
-        $cities = City::all();
-        return view('admin::basic_settings.city.create', compact("cities"));
+        $districts = District::all();
+        return view('admin::basic_settings.district.create', compact("districts"));
     }
 
     /**
@@ -36,8 +36,8 @@ class CityController extends Controller
     public function store(Request $request)
     {
         $data = $request->except("_token");
-        $city = City::create($data);
-        return redirect()->back()->with("success", "City created successfully");
+        $district = District::create($data);
+        return redirect()->back()->with("success", "District created successfully");
     }
 
     /**
@@ -66,11 +66,11 @@ class CityController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(City $city, CityRequest $request)
+    public function update(District $district, DistrictRequest $request)
     {
         $data = $request->except("_token");
-        $city->update($data);
-        return redirect()->back()->with("success", "City updated successfully");
+        $district->update($data);
+        return redirect()->back()->with("success", "Disctrict updated successfully");
     }
 
     /**
@@ -78,9 +78,9 @@ class CityController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function destroy(City $city)
+    public function destroy(District $district)
     {
-        $city->delete();
-        return redirect()->back()->with("success", "City deleted successfully");
+        $district->delete();
+        return redirect()->back()->with("success", "Disctrict deleted successfully");
     }
 }
