@@ -4,7 +4,7 @@
     @parent
     @php
         $form_heading = 'Add';
-        $form_url = route('investigation-categories.store');
+        $form_url = route('investigation-sub-categories.store');
         $form_method = 'POST';
     @endphp
 
@@ -22,7 +22,7 @@
                             <form action="{{ $form_url }}" method="{{ $form_method }}">
                                 @csrf
                                 <div class="row gutters">
-                                    <div class="col-4">
+                                    <div class="col-3">
                                         <div class="form-group">
                                             <div style="font-weight: bold;">Category</div>
                                             <div class="input-group">
@@ -30,7 +30,7 @@
                                                     <label class="input-group-text" for=""><span
                                                             class="icon-folder-plus"></span></label>
                                                 </div>
-                                                <select class="form-control select2" data-width=90% id="category">
+                                                <select class="form-control select2" data-width=90% id="category" name="category_id">
                                                     @foreach ($categories as $category)
                                                         <option value="{{ $category->id }}">{{ $category->category_name }}
                                                         </option>
@@ -39,10 +39,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="row gutters">
-                                    <div class="col-4">
+                                    <div class="col-3">
                                         <div class="form-group">
                                             <div style="font-weight: bold;">Test Name</div>
                                             <div class="input-group">
@@ -52,14 +50,12 @@
                                                 </div>
                                                 <input type="text" id="subCategoryName" class="form-control"
                                                     placeholder="Sub Category Name" aria-label="Username"
-                                                    aria-describedby="basic-addon1">
+                                                    aria-describedby="basic-addon1" name="sub_category_name">
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="row gutters">
-                                    <div class="col-4">
+                                    <div class="col-3">
                                         <div class="form-group">
                                             <div style="font-weight: bold;">Normal Value</div>
                                             <div class="input-group">
@@ -69,17 +65,15 @@
                                                 </div>
                                                 <input type="number" class="form-control" id="minimum_value"
                                                     placeholder="Minimum" aria-label="Username"
-                                                    aria-describedby="basic-addon1">
+                                                    aria-describedby="basic-addon1" name="minimum_value">
                                                 <input type="number" class="form-control" id="maximum_value"
                                                     placeholder="Maximum" aria-label="Username"
-                                                    aria-describedby="basic-addon1">
+                                                    aria-describedby="basic-addon1" name="maximum_value">
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="row gutters">
-                                    <div class="col-4">
+                                    <div class="col-3">
                                         <div class="form-group">
                                             <div style="font-weight: bold;">Unit</div>
                                             <div class="input-group">
@@ -89,14 +83,14 @@
                                                 </div>
                                                 <input type="text" id="unit" class="form-control"
                                                     placeholder="Unit Name" aria-label="Username"
-                                                    aria-describedby="basic-addon1">
+                                                    aria-describedby="basic-addon1" name="unit">
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="input-group mb-3">
-                                        <button type="submit" class="btn btn-outline-primary">Save</button>
+                                    <div class="col-2">
+                                        <div class="input-group mb-3">
+                                            <button type="submit" class="btn btn-outline-primary">Save</button>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -106,14 +100,20 @@
                                 <table id="Example" class="table custom-table">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
+                                            <th>Category</th>
+                                            <th>Sub Category</th>
+                                            <th>Normal Value</th>
+                                            <th>Unit</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody id="incomeHeadTable">
                                         @foreach ($sub_categories as $categorie)
                                             <tr>
+                                                <td>{{ $categorie->category->category_name ?? '' }}</td>
                                                 <td>{{ $categorie->sub_category_name }}</td>
+                                                <td>{{ $categorie->minimum_value }} - {{ $categorie->maximum_value }}</td>
+                                                <td>{{ $categorie->unit }}</td>
                                                 <td>
                                                     <div class="icon-btn">
                                                         <nobr>
@@ -123,7 +123,7 @@
                                                                     class="fas fa-pen"></i></a>
 
                                                             <form
-                                                                action="{{ route('investigation-categories.destroy', $categorie->id) }}"
+                                                                action="{{ route('investigation-sub-categories.destroy', $categorie->id) }}"
                                                                 method="POST" data-toggle="tooltip" title="Delete"
                                                                 class="d-inline deleteData">
                                                                 @csrf
@@ -159,9 +159,13 @@
             let sub_categories = @json($sub_categories);
             sub_categories.find(categorie => {
                 if (categorie.id == id) {
-                    $('input[name="category_name"]').val(categorie.category_name);
+                    $('#category').val(categorie.category_id).trigger('change');
+                    $('input[name="sub_category_name"]').val(categorie.sub_category_name);
+                    $('input[name="minimum_value"]').val(categorie.minimum_value);
+                    $('input[name="maximum_value"]').val(categorie.maximum_value);
+                    $('input[name="unit"]').val(categorie.unit);
                     $('form').data('id', categorie.id);
-                    let form_url = "{{ route('investigation-categories.update', ':id') }}";
+                    let form_url = "{{ route('investigation-sub-categories.update', ':id') }}";
                     form_url = form_url.replace(':id', $('form').data('id'));
                     $('form').attr('action', form_url);
                     $('form').attr('method', 'POST');

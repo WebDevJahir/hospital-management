@@ -17,10 +17,8 @@ class InvestigationSubCategoryController extends Controller
     public function index()
     {
         $categories = InvestigationCategory::latest()->get();
-    	$sub_categories = InvestigationSubCategory::latest()->get();
-        
+        $sub_categories = InvestigationSubCategory::with('category')->latest()->get();
         return view('monitoring::investigation.sub-categories.create', compact("categories", "sub_categories"));
-
     }
 
     /**
@@ -39,7 +37,8 @@ class InvestigationSubCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        InvestigationSubCategory::create($request->all());
+        return redirect()->back()->with("success", "Investigation Sub Category created successfully");
     }
 
     /**
@@ -68,9 +67,10 @@ class InvestigationSubCategoryController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(Request $request, $id)
+    public function update(InvestigationSubCategory $investigationSubCategory, Request $request)
     {
-        //
+        $investigationSubCategory->update($request->all());
+        return redirect()->back()->with("success", "Investigation Sub Category updated successfully");
     }
 
     /**
@@ -78,8 +78,9 @@ class InvestigationSubCategoryController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function destroy($id)
+    public function destroy(InvestigationSubCategory $investigationSubCategory)
     {
-        //
+        $investigationSubCategory->delete();
+        return redirect()->back()->with("success", "Investigation Sub Category deleted successfully");
     }
 }
