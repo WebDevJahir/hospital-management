@@ -64,14 +64,7 @@
 <body>
     @php
         $user = App\Models\User::where('id', Auth::id())->first();
-        $role = \Modules\Admin\Entities\Role::where('id', $user->role_id)->first();
-        $userPermission = \App\UserPermission::where('role', $role->id)->first();
-        if ($userPermission) {
-            $permission = json_decode($userPermission->permission);
-            Illuminate\Support\Facades\Session::put('permission', $permission);
-        } else {
-            return redirect('login');
-        }
+        
         // $unseen = Auth::user()->chat->where('seen','0')->unique('from_id')->count('from_id');
     @endphp
 
@@ -126,7 +119,6 @@
                                     style="color: #ff7600;font-size: 14px;margin-right: 10px;"></span>
                             </a>
                         </li>
-                        @if (in_array(400, $permission))
                             <li class="dropdown">
                                 <a href="" id="notifications" data-toggle="dropdown" aria-haspopup="true">
                                     <i class="icon-bell" style="color: #ff7600;font-size: 18px;"></i>
@@ -193,15 +185,12 @@
                                     </ul>
                                 </div>
                             </li>
-                        @endif
-                        @if (in_array(235, $permission))
                             {{-- <li>
         						    <a href="{{url('chat')}}">
         						        <i class="fab fa-facebook-messenger" style="color: #ff7600;font-size: 18px;"></i>
         							    <span class="count-label" style="color: #ff7600;font-size: 14px;margin-right: 10px;">{{$unseen}}</span> 
         							</a>
         						</li> --}}
-                        @endif
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
                                 <a class="nav-link active-page" href="{{ url('dashboard') }}"
@@ -220,24 +209,18 @@
                                     Patient
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="pagesDropdown">
-                                    @if (in_array(110, $permission))
                                         <li>
                                             <a class="dropdown-item" href="{{ url('patient-list') }}"><span
                                                     class="icon-person_add"></span> New Registration</a>
                                         </li>
-                                    @endif
-                                    @if (in_array(114, $permission))
                                         <li>
                                             <a class="dropdown-item" href="{{ url('plan-and-status') }}"><span
                                                     class="icon-help_outline"></span> Plan & status</a>
                                         </li>
-                                    @endif
-                                    @if (in_array(118, $permission))
                                         <li>
                                             <a class="dropdown-item" href="{{ url('reports') }}"><span
                                                     class="icon-record_voice_over"></span> Registration Report</a>
                                         </li>
-                                    @endif
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
@@ -247,593 +230,54 @@
                                     Monitoring
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="formsDropdown">
-                                    @if (in_array(123, $permission))
                                         <li>
                                             <a class="dropdown-item" href="{{ url('patient-profile-list') }}"><span
                                                     class="icon-account_box"></span> Patient Profile</a>
                                         </li>
-                                    @endif
-                                    @if (in_array(127, $permission))
                                         <li>
                                             <a class="dropdown-toggle sub-nav-link" href="m_investigation.html"><span
                                                     class="icon-search1"></span> Prescription</a>
                                             <ul class="dropdown-menu dropdown-menu-right"
                                                 aria-labelledby="customDropdown">
-                                                @if (in_array(128, $permission))
                                                     <li>
                                                         <a class="dropdown-item"
                                                             href="{{ url('prescription-patient-list') }}"><span
                                                                 class="icon-file-text"></span> Prescription
                                                             Generator</a>
                                                     </li>
-                                                @endif
-                                                @if (in_array(129, $permission))
                                                     <li>
                                                         <a class="dropdown-item"
                                                             href="{{ url('certificate-patient-list') }}"><i
                                                                 class="icon-printer nav-icon"></i> Death
                                                             Certificate</a>
                                                     </li>
-                                                @endif
-                                                @if (in_array(130, $permission))
                                                     <li>
                                                         <a class="dropdown-item"
                                                             href="{{ url('opd-patient-list') }}"><i
                                                                 class="icon-printer nav-icon"></i>OPD Prescription</a>
                                                     </li>
-                                                @endif
-                                                @if (in_array(131, $permission))
                                                     <li>
                                                         <a class="dropdown-item" href="{{ url('opd-list') }}"><i
                                                                 class="icon-printer nav-icon"></i>List of OPD</a>
                                                     </li>
-                                                @endif
-                                                @if (in_array(132, $permission))
                                                     <li>
                                                         <a class="dropdown-item"
                                                             href="{{ url('medicine-item-list') }}"><i
                                                                 class="icon-printer nav-icon"></i>Add Medicine</a>
                                                     </li>
-                                                @endif
-                                                @if (in_array(136, $permission))
                                                     <li>
                                                         <a class="dropdown-item"
                                                             href="{{ url('follow-up-patient') }}"><i
                                                                 class="icon-printer nav-icon"></i>Patient Follow Up</a>
                                                     </li>
-                                                @endif
-                                                @if (in_array(139, $permission))
                                                     <li>
                                                         <a class="dropdown-item"
                                                             href="{{ url('next-plan-patient') }}"><i
                                                                 class="icon-printer nav-icon"></i>Next Plan</a>
                                                     </li>
-                                                @endif
                                             </ul>
                                         </li>
-                                    @endif
-                                    <!-- <li>
-                <a class="dropdown-item" href="patient-follow-up-list"><span class="icon-fast-forward"></span> Follow Up</a>
-         </li> -->
-                                    @if (in_array(140, $permission))
-                                        <li>
-                                            <a class="dropdown-toggle sub-nav-link" href="m_investigation.html"><span
-                                                    class="icon-search1"></span> Investigation</a>
-                                            <ul class="dropdown-menu dropdown-menu-right"
-                                                aria-labelledby="customDropdown">
-                                                @if (in_array(145, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('investigation-category-list') }}"><i
-                                                                class="icon-printer nav-icon"></i> Category</a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(149, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('investigation-sub-category-list') }}"><i
-                                                                class="icon-printer nav-icon"></i> Sub Category</a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(141, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('investigation-reports-list') }}"><i
-                                                                class="icon-edit1 nav-icon"></i>Input & Report</a>
-                                                    </li>
-                                                @endif
-                                            </ul>
-                                        </li>
-                                    @endif
-                                    @if (in_array(153, $permission))
-                                        <li>
-                                            <a class="dropdown-toggle sub-nav-link" href="#"
-                                                id="customDropdown" role="button" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
-                                                <span class="icon-chrome"></span> Pain Clinic
-                                            </a>
-                                            <ul class="dropdown-menu dropdown-menu-right"
-                                                aria-labelledby="customDropdown">
-                                                @if (in_array(154, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('patient-pain-asmt-list') }}"><i
-                                                                class="icon-edit1 nav-icon"></i>Assessment</a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(157, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('patient-morphin-list') }}"><i
-                                                                class="icon-edit1 nav-icon"></i>Management</a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(160, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('patient-morphin-dose-list') }}"><i
-                                                                class="icon-edit1 nav-icon"></i>Monitoring</a>
-                                                    </li>
-                                                @endif
-                                            </ul>
-                                        </li>
-                                    @endif
-                                    @if (in_array(163, $permission))
-                                        <li>
-                                            <a class="dropdown-toggle sub-nav-link" href="#"
-                                                id="customDropdown" role="button" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
-                                                <span class="icon-chrome"></span>Wound Clinic
-                                            </a>
-                                            <ul class="dropdown-menu dropdown-menu-right"
-                                                aria-labelledby="customDropdown">
-                                                @if (in_array(164, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('patient-wound-list') }}"><i
-                                                                class="icon-edit1 nav-icon"></i>Wound Describe</a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(167, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('patient-wound-asst-list') }}"><i
-                                                                class="icon-edit1 nav-icon"></i>Wound Assesment</a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(170, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('patient-wound-manage-list') }}"><i
-                                                                class="icon-edit1 nav-icon"></i>Wound Management</a>
-                                                    </li>
-                                                @endif
-                                            </ul>
-                                        </li>
-                                    @endif
-                                    @if (in_array(240, $permission))
-                                        <li>
-                                            <a class="dropdown-item"
-                                                href="{{ url('patient-psycho-asmt-list') }}"><span
-                                                    class="icon-image"></span> Phycho ASMT</a>
-                                        </li>
-                                    @endif
-                                    @if (in_array(173, $permission))
-                                        <li>
-                                            <a class="dropdown-toggle sub-nav-link" href="#"
-                                                id="customDropdown" role="button" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
-                                                <span class="icon-github"></span> Rehabilitative Pall Care
-                                            </a>
-                                            <ul class="dropdown-menu dropdown-menu-right"
-                                                aria-labelledby="customDropdown">
-                                                @if (in_array(174, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item" href="{{ url('menu-list') }}"><span
-                                                                class="icon-list2"></span> Menu</a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(178, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('video-link-list') }}"><span
-                                                                class="icon-paperclip"></span> Video</a>
-                                                    </li>
-                                                @endif
-                                            </ul>
-                                        </li>
-                                    @endif
-                                    @if (in_array(182, $permission))
-                                        <li>
-                                            <a class="dropdown-item" href="{{ url('all-uploads') }}"><span
-                                                    class="icon-image"></span> Uploaded Documents</a>
-                                        </li>
-                                    @endif
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="uiElementsDropdown"
-                                    role="button" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                    <i class="icon-edit1 nav-icon" style="float:left;padding-right: 5px;"></i>
-                                    Diagnostic Lab
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="uiElementsDropdown">
-                                    @if (in_array(183, $permission))
-                                        <li>
-                                            <a class="sub-nav-link"
-                                                href="{{ url('hospice-investigation-category-list') }}">
-                                                <span class="icon-trending_up"></span> Category
-                                            </a>
-                                        </li>
-                                    @endif
-                                    @if (in_array(195, $permission))
-                                        <li>
-                                            <a class="sub-nav-link"
-                                                href="{{ url('hospice-investigation-sub-category-list') }}">
-                                                <span class="icon-trending-down"></span> Sub Category
-                                            </a>
-                                        </li>
-                                    @endif
-                                    @if (in_array(199, $permission))
-                                        <li>
-                                            <a class="sub-nav-link"
-                                                href="{{ url('hospice-investigation-reports-list') }}">
-                                                <span class="icon-server"></span>Lab Report
-                                            </a>
-                                        </li>
-                                    @endif
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="uiElementsDropdown"
-                                    role="button" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                    <i class="icon-edit1 nav-icon" style="float:left;padding-right: 5px;"></i>
-                                    ERP Entry
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="uiElementsDropdown">
-                                    @if (in_array(183, $permission))
-                                        <li>
-                                            <a class="dropdown-toggle sub-nav-link" href=""
-                                                id="buttonsDropdown" role="button" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
-                                                <span class="icon-trending_up"></span> Invoice
-                                            </a>
-                                            <ul class="dropdown-menu dropdown-menu-right"
-                                                aria-labelledby="buttonsDropdown">
-                                                <li>
-                                                    <a class="dropdown-item" href="{{ url('invoice-list') }}"><span
-                                                            class="icon-twitter1"></span>Invoice</a>
-                                                </li>
-                                                @if (in_array(193, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('due-invoice-list') }}"><span
-                                                                class="icon-insert_invitation"></span> Due Invoice</a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(194, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('paid-invoice-list') }}"><span
-                                                                class="icon-event_available"></span> Paid Invoice</a>
-                                                    </li>
-                                                @endif
-                                            </ul>
-                                        </li>
-                                    @endif
-                                    @if (in_array(195, $permission))
-                                        <li>
-                                            <a class="dropdown-toggle sub-nav-link" href="#"
-                                                id="buttonsDropdown" role="button" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
-                                                <span class="icon-trending-down"></span> Expense
-                                            </a>
-                                            <ul class="dropdown-menu dropdown-menu-right"
-                                                aria-labelledby="buttonsDropdown">
-                                                <li>
-                                                    <a class="dropdown-item" href="{{ url('voucher-list') }}"><span
-                                                            class="icon-send1"></span> Debit Voucher</a>
-                                                </li>
-                                                @if (in_array(197, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('due-expence-list') }}"><span
-                                                                class="icon-restore"></span> Due Expense</a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(198, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('paid-expence-list') }}"><span
-                                                                class="icon-highlight_off"></span> Paid Expense</a>
-                                                    </li>
-                                                @endif
-                                            </ul>
-                                        </li>
-                                    @endif
-                                    @if (in_array(199, $permission))
-                                        <li>
-                                            <a class="dropdown-toggle sub-nav-link" href="#"
-                                                id="buttonsDropdown" role="button" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
-                                                <span class="icon-server"></span> Inventory
-                                            </a>
-                                            <ul class="dropdown-menu dropdown-menu-right"
-                                                aria-labelledby="buttonsDropdown">
-                                                @if (in_array(200, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item" href="{{ url('buy-list') }}"><span
-                                                                class="icon-plus-circle"></span> Buy</a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(204, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item" href="{{ url('sell-list') }}"><span
-                                                                class="icon-minus-circle"></span> Sell</a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(208, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('buy-and-sell-reports') }}"><span
-                                                                class="icon-target"></span> Total</a>
-                                                    </li>
-                                                @endif
-                                            </ul>
-                                        </li>
-                                    @endif
-                                    @if (in_array(209, $permission))
-                                        <li>
-                                            <a class="dropdown-toggle sub-nav-link" href="#"
-                                                id="buttonsDropdown" role="button" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
-                                                <span class="icon-layers2"></span> Roster
-                                            </a>
-                                            <ul class="dropdown-menu dropdown-menu-right"
-                                                aria-labelledby="buttonsDropdown">
-                                                @if (in_array(210, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item" href="{{ url('roster-entry') }}"><i
-                                                                class="icon-edit1 "></i> Entry</a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(211, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('roster-duty-report') }}"><i
-                                                                class="icon-printer nav-icon"></i> Report</a>
-                                                    </li>
-                                                @endif
-                                            </ul>
-                                        </li>
-                                    @endif
-                                    @if (in_array(212, $permission))
-                                        <li>
-                                            <a class="dropdown-toggle sub-nav-link" href="#"
-                                                id="buttonsDropdown" role="button" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
-                                                <span class="icon-layers2"></span> Salary
-                                            </a>
-                                            <ul class="dropdown-menu dropdown-menu-right"
-                                                aria-labelledby="buttonsDropdown">
-                                                @if (in_array(213, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('salary-list') }}"><span
-                                                                class="icon-dollar-sign"></span>Add Salary</a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(214, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('salary-report-list') }}"><span
-                                                                class="icon-dollar-sign"></span>Salary Report</a>
-                                                    </li>
-                                                @endif
-                                            </ul>
-                                        </li>
-                                    @endif
-                                    @if (in_array(215, $permission))
-                                        <li>
-                                            <a class="dropdown-toggle sub-nav-link" href="#"
-                                                id="buttonsDropdown" role="button" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
-                                                <span class="icon-layers2"></span> Leave
-                                            </a>
-                                            <ul class="dropdown-menu dropdown-menu-right"
-                                                aria-labelledby="buttonsDropdown">
-                                                @if (in_array(216, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item" href="{{ url('leave-list') }}"><span
-                                                                class="icon-clock1"></span> Leave Application</a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(218, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('unapprove-leave-list') }}"><span
-                                                                class="icon-log-in"></span> Pending List</a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(217, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('approve-leave-list') }}"><i
-                                                                class="icon-printer nav-icon"></i> Approve List</a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(219, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('leave-report-list') }}"><span
-                                                                class="icon-clock1"></span> Leave Report</a>
-                                                    </li>
-                                                @endif
-                                            </ul>
-                                        </li>
-                                    @endif
-                                    @if (in_array(220, $permission))
-                                        <li>
-                                            <a class="dropdown-toggle sub-nav-link" href="#"
-                                                id="calendarsDropdown" role="button" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
-                                                <span class="icon-file-plus"></span>Bed
-                                            </a>
-                                            <ul class="dropdown-menu dropdown-menu-right"
-                                                aria-labelledby="calendarsDropdown">
-                                                @if (in_array(221, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item" href="{{ url('bed-list') }}"><span
-                                                                class="icon-file-plus"></span> Add Bed </a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(222, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('bed-assign-list') }}"><span
-                                                                class="icon-archive"></span>Assign Bed</a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(223, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item" href="{{ url('bed-report') }}"><span
-                                                                class="icon-clock1"></span> Bed Report</a>
-                                                    </li>
-                                                @endif
-                                            </ul>
-                                        </li>
-                                    @endif
-                                    @if (in_array(224, $permission))
-                                        <li>
-                                            <a class="dropdown-toggle sub-nav-link" href="#"
-                                                id="calendarsDropdown" role="button" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
-                                                <span style="margin-right: 3px;"><i
-                                                        class="fas fa-bed"></i></span>Instrument
-                                            </a>
-                                            <ul class="dropdown-menu dropdown-menu-right"
-                                                aria-labelledby="calendarsDropdown">
-                                                @if (in_array(225, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('instrument-rent-list') }}"><span
-                                                                class="icon-file-plus"></span> Add Instrument </a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(226, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('instrument-assign-list') }}"><span
-                                                                class="icon-archive"></span>Assign Instrument</a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(227, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('instrument-report') }}"><span
-                                                                class="icon-clock1"></span> Instrument</a>
-                                                    </li>
-                                                @endif
-                                            </ul>
-                                        </li>
-                                    @endif
-                                    @if (in_array(241, $permission))
-                                        <li>
-                                            <a class="dropdown-toggle sub-nav-link" href="#"
-                                                id="calendarsDropdown" role="button" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
-                                                <span style="margin-right: 3px;"><i
-                                                        class="fas fa-bed"></i></span>Schedule & Booking
-                                            </a>
-                                            <ul class="dropdown-menu dropdown-menu-right"
-                                                aria-labelledby="calendarsDropdown">
-                                                @if (in_array(242, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('schedule-list') }}"><span
-                                                                class="icon-file-plus"></span> Add Schedule </a>
-                                                    </li>
-                                                @endif
-                                                @if (in_array(243, $permission))
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ url('appointment-list') }}"><span
-                                                                class="icon-archive"></span>Add Appointment</a>
-                                                    </li>
-                                                @endif
-                                            </ul>
-                                        </li>
-                                    @endif
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="tablesDropdown"
-                                    role="button" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                    <i class="icon-printer nav-icon" style="float:left;padding-right: 5px;"></i>
-                                    ERP Report
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="tablesDropdown">
-                                    @if (in_array(229, $permission))
-                                        <li>
-                                            <a class="dropdown-item" href="{{ url('payment-list') }}"><span
-                                                    class="icon-file-text"></span> Payments</a>
-                                        </li>
-                                    @endif
-                                    @if (in_array(230, $permission))
-                                        <li>
-                                            <a class="dropdown-item" href="{{ url('cash-book') }}"><i
-                                                    class="icon-book-open"></i> Cash Book</a>
-                                        </li>
-                                    @endif
-                                    @if (in_array(231, $permission))
-                                        <li>
-                                            <a class="dropdown-item" href="{{ url('cash-book-subcat') }}"><i
-                                                    class="icon-book-open"></i> Cash Book by Sub-Cat</a>
-                                        </li>
-                                    @endif
-                                    @if (in_array(232, $permission))
-                                        <li>
-                                            <a class="dropdown-item" href="{{ url('cash-book-head') }}"><i
-                                                    class="icon-book-open"></i> Cash Book by In-Head</a>
-                                        </li>
-                                    @endif
-                                    @if (in_array(233, $permission))
-                                        <li>
-                                            <a class="dropdown-item" href="{{ url('provident-fund-report') }}"><span
-                                                    class="icon-loader"></span> Provident Fund</a>
-                                        </li>
-                                    @endif
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="layoutsDropdown"
-                                    role="button" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                    <i class="icon-radio nav-icon" style="float:left;padding-right: 5px;"></i>
-                                    Communication
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="layoutsDropdown">
-                                    @if (in_array(235, $permission))
-                                        {{-- <li>
-										<a class="dropdown-item" href="{{url('/chat')}}"><span class="icon-chat"></span> Chat<span style="color:red;font-weight:bold;">({{$unseen}})</span></a>
-									</li> --}}
-                                    @endif
-                                    @if (in_array(236, $permission))
-                                        <li>
-                                            <a class="dropdown-item"
-                                                href="{{ url('https://webmail-box2496.bluehost.com/') }}"
-                                                target="_blank"><span class="icon-mail"></span> Mail Portal</a>
-                                        </li>
-                                    @endif
-                                    @if (in_array(238, $permission))
-                                        <li>
-                                            <a class="dropdown-item" href="{{ url('sms-portal') }}"><span
-                                                    class="icon-message"></span> SMS Portal</a>
-                                        </li>
-                                    @endif
+                                    
                                 </ul>
                             </li>
                         </ul>
