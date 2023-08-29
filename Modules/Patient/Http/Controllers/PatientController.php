@@ -31,7 +31,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $patients = Patient::with('package')->orderBy('id', 'desc')->take(20)->get();
+        $patients = Patient::with('package')->latest()->take(20)->get();
         return view('patient::patient.index', compact('patients'));
     }
 
