@@ -63,7 +63,6 @@ Route::prefix('admin')->group(function () {
         'banners' => BannerController::class,
         'packages' => PackageController::class,
         'promo-codes' => PromoCodeController::class,
-        'patient' => PatientController::class,
     ]);
     Route::match(['get', 'post'], 'vat', [VatController::class, 'index'])->name('vat');
 });

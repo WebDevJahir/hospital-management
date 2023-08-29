@@ -17,21 +17,22 @@ use Modules\Patient\Entities\FunctionalStatus;
 use Modules\Patient\Entities\PreviousTreatment;
 use Modules\Patient\Entities\PsychologicalStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Admin\Entities\Package;
 
 class Patient extends Model
 {
     use HasFactory;
 
-    protected $gaured = [];
+    protected $guarded = [];
 
     public function package()
     {
-        return $this->hasOne(IncomeSubCategory::class, 'id', 'package_id');
+        return $this->hasOne(Package::class, 'id', 'package_id');
     }
 
-    public function details()
+    public function patientDetail()
     {
-        return $this->hasOne(PatientDetail::class, 'patient_id', 'id');
+        return $this->hasOne(PatientDetail::class, 'patient_id', 'id')->withDefault();
     }
 
     public function user()
@@ -41,42 +42,32 @@ class Patient extends Model
 
     public function patientReferral()
     {
-        return $this->hasOne(PatientReferral::class, 'patient_id', 'id');
+        return $this->hasOne(PatientReferral::class, 'patient_id', 'id')->withDefault();
     }
 
     public function primaryDiseases()
     {
-        return $this->hasOne(PrimaryDisease::class, 'patient_id', 'id');
+        return $this->hasOne(PrimaryDisease::class, 'patient_id', 'id')->withDefault();
     }
 
     public function concernDiseases()
     {
-        return $this->hasOne(ConcernDisease::class, 'patient_id', 'id');
+        return $this->hasOne(ConcernDisease::class, 'patient_id', 'id')->withDefault();
     }
 
     public function previousTreatment()
     {
-        return $this->hasOne(PreviousTreatment::class, 'patient_id', 'id');
+        return $this->hasOne(PreviousTreatment::class, 'patient_id', 'id')->withDefault();
     }
 
     public function functionStatus()
     {
-        return $this->hasOne(FunctionalStatus::class, 'patient_id', 'id');
-    }
-
-    public function psychologicalStatus()
-    {
-        return $this->hasOne(PsychologicalStatus::class, 'patient_id', 'id');
+        return $this->hasOne(FunctionalStatus::class, 'patient_id', 'id')->withDefault();
     }
 
     public function currentProblem()
     {
-        return $this->hasOne(CurrentProblem::class, 'patient_id', 'id');
-    }
-
-    public function painStatuses()
-    {
-        return $this->hasMany(PainStatus::class, 'patient_id', 'id');
+        return $this->hasOne(CurrentProblem::class, 'patient_id', 'id')->withDefault();
     }
 
     public function city()

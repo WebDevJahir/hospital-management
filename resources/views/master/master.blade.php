@@ -14,6 +14,7 @@
     <title>@yield('title')</title>
 
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/select2.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}" />
 
     <!-- Main css -->
@@ -25,11 +26,12 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/daterange/daterange.css') }}" />
     <!-- Data Tables -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/dataTables.bs4.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/dataTable.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/wizard/jquery.steps.css') }}" />
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="{{ asset('js/jquery.validate.js') }}"></script>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="{{ asset('assets/vendor/wizard/jquery.steps.custom.js') }}"></script>
 
     <script type="text/javascript">
         const Toast = Swal.mixin({
@@ -903,6 +905,7 @@
     <script src="{{ asset('assets/js/moment.js') }}"></script>
     <script src="{{ asset('assets/js/sweet-alert.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
+    <script src="{{ asset('assets/js/select2.js') }}"></script>
 
     <!-- Data Tables -->
     <script src="{{ asset('assets/vendor/datatables/dataTables.min.js') }}"></script>
@@ -916,9 +919,13 @@
     <script src="{{ asset('assets/vendor/wizard/jquery.steps.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/wizard/jquery.steps.custom.js') }}"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                width: 'resolve' // or a specific width value
+            });
+        });
+    </script>
     <script src="{{ asset('js/lightbox.js') }}"></script>
     @yield('script')
     @if (Session::has('success'))

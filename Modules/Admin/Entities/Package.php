@@ -14,7 +14,7 @@ class Package extends Model
     protected $fillable = [
         'project_id',
         'income_head_id',
-        'income_subcategory_id',
+        'income_sub_category_id',
         'time',
         'duration',
         'price',
@@ -26,8 +26,8 @@ class Package extends Model
         return $this->hasOne(Project::class, 'id', 'project_id');
     }
 
-    public function subCategory()
+    public function incomeSubCategory()
     {
-        return $this->hasOne(IncomeSubCategory::class, 'id', 'income_subcategory_id');
+        return $this->hasOne(IncomeSubCategory::class, 'id', 'income_sub_category_id');
     }
 }

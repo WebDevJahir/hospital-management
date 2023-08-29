@@ -66,23 +66,10 @@
                                                 <td>{{ $patient->status ?? '' }}</td>
                                                 <td>
                                                     {{-- @if (in_array(13, $permission)) --}}
-                                                    <button class="btn btn-sm" style="background:inherit" title="Edit"
-                                                        onclick="dataModal({{ $patient->id }})" type="submit"><i
-                                                            class="fas fa-edit text-success"></i></button>
-                                                    {{-- @endif --}}
-
-                                                    <button onclick="editPlan({{ $patient->id }})" class="btn btn-sm"
-                                                        style="background:inherit" title="Plan and Status"><i
-                                                            class="fas fa-user-tag text-success"></i></button>
-                                                    {{-- @if (in_array(14, $permission)) --}}
-                                                    <form action="{{ route('employee.destroy', $patient->id) }}"
-                                                        method="POST" style="display: inline-block">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button class="btn btn-sm" style="background:inherit" title="Delete"
-                                                            onclick="deleteData(event)" type="submit"><i
-                                                                class="fas fa-trash text-danger"></i></button>
-                                                    </form>
+                                                    <a href="{{ route('patient-profile-edit', $patient->id) }}"
+                                                        class="btn btn-sm" style="background:inherit" title="View"><i
+                                                            class="fas fa-edit text-success"></i>
+                                                    </a>
                                                     {{-- @endif --}}
                                                 </td>
                                             </tr>
@@ -106,59 +93,5 @@
 
 
 @section('script')
-    <script type="text/javascript">
-        function dataModal(id) {
-            var url = id ? `/patient/patient/${id}/edit` : "{{ route('patient.create') }}";
-            url = url.replace(':id', id);
-            //get data by ajax
-            $.ajax({
-                url: url,
-                type: "GET",
-                success: function(response) {
-                    $('.dataModal').html(response);
-                    $('#dataModal').modal('show');
-                }
-            });
-        }
 
-        function editPlan(id) {
-            var url = "{{ route('patient.plan.and.statu.edit') }}"
-            //get data by ajax
-            $.ajax({
-                url: url,
-                type: "GET",
-                data: {
-                    id: id
-                },
-                success: function(response) {
-                    $('.dataModal').html(response);
-                    $('#dataModal').modal('show');
-                }
-            });
-        }
-
-        function deleteData(e) {
-            e.preventDefault();
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You want to delete this employee!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    e.target.closest('form').submit();
-                }
-            })
-        }
-
-        $(document).ready(function() {
-            $('#tableOfData').DataTable({
-                "order": []
-            });
-        });
-    </script>
 @endsection

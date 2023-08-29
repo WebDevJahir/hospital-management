@@ -869,7 +869,7 @@ ul.header-tasks:last-child {
   padding: 1rem 0 1rem 0;
   background: #ffffff;
   height: calc(103vh - 90px);
-  overflow: hidden; }
+  overflow: scroll; }
   .content-wrapper .fixedBodyScroll {
     padding: 0 1rem 0 1rem; }
 
