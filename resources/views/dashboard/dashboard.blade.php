@@ -44,7 +44,7 @@
                 <!-- Row start -->
                 <div class="row gutters">
                     <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-12">
-                        @php $patients = App\Patient::get(); @endphp
+                        @php $patients = Modules\Patient\Entities\Patient::get(); @endphp
                         <!-- Widget start -->
                         <div class="mini-widget red">
                             <div class="mini-widget-header">
@@ -90,7 +90,7 @@
                             <div class="mini-widget-body">
                                 <i class="icon-thumbs-up1"></i>
                                 <div class="number">
-                                    {{ App\Patient::where('package_id', '!=', 13)->whereMonth('created_at', Carbon\Carbon::now()->format('m'))->where('status', 'Active')->count() }}
+                                    {{ Modules\Patient\Entities\Patient::where('package_id', '!=', 13)->whereMonth('created_at', Carbon\Carbon::now()->format('m'))->where('status', 'Active')->count() }}
                                 </div>
                             </div>
                         </div>
@@ -108,7 +108,7 @@
                                 <i class="icon-box"></i>
                                 <a href="{{ 'due-invoice-list' }}" style="color:white">
                                     <div class="number">
-                                        {{ App\Invoice::where('invoice_type', 'ambulance_support')->where('payment_status', 'due')->whereDate('created_at', Carbon\Carbon::now()->toDateString())->count() }}
+                                        {{-- {{ App\Invoice::where('invoice_type', 'ambulance_support')->where('payment_status', 'due')->whereDate('created_at', Carbon\Carbon::now()->toDateString())->count() }} --}}
                                     </div>
                                 </a>
                             </div>
@@ -144,8 +144,8 @@
                             <div class="mini-widget-body">
                                 <i class="icon-thumbs-up1"></i>
                                 <a href="{{ 'due-invoice-list' }}" style="color:white">
-                                    <div class="number">{{ App\Invoice::where('payment_status', '=', 'due')->count() }}
-                                    </div>
+                                    {{-- <div class="number">{{ App\Invoice::where('payment_status', '=', 'due')->count() }}
+                                    </div> --}}
                                 </a>
                             </div>
                         </div>
@@ -165,8 +165,8 @@
                             Todays Next Plan Patient
                         </div>
                         @php
-                            $next_plans = App\NextPlan::where('notification_date', Carbon\Carbon::now()->toDateString())->get();
-                            $data_count = $next_plans->count();
+                            // $next_plans = App\NextPlan::where('notification_date', Carbon\Carbon::now()->toDateString())->get();
+                            // $data_count = $next_plans->count();
                             
                         @endphp
                         <div style="border:1px solid black;padding:0px 10px; width: 100%;" class="fixed-n">
@@ -179,10 +179,10 @@
                                         <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="serviceTable">
+                                    {{-- <tbody id="serviceTable">
                                         @foreach ($next_plans as $key => $plan)
                                             <tr id="tr{{ $plan->id }}">
-                                                <td>{{ App\Patient::where('id', $plan->patient_id)->first()->patient_name }}
+                                                <td>{{ Modules\Patient\Entities\Patient::where('id', $plan->patient_id)->first()->patient_name }}
                                                 </td>
                                                 <td>{{ $plan->next_plan }}</td>
                                                 <td>{{ $plan->notification_date }}</td>
@@ -207,7 +207,7 @@
                                                 </td>
                                             </tr>
                                         @endfor
-                                    </tbody>
+                                    </tbody> --}}
                                 </table>
                             </div>
 
