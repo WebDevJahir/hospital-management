@@ -31,7 +31,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $patients = Patient::with('package')->latest()->take(20)->get();
+        $patients = Patient::with('user', 'package')->latest()->take(5)->get();
         return view('patient::patient.index', compact('patients'));
     }
 
@@ -41,15 +41,17 @@ class PatientController extends Controller
      */
     public function create()
     {
-        $reg_no = Patient::max('registration_no');
+        $max_reg_no = Patient::latest()->value('registration_no');
+
         $districts = District::latest()->get();
         $police_stations = PoliceStation::latest()->get();
+
         $package = Package::with('incomeSubCategory')
             ->whereHas('incomeSubCategory', function ($query) {
                 $query->where('name', 'Free');
             })
             ->first();
-        $reg_no = Patient::max('registration_no') ? Patient::max('registration_no') + 1 : Date('Y') . '-' . '01';
+        $reg_no = $max_reg_no ? $max_reg_no + 1 : Date('Y') . '-' . '01';
         $patient = new Patient();
         return view('patient::patient.modals.modal', compact('reg_no', 'districts', 'police_stations', 'package', 'patient'));
     }

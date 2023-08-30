@@ -1,7 +1,7 @@
 @php
     $is_old = old() ? true : false;
     $form_heading = !empty($patient->id) ? 'Update' : 'Add';
-    $form_url = !empty($patient->id) ? route('patient.update', $patient->id) : route('patient.store');
+    $form_url = !empty($patient->id) ? route('patients.update', $patient->id) : route('patients.store');
     $form_method = !empty($patient->id) ? 'PUT' : 'POST';
     $package_id = !empty($patient->id) ? $patient->package_id : $package->id;
     $package_name = !empty($patient->id) ? $patient->package->incomeSubCategory->name : $package->incomeSubCategory->name;
