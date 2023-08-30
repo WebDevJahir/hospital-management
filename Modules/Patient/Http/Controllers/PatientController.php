@@ -31,7 +31,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $patients = Patient::with('user', 'package.incomeSubCategory')->latest()->take(5)->get();
+        $patients = Patient::with('user', 'package.incomeSubCategory')->latest()->take(20)->get();
         return view('patient::patient.index', compact('patients'));
     }
 
