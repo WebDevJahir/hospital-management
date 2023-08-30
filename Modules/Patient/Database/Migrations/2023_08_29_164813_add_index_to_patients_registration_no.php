@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::table('patients', function (Blueprint $table) {
             $table->index('registration_no');
+            $table->index('created_at');
         });
     }
 
@@ -27,6 +28,7 @@ return new class extends Migration
     {
         Schema::table('patients', function (Blueprint $table) {
             $table->dropIndex('patients_registration_no_index');
+            $table->dropIndex('patients_created_at_index');
         });
     }
 };
