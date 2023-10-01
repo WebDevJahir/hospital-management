@@ -9,10 +9,7 @@ class CurrentProblem extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = ['current_problem', 'patient_id'];
     
-    protected static function newFactory()
-    {
-        return \Modules\Patient\Database\factories\CurrentProblemFactory::new();
-    }
+    
 }

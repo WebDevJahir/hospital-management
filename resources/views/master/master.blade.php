@@ -60,6 +60,20 @@
         .swal-wide {
             width: 850px !important;
         }
+
+        .select2-container--default .select2-selection--single {
+            border-radius: 0px !important;
+        }
+
+        .rotate {
+            animation: spinner-animation 1s linear infinite reverse;
+        }
+
+        @keyframes spinner-animation {
+            to {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 
@@ -690,6 +704,21 @@
             window.addEventListener ? window.addEventListener("load", loader, false) : window.attachEvent("onload",
                 loader);
         })(window, document);
+
+        function showConfirmationDialog(message, callback) {
+            Swal.fire({
+                title: message,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Active it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    callback();
+                }
+            });
+        }
     </script>
 
     <!-- Required jQuery first, then Bootstrap Bundle JS -->
