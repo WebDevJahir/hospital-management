@@ -19,7 +19,7 @@ Route::prefix('patient')->group(function () {
     Route::get('/', 'AdminController@index');
 
     Route::resources([
-        'patient' => PatientController::class,
+        'patients' => PatientController::class,
         'patient-profile' => PatientProfileController::class,
     ]);
     Route::get('patient-plan-and-status-edit', [PatientController::class, 'planAndStatusEdit'])->name('patient.plan.and.statu.edit');

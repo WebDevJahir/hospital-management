@@ -79,8 +79,7 @@
 
 <body>
     @php
-        $user = App\Models\User::where('id', Auth::id())->first();
-        $role = \Modules\Admin\Entities\Role::where('id', $user->role_id)->first();
+        $role = \Modules\Admin\Entities\Role::whereId(auth()->user()->role_id)->first();
         $userPermission = \App\UserPermission::where('role', $role->id)->first();
         if ($userPermission) {
             $permission = json_decode($userPermission->permission);
@@ -109,7 +108,7 @@
                                 <img src="assets/img/logo.png" alt="Admin Template" />
                             </div>
                             <h5>Hospice Bangladesh</h5>
-                            <p>{{ $user->name }}</p>
+                            <p>{{ auth()->user()->name }}</p>
                             <a class="bg-primary text-white" href="{{ url('logout') }}"><i class="icon-log-out1"></i>
                                 Sign Out</a>
                         </div>
@@ -131,8 +130,9 @@
                         </span>
                     </button>
                     @php
-                        $user = App\Models\User::where('id', 40)->first();
-                        $total_notification = $user->notifications->where('read_at', '')->count();
+                        // $user = App\Models\User::where('id', 40)->first();
+                        // dd($user);
+                        // $total_notification = auth()->user()->notifications->where('read_at', '')->count();
                     @endphp
                     <div class="collapse navbar-collapse" id="bluemoonNavbar">
                         <li class="dropdown">
@@ -142,7 +142,7 @@
                                     style="color: #ff7600;font-size: 14px;margin-right: 10px;"></span>
                             </a>
                         </li>
-                        @if (in_array(400, $permission))
+                        {{-- @if (in_array(400, $permission))
                             <li class="dropdown">
                                 <a href="" id="notifications" data-toggle="dropdown" aria-haspopup="true">
                                     <i class="icon-bell" style="color: #ff7600;font-size: 18px;"></i>
@@ -154,7 +154,7 @@
                                     <ul class="header-notifications">
                                         @php   $count = 1; @endphp
 
-                                        @foreach ($user->unreadNotifications as $notification)
+                                        @foreach (auth()->user()->unreadNotifications as $notification)
                                             @php $data = $notification->data; @endphp
                                             @if ($count < 15)
                                                 <li><span onclick="markAsRead({{ $notification }})">
@@ -168,7 +168,7 @@
                                                 </li>
                                             @endif
                                         @endforeach
-                                        @foreach ($user->readNotifications as $notification)
+                                        @foreach (auth()->user()->readNotifications as $notification)
                                             @php $data = $notification->data; @endphp
                                             @if ($count < 15)
                                                 <li><span>
@@ -182,7 +182,8 @@
                                                 </li>
                                             @endif
                                         @endforeach
-                                        <li><span>
+                                        <li>
+                                            <span>
                                                 <div class="details">
                                                     <div style="padding: 9px;border-bottom: 1px solid gray; color: gray; cursor: pointer;"
                                                         class="noti-details">
@@ -192,24 +193,22 @@
                                                 </div>
                                             </span>
                                         </li>
-
-
                                         <!-- <li>
-           <a href="#">
-            <div class="user-img online">
-             <img src="img/user6.png" alt="User" />
-            </div>
-            <div class="details">
-             <div class="user-title">Larkyn</div>
-             <div class="noti-details">Check out every table in detail.</div>
-             <div class="noti-date">Oct 15, 04:00 pm</div>
-            </div>
-           </a>
-          </li> -->
+                                            <a href="#">
+                                                <div class="user-img online">
+                                                <img src="img/user6.png" alt="User" />
+                                                </div>
+                                                <div class="details">
+                                                <div class="user-title">Larkyn</div>
+                                                <div class="noti-details">Check out every table in detail.</div>
+                                                <div class="noti-date">Oct 15, 04:00 pm</div>
+                                                </div>
+                                            </a>
+                                        </li> -->
                                     </ul>
                                 </div>
                             </li>
-                        @endif
+                        @endif --}}
                         @if (in_array(235, $permission))
                             {{-- <li>
         						    <a href="{{url('chat')}}">
