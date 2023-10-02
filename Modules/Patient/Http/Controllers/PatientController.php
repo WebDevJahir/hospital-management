@@ -94,7 +94,7 @@ class PatientController extends Controller
                 'phone' => $patient->contact_no,
                 'project' => $project,
             ];
-            $sent = SendMail::sendMail($patient->email, $messageData);
+            $sent = SendMail::handel($patient->email, $messageData);
         }
         return redirect()->route('patient.index')->with('success', 'Patient created successfully');
     }
