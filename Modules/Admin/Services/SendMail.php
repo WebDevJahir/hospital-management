@@ -5,9 +5,9 @@ namespace Modules\Admin\Services;
 use Illuminate\Support\Facades\Mail;
 use Modules\Admin\Entities\Project;
 
-class sendMail
+class SendMail
 {
-    public static function sendMail($email, $data)
+    public static function handel($email, $data)
     {
         $messageData = [
             'email' => $email,
