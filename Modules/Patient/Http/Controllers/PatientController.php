@@ -19,7 +19,7 @@ use Illuminate\Support\Str;
 use Modules\Accounts\Entities\Invoice;
 use Modules\Accounts\Entities\InvoiceDetail;
 use Modules\Admin\Entities\Project;
-use Modules\Admin\Services\sendMail;
+use Modules\Admin\Services\SendMail;
 use Modules\Patient\Http\Requests\PatientRequest;
 use PhpMyAdmin\Plugins\Schema\Dia\Dia;
 
@@ -82,7 +82,7 @@ class PatientController extends Controller
         $sms = new Sms();
         $sms->sendSms($msisdn, $messageBody, $csmsId);
         //send mail
-        $package = Package::where('income_sub_category_id', '13')->first();
+        $package = Package::whereIncomeSubCategoryId('13')->first();
         $project = Project::find($package->id);
         if (!empty($patient->email)) {
             $messageData = [
@@ -94,7 +94,7 @@ class PatientController extends Controller
                 'phone' => $patient->contact_no,
                 'project' => $project,
             ];
-            $sent = sendMail::sendMail($patient->email, $messageData);
+            $sent = SendMail::sendMail($patient->email, $messageData);
         }
         return redirect()->route('patient.index')->with('success', 'Patient created successfully');
     }
@@ -118,7 +118,7 @@ class PatientController extends Controller
     {
         $reg_no = Patient::max('registration_no');
         $districts = District::latest()->get();
-        $police_stations = PoliceStation::where('district_id', $patient->district_id)->latest()->get();
+        $police_stations = PoliceStation::whereDistricId($patient->district_id)->latest()->get();
         return view('patient::patient.modals.modal', compact('patient', 'reg_no', 'districts', 'police_stations'));
     }
 
@@ -156,7 +156,7 @@ class PatientController extends Controller
     public function planAndStatusEdit(Request $request)
     {
         $patient = Patient::find($request->id);
-        $packages = Package::get();
+        $packages = Package::latest()->get();
         return view('patient::patient.modals.plan_modal', compact('patient', 'packages'));
     }
 
@@ -193,13 +193,13 @@ class PatientController extends Controller
                 'invoice_no' => $invoice_no++,
                 'invoice_type' => 'package',
                 'sub_total' => $package->price,
-                'discount' => 0,
-                'delivery_method' => null,
-                'advance' => 0,
+                //'discount' => 0,
+                //'delivery_method' => null,
+                //'advance' => 0,
                 'city_id' => $patient->city_id,
-                'collection_charge' => 0,
-                'delivery_charge' => 0,
-                'service_charge' => 0,
+                //'collection_charge' => 0,
+                //'delivery_charge' => 0,
+                //'service_charge' => 0,
                 'due' => $package->price,
                 'total' => $package->price,
                 'project_id' => $package->id,
