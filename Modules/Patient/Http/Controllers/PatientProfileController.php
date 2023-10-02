@@ -66,8 +66,8 @@ class PatientProfileController extends Controller
     public function edit($id)
     {
         $packages = Package::get();
-        $patient = Patient::with('user', 'patientDetail', 'patientReferral', 'primaryDiseases', 'concernDiseases', 'previousTreatment', 'functionStatus', 'currentProblem')->where('id', $id)->first();
-        $doctors = PrescriptionDoctor::get();
+        $patient = Patient::with('user', 'patientDetail', 'patientReferral', 'primaryDiseases', 'concernDiseases', 'previousTreatment', 'functionStatus', 'currentProblem')->whereId($id)->first();
+        $doctors = PrescriptionDoctor::latest()->get();
         return view('patient::patient_profile.edit', compact('patient', 'packages', 'doctors'));
     }
 
@@ -131,7 +131,7 @@ class PatientProfileController extends Controller
 
     public function addPatientDetails($details_data, $patient_id)
     {
-        $patient_detail = PatientDetail::where('patient_id', $patient_id)->first();
+        $patient_detail = PatientDetail::wherePatientId($patient_id)->first();
         if ($patient_detail) {
             $patient_detail->update($details_data);
         } else {
@@ -143,7 +143,7 @@ class PatientProfileController extends Controller
 
     public function addPatientReferral($referral_data, $patient_id)
     {
-        $patient_referral = PatientReferral::where('patient_id', $patient_id)->first();
+        $patient_referral = PatientReferral::wherePatientId($patient_id)->first();
         if ($patient_referral) {
             $patient_referral->update($referral_data);
         } else {
@@ -155,7 +155,7 @@ class PatientProfileController extends Controller
 
     public function addPrimaryDiseases($primary_diseases_data, $patient_id)
     {
-        $patient_primary_diseases = PrimaryDisease::where('patient_id', $patient_id)->first();
+        $patient_primary_diseases = PrimaryDisease::wherePatientId($patient_id)->first();
         if ($patient_primary_diseases) {
             $patient_primary_diseases->update($primary_diseases_data);
         } else {
@@ -167,7 +167,7 @@ class PatientProfileController extends Controller
 
     public function addConcernDiseases($concern_diseases_data, $patient_id)
     {
-        $patient_concern_diseases = ConcernDisease::where('patient_id', $patient_id)->first();
+        $patient_concern_diseases = ConcernDisease::wherePatientId($patient_id)->first();
         if ($patient_concern_diseases) {
             $patient_concern_diseases->update($concern_diseases_data);
         } else {
@@ -179,7 +179,7 @@ class PatientProfileController extends Controller
 
     public function addPreviousTreatment($previous_treatment_data, $patient_id)
     {
-        $patient_previous_treatment = PreviousTreatment::where('patient_id', $patient_id)->first();
+        $patient_previous_treatment = PreviousTreatment::wherePatientId($patient_id)->first();
         if ($patient_previous_treatment) {
             $patient_previous_treatment->update($previous_treatment_data);
         } else {
@@ -191,7 +191,7 @@ class PatientProfileController extends Controller
 
     public function addFunctionalStatus($functional_status_data, $patient_id)
     {
-        $patient_functional_status = FunctionalStatus::where('patient_id', $patient_id)->first();
+        $patient_functional_status = FunctionalStatus::wherePatientId($patient_id)->first();
         if ($patient_functional_status) {
             $patient_functional_status->update($functional_status_data);
         } else {
@@ -203,7 +203,7 @@ class PatientProfileController extends Controller
 
     public function addCurrentProblem($current_problem, $patient_id)
     {
-        $patient_current_problem = CurrentProblem::where('patient_id', $patient_id)->first();
+        $patient_current_problem = CurrentProblem::wherePatientId($patient_id)->first();
         if ($patient_current_problem) {
             $patient_current_problem->update($current_problem);
         } else {
