@@ -31,7 +31,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $patients = Patient::with('user', 'package.incomeSubCategory')->latest()->take(20)->get();
+        $patients = Patient::with('user', 'package.incomeSubCategory')->latest()->get();
         return view('patient::patient.index', compact('patients'));
     }
 
@@ -69,34 +69,41 @@ class PatientController extends Controller
         //data for user table
         $userData = $request->only(['name', 'email', 'contact_no']);
         $userData['password'] =  Hash::make($data['password']);
-        DB::beginTransaction();
-        $user = User::create($userData);
-        //patient data
-        $data['user_id'] = $user->id;
-        $patient = Patient::create($data);
-        DB::commit();
-        //send sms
-        $msisdn = $data['contact_no'];
-        $messageBody = $data['name'] . ", Thanks for your registration in Hospice Bangladesh.You successfully created an account at Hospice Bangladesh. You agreed our Terms & Conditions.";
-        $csmsId = Str::random(10); // csms id must be unique
-        $sms = new Sms();
-        $sms->sendSms($msisdn, $messageBody, $csmsId);
-        //send mail
-        $package = Package::where('income_sub_category_id', '13')->first();
-        $project = Project::find($package->id);
-        if (!empty($patient->email)) {
-            $messageData = [
-                'patient_id' => $patient->id,
-                'patient_name' => $patient->name,
-                'password' => $data['password'],
-                'package' => $package,
-                'reg_no' => $reg_no,
-                'phone' => $patient->contact_no,
-                'project' => $project,
-            ];
-            $sent = sendMail::sendMail($patient->email, $messageData);
+
+        try {
+            DB::beginTransaction();
+            $user = User::create($userData);
+            //patient data
+            $data['user_id'] = $user->id;
+            $patient = Patient::create($data);
+            DB::commit();
+
+            //send sms
+            $msisdn = $data['contact_no'];
+            $messageBody = $data['name'] . ", Thanks for your registration in Hospice Bangladesh.You successfully created an account at Hospice Bangladesh. You agreed our Terms & Conditions.";
+            $csmsId = Str::random(10); // csms id must be unique
+            $sms = new Sms();
+            $sms->sendSms($msisdn, $messageBody, $csmsId);
+            //send mail
+            $package = Package::where('income_sub_category_id', '13')->first();
+            $project = Project::find($package->id);
+            if (!empty($patient->email)) {
+                $messageData = [
+                    'patient_id' => $patient->id,
+                    'patient_name' => $patient->name,
+                    'password' => $data['password'],
+                    'package' => $package,
+                    'reg_no' => $reg_no,
+                    'phone' => $patient->contact_no,
+                    'project' => $project,
+                ];
+                $sent = sendMail::sendMail($patient->email, $messageData);
+            }
+            return redirect()->route('patient.index')->with('success', 'Patient created successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withInput()->withErrors($e->getMessage());
         }
-        return redirect()->route('patient.index')->with('success', 'Patient created successfully');
     }
 
     /**
@@ -116,9 +123,9 @@ class PatientController extends Controller
      */
     public function edit(Patient $patient)
     {
-        $reg_no = Patient::max('registration_no');
-        $districts = District::latest()->get();
-        $police_stations = PoliceStation::where('district_id', $patient->district_id)->latest()->get();
+        $reg_no = Patient::latest()->value('registration_no');
+        $districts = District::get();
+        $police_stations = PoliceStation::where('district_id', $patient->district_id)->get();
         return view('patient::patient.modals.modal', compact('patient', 'reg_no', 'districts', 'police_stations'));
     }
 
