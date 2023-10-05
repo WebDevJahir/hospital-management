@@ -12,7 +12,7 @@ class InvestigationSubCategory extends Model
 
     protected $fillable = [
         'category_id',
-        'sub_category_name',
+        'name',
         'maximum_value',
         'minimum_value',
         'unit',

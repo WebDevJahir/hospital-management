@@ -25,4 +25,5 @@ Route::prefix('patient')->group(function () {
     Route::get('patient-plan-and-status-edit', [PatientController::class, 'planAndStatusEdit'])->name('patient.plan.and.statu.edit');
     Route::post('patient-plan-and-status-update/{id}', [PatientController::class, 'planAndStatusUpdate'])->name('patient.plan.and.status.update');
     Route::get('patient-profile-edit/{id}', [PatientProfileController::class, 'edit'])->name('patient-profile-edit');
+    Route::post('patient-profile-update/{id}', [PatientProfileController::class, 'update'])->name('patient-profile-update');
 });

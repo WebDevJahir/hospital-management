@@ -2,13 +2,12 @@
 
 namespace Modules\Monitoring\Http\Controllers;
 
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Contracts\Support\Renderable;
-use Modules\Monitoring\Entities\InvestigationCategory;
-use Modules\Monitoring\Entities\InvestigationSubCategory;
+use Modules\Patient\Entities\Patient;
 
-class InvestigationSubCategoryController extends Controller
+class CommonController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +15,7 @@ class InvestigationSubCategoryController extends Controller
      */
     public function index()
     {
-        $categories = InvestigationCategory::latest()->get();
-        $sub_categories = InvestigationSubCategory::with('category')->latest()->get();
-        return view('monitoring::investigation.sub-categories.create', compact("categories", "sub_categories"));
+        return view('monitoring::index');
     }
 
     /**
@@ -37,8 +34,7 @@ class InvestigationSubCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        InvestigationSubCategory::create($request->all());
-        return redirect()->back()->with("success", "Investigation Sub Category created successfully");
+        //
     }
 
     /**
@@ -67,10 +63,9 @@ class InvestigationSubCategoryController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(InvestigationSubCategory $investigationSubCategory, Request $request)
+    public function update(Request $request, $id)
     {
-        $investigationSubCategory->update($request->all());
-        return redirect()->back()->with("success", "Investigation Sub Category updated successfully");
+        //
     }
 
     /**
@@ -78,15 +73,14 @@ class InvestigationSubCategoryController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function destroy(InvestigationSubCategory $investigationSubCategory)
+    public function destroy($id)
     {
-        $investigationSubCategory->delete();
-        return redirect()->back()->with("success", "Investigation Sub Category deleted successfully");
+        //
     }
 
-    public function getNormalValue(Request $request)
+    public function getPatients(Request $request)
     {
-        $sub_category = InvestigationSubCategory::find($request->id);
-        return $sub_category;
+        $patients = Patient::select('id', 'name')->where('package_id', '!=', 13)->orderBy('id', 'desc')->where('status', 'Active')->get();
+        return response()->json($patients);
     }
 }

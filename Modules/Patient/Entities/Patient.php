@@ -17,6 +17,7 @@ use Modules\Patient\Entities\FunctionalStatus;
 use Modules\Patient\Entities\PreviousTreatment;
 use Modules\Patient\Entities\PsychologicalStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Admin\Entities\District;
 use Modules\Admin\Entities\Package;
 
 class Patient extends Model
@@ -70,9 +71,9 @@ class Patient extends Model
         return $this->hasOne(CurrentProblem::class, 'patient_id', 'id')->withDefault();
     }
 
-    public function city()
+    public function district()
     {
-        return $this->hasOne(City::class, 'id', 'city_id');
+        return $this->hasOne(District::class, 'id', 'district_id');
     }
 
     public function thana()
