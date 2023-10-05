@@ -20,7 +20,9 @@ class Patient extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'user_id', 'package_id', 'name', 'father_name', 'mother_name', 'date_of_birth', 'age', 'present_address', 'permanent_address', 'landmark', 'district_id', 'police_station_id', 'registration_no', 'project_id', 'gender', 'contact_no', 'password', 'status', 'payment_status', 'last_payment_date', 'details_added', 'due_payment_date', 'reminder_date'
+    ];
 
     public function package()
     {

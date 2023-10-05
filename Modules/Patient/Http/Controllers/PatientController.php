@@ -11,7 +11,6 @@ use Modules\Patient\Entities\Patient;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Modules\Admin\Entities\District;
 use Modules\Admin\Entities\PoliceStation;
 use Modules\Admin\Services\Sms;
@@ -21,7 +20,6 @@ use Modules\Accounts\Entities\InvoiceDetail;
 use Modules\Admin\Entities\Project;
 use Modules\Admin\Services\SendMail;
 use Modules\Patient\Http\Requests\PatientRequest;
-use PhpMyAdmin\Plugins\Schema\Dia\Dia;
 
 class PatientController extends Controller
 {
@@ -124,6 +122,7 @@ class PatientController extends Controller
         $reg_no = Patient::latest()->value('registration_no');
         $districts = District::latest()->get();
         $police_stations = PoliceStation::whereDistricId($patient->district_id)->latest()->get();
+
         return view('patient::patient.modals.modal', compact('patient', 'reg_no', 'districts', 'police_stations'));
     }
 
@@ -139,13 +138,19 @@ class PatientController extends Controller
         //data for user table
         $userData = $request->only(['name', 'email', 'contact_no']);
         $userData['password'] =  Hash::make($data['password']);
-        DB::beginTransaction();
-        $user = User::find($patient->user_id);
-        $user->update($userData);
-        //patient data
-        $patient->update($data);
-        DB::commit();
-        return redirect()->route('patient.index')->with('success', 'Patient updated successfully');
+        try {
+            DB::beginTransaction();
+            $user = User::find($patient->user_id);
+            $user->update($userData);
+            //patient data
+            $patient->update($data);
+            DB::commit();
+
+            return redirect()->route('patient.index')->with('success', 'Patient updated successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withInput()->withErrors($e->getMessage());
+        }
     }
 
     /**
@@ -158,9 +163,9 @@ class PatientController extends Controller
         //
     }
 
-    public function planAndStatusEdit(Request $request)
+    public function planAndStatusEdit()
     {
-        $patient = Patient::find($request->id);
+        $patient = Patient::find(request()->id);
         $packages = Package::latest()->get();
         return view('patient::patient.modals.plan_modal', compact('patient', 'packages'));
     }
