@@ -50,8 +50,8 @@ class PatientController extends Controller
             })
             ->first();
         $reg_no = $max_reg_no ? $max_reg_no + 1 : Date('Y') . '-' . '01';
-        $patient = new Patient();
-        return view('patient::patient.modals.modal', compact('reg_no', 'districts', 'police_stations', 'package', 'patient'));
+        
+        return view('patient::patient.modals.modal', compact('reg_no', 'districts', 'police_stations', 'package'));
     }
 
     /**

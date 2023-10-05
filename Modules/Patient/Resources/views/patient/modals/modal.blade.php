@@ -1,26 +1,26 @@
 @php
     $is_old = old() ? true : false;
-    $form_heading = !empty($patient->id) ? 'Update' : 'Add';
-    $form_url = !empty($patient->id) ? route('patients.update', $patient->id) : route('patients.store');
-    $form_method = !empty($patient->id) ? 'PUT' : 'POST';
-    $package_id = !empty($patient->id) ? $patient->package_id : $package->id;
-    $package_name = !empty($patient->id) ? $patient->package->incomeSubCategory->name : $package->incomeSubCategory->name;
-    $registration_no = !empty($patient->id) ? $patient->registration_no : '';
-    $name = !empty($patient->id) ? $patient->name : '';
-    $password = !empty($patient->id) ? $patient->password : '';
-    $confirm_password = !empty($patient->id) ? $patient->password : '';
-    $email = !empty($patient->id) ? $patient->user->email : '';
-    $contact_no = !empty($patient->id) ? $patient->contact_no : '';
-    $age = !empty($patient->id) ? $patient->age : '';
-    $gender = !empty($patient->id) ? $patient->gender : '';
-    $district_id = !empty($patient->id) ? $patient->district_id : '';
-    $police_station_id = !empty($patient->id) ? $patient->police_station_id : '';
-    $present_address = !empty($patient->id) ? $patient->present_address : '';
-    $permanent_address = !empty($patient->id) ? $patient->permanent_address : '';
+    $form_heading = isset($patient->id) ? 'Update' : 'Add';
+    $form_url = isset($patient->id) ? route('patients.update', $patient->id) : route('patients.store');
+    $form_method = isset($patient->id) ? 'PUT' : 'POST';
+    $package_id = isset($patient->id) ? $patient->package_id : $package->id;
+    $package_name = isset($patient->id) ? $patient->package->incomeSubCategory->name : $package->incomeSubCategory->name;
+    $registration_no = isset($patient->id) ? $patient->registration_no : '';
+    $name = isset($patient->id) ? $patient->name : '';
+    $password = isset($patient->id) ? $patient->password : '';
+    $confirm_password = isset($patient->id) ? $patient->password : '';
+    $email = isset($patient->id) ? $patient->user->email : '';
+    $contact_no = isset($patient->id) ? $patient->contact_no : '';
+    $age = isset($patient->id) ? $patient->age : '';
+    $gender = isset($patient->id) ? $patient->gender : '';
+    $district_id = isset($patient->id) ? $patient->district_id : '';
+    $police_station_id = isset($patient->id) ? $patient->police_station_id : '';
+    $present_address = isset($patient->id) ? $patient->present_address : '';
+    $permanent_address = isset($patient->id) ? $patient->permanent_address : '';
 @endphp
 <form action="{{ $form_url }}" method="POST" enctype="multipart/form-data">
     @csrf
-    @if (!empty($patient->id))
+    @if (isset($patient->id))
         @method('PUT')
     @endif
     <div class="modal fade" id="dataModal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
@@ -182,7 +182,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-outline-primary tn-lg"
-                        type="submit">{{ $patient->id ? 'Update' : 'Save' }}</button>
+                        type="submit">{{ isset($patient->id) ? 'Update' : 'Save' }}</button>
                 </div>
             </div>
         </div>
