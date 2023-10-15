@@ -50,7 +50,7 @@ class PatientController extends Controller
             })
             ->first();
         $reg_no = $max_reg_no ? $max_reg_no + 1 : Date('Y') . '-' . '01';
-        
+
         return view('patient::patient.modals.modal', compact('reg_no', 'districts', 'police_stations', 'package'));
     }
 
@@ -62,21 +62,22 @@ class PatientController extends Controller
     public function store(PatientRequest $request)
     {
         $reg_no = Patient::max('registration_no') ? Patient::max('registration_no') + 1 : Date('Y') . '-' . '01';
-        $data = $request->except('_token', '_method', 'confirm_password', 'email', 'package');
+
+        $data = $request->all();
         $data['registration_no'] = $reg_no;
+
         //data for user table
-        $userData = $request->only(['name', 'email', 'contact_no']);
-        $userData['password'] =  Hash::make($data['password']);
+        $data['password'] =  Hash::make($data['password']);
         try {
             DB::beginTransaction();
-            $user = User::create($userData);
+            $user = User::create($data);
             //patient data
             $data['user_id'] = $user->id;
             $patient = Patient::create($data);
             DB::commit();
             //send sms
             $msisdn = $data['contact_no'];
-            $messageBody = $data['name'] . ", Thanks for your registration in Hospice Bangladesh.You successfully created an account at Hospice Bangladesh. You agreed our Terms & Conditions.";
+            $messageBody = $data['name'] . ", Thanks for your registration in " . config('app.name') . ".You successfully created an account at " . config('app.name') . ". You agreed our Terms & Conditions.";
             $csmsId = Str::random(10); // csms id must be unique
             $sms = new Sms();
             $sms->sendSms($msisdn, $messageBody, $csmsId);
