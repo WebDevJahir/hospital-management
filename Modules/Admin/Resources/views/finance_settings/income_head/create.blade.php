@@ -20,7 +20,15 @@
                         <div class="table-container">
                             <div class="t-header">Income Head</div>
                             <hr />
-                            <form action="{{ $form_url }}" method="{{ $form_method }}">
+                            <form method="POST" action="{{ route('admin.updateEnv') }}">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="app_name">App Name</label>
+                                    <input type="text" class="form-control" id="app_name" name="APP_NAME" value="{{ env('APP_NAME') }}">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </form>
+                            {{-- <form action="{{ $form_url }}" method="{{ $form_method }}">
                                 @csrf
                                 <div class="row gutters">
                                     <div class="col-4">
@@ -48,10 +56,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </form>
+                            </form> --}}
                             <hr />
 
-                            <div class="table-responsive">
+                            {{-- <div class="table-responsive">
                                 <table id="Example" class="table custom-table">
                                     <thead>
                                         <tr>
@@ -90,7 +98,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                            </div>
+                            </div> --}}
                         </div>
                         <!-- Table container end -->
                     </div>

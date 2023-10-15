@@ -2,11 +2,13 @@
 
 namespace Modules\Admin\Http\Controllers;
 
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Admin\Entities\IncomeHead;
 use Modules\Admin\Entities\Project;
+use Modules\Admin\Entities\IncomeHead;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Contracts\Support\Renderable;
+use Jackiedo\DotenvEditor\Facades\DotenvEditor;
 use Modules\Admin\Http\Requests\IncomeHeadRequest;
 
 class IncomeHeadController extends Controller
@@ -20,6 +22,27 @@ class IncomeHeadController extends Controller
         $income_heads = IncomeHead::all();
         $projects = Project::all();
         return view('admin::finance_settings.income_head.create', compact('income_heads', 'projects'));
+    }
+
+    public function updateEnv(Request $request)
+    {
+        // Validate form input (you should add proper validation)
+        $request->validate([
+            'APP_NAME' => 'required|string',
+        ]);
+
+        // Update the .env file using the DotenvEditor package
+        DotenvEditor::setKey('APP_NAME', $request->input('APP_NAME'));
+
+        // Save the changes
+        DotenvEditor::save();
+
+        // Clear the cached config
+        Artisan::call('config:clear');
+        Artisan::call('config:cache');
+
+        // Redirect back with a success message
+        return redirect()->back();
     }
 
     /**

@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use Modules\Admin\Entities\District;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
 use Modules\Admin\Http\Controllers\VatController;
 use Modules\Admin\Http\Controllers\CityController;
 use Modules\Admin\Http\Controllers\StaffController;
@@ -11,6 +12,7 @@ use Modules\Admin\Http\Controllers\DoctorController;
 use Modules\Admin\Http\Controllers\LabTestController;
 use Modules\Admin\Http\Controllers\ProductController;
 use Modules\Admin\Http\Controllers\ProjectController;
+use Modules\Admin\Http\Controllers\DistrictController;
 use Modules\Admin\Http\Controllers\EmployeeController;
 use Modules\Admin\Http\Controllers\PromoCodeController;
 use Modules\Admin\Http\Controllers\IncomeHeadController;
@@ -20,7 +22,6 @@ use Modules\Admin\Http\Controllers\AlliedHealthController;
 use Modules\Admin\Http\Controllers\PoliceStationController;
 use Modules\Admin\Http\Controllers\ServiceChargeController;
 use Modules\Admin\Http\Controllers\DeliveryChargeController;
-use Modules\Admin\Http\Controllers\DistrictController;
 use Modules\Admin\Http\Controllers\MedicalSupportController;
 use Modules\Admin\Http\Controllers\MedicalProcedureController;
 use Modules\Admin\Http\Controllers\IncomeSubCategoryController;
@@ -39,6 +40,9 @@ use Modules\Admin\Http\Controllers\ExpenseSubCategoryController;
 
 Route::prefix('admin')->group(function () {
     Route::get('/', 'AdminController@index');
+
+    Route::post('updateEnv', [IncomeHeadController::class, 'updateEnv'])->name('admin.updateEnv');
+
 
     //income head
     Route::resources([
