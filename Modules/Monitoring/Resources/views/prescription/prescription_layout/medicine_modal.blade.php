@@ -52,7 +52,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="addMedicine()">Add</button>
+                    <button type="button" class="btn btn-primary" id="addMedicinebutton"
+                        onclick="addMedicine()">Add</button>
                 </div>
             </div>
             <hr class="m-1" />
@@ -81,9 +82,9 @@
                                 <td> <button class="btn btn-inline btn-sm" style="background:inherit" title="Edit"
                                         onclick="editMedicine({{ $medicine->id }})" type="submit"
                                         style="margin:2px;"><i class="fas fa-edit text-success"></i></button><br>
-                                    <button class="btn btn-inline btn-sm" style="background:inherit" title="Cancel"
-                                        onclick="cancelMedicine({{ $medicine->id }})" type="submit"
-                                        style="margin:2px;"><i class="fas fa-trash-alt text-danger"></i></button>
+                                    <button class="btn btn-inline btn-sm cancelMedicineButton"
+                                        style="background:inherit" title="Cancel" type="submit" style="margin:2px;"><i
+                                            class="fas fa-trash-alt text-danger"></i></button>
                                     <br><a class="btn btn-inline btn-sm" style="background:inherit" title="Send SMS"
                                         href="{{ url('send-medicine-sms', $medicine->id) }}" style="margin:2px;"><i
                                             class="fas fa-sms text-primary"></i></a>

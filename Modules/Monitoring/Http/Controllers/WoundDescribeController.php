@@ -19,10 +19,8 @@ class WoundDescribeController extends Controller
      */
     public function index()
     {
-        $wounds = WoundDescribe::with('patient.package', 'patient.user')->latest()->get();
-        $patients = Patient::with('package')->latest()->get();
-
-    	return view('monitoring::wound_clinic.create',compact('wounds', 'patients'));
+        $patients = Patient::where('status', 'Active')->orderBy('id', 'desc')->take(20)->get();
+        return view('monitoring::wound_clinic.describe.index', compact('patients'));
     }
 
     /**
@@ -31,7 +29,9 @@ class WoundDescribeController extends Controller
      */
     public function create()
     {
-        return view('monitoring::create');
+        $patient = Patient::find(request()->patient_id);
+        $patient_id = request()->patient_id;
+        return view('monitoring::wound_clinic.describe.modal.create', compact('patient', 'patient_id'));
     }
 
     /**
@@ -39,19 +39,10 @@ class WoundDescribeController extends Controller
      * @param Request $request
      * @return Renderable
      */
-    public function store()
+    public function store(Request $request)
     {
-        WoundDescribe::create(request()->all());
-
-        // $patient = Patient::where('id',request()->patient_id)->first();
-        // if($patient->status == 'Active' && $patient->package_id != 13){
-        //     $user = User::where('id',$patient->user_id)->first();
-        //     $message = 'New Wound descride added';
-        //     $url = 'patient-wound-describe-report';
-        //     Notification::send($user, new UserNotification($message,$url)); 
-        // }
-
-        return redirect()->back()->with('success', 'Wound description has been added successfully');
+        WoundDescribe::create($request->all());
+        return redirect()->route('wound-describe.index')->with('success', 'Wound Describe Created Successfully');
     }
 
     /**
@@ -64,6 +55,12 @@ class WoundDescribeController extends Controller
         return view('monitoring::show');
     }
 
+    public function list()
+    {
+        $wound_describes = WoundDescribe::where('patient_id', request()->patient_id)->orderBy('id', 'desc')->get();
+        return view('monitoring::wound_clinic.describe.modal.list', compact('wound_describes'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      * @param int $id
@@ -71,7 +68,9 @@ class WoundDescribeController extends Controller
      */
     public function edit($id)
     {
-        return view('monitoring::edit');
+        $wound_describe = WoundDescribe::find($id);
+        $patient = Patient::find($wound_describe->patient_id);
+        return view('monitoring::wound_clinic.describe.modal.create', compact('wound_describe', 'patient'));
     }
 
     /**
@@ -80,19 +79,10 @@ class WoundDescribeController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(WoundDescribe $woundDescribe)
+    public function update(Request $request, $id)
     {
-        $woundDescribe->update(request()->all());
-
-        // $patient = Patient::where('id',request()->patient_id)->first();
-        // if($patient->status == 'Active' && $patient->package_id != 13){
-        //     $user = User::where('id',$patient->user_id)->first();
-        //     $message = 'Wound descride updated';
-        //     $url = 'patient-wound-describe-report';
-        //     Notification::send($user, new UserNotification($message,$url)); 
-        // }
-
-        return redirect()->back()->with('success', 'Wound description has been updated successfully');
+        WoundDescribe::find($id)->update($request->all());
+        return redirect()->route('wound-describe.index')->with('success', 'Wound Describe Updated Successfully');
     }
 
     /**
@@ -100,9 +90,8 @@ class WoundDescribeController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function destroy(WoundDescribe $woundDescribe)
+    public function destroy($id)
     {
-        $woundDescribe->delete();
-        return redirect()->back()->with('success', 'Wound description has been deleted successfully');
+        //
     }
 }

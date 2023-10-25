@@ -5,8 +5,10 @@ namespace Modules\Monitoring\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Monitoring\Entities\PainAssesment;
+use Modules\Patient\Entities\Patient;
 
-class FollowupsController extends Controller
+class PainAssesmentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +16,8 @@ class FollowupsController extends Controller
      */
     public function index()
     {
-        return view('monitoring::index');
+        $patients = Patient::where('status', 'Active')->orderBy('id', 'desc')->take(20)->get();
+        return view('monitoring::pain_clinic.assesment.index', compact('patients'));
     }
 
     /**
@@ -23,7 +26,9 @@ class FollowupsController extends Controller
      */
     public function create()
     {
-        return view('monitoring::create');
+        $patient = Patient::find(request()->patient_id);
+        $patient_id = request()->patient_id;
+        return view('monitoring::pain_clinic.assesment.modal.create', compact('patient', 'patient_id'));
     }
 
     /**
@@ -33,7 +38,8 @@ class FollowupsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        PainAssesment::create($request->all());
+        return redirect()->route('pain-assesment.index')->with('success', 'Pain Assesment Created Successfully');
     }
 
     /**
@@ -46,6 +52,12 @@ class FollowupsController extends Controller
         return view('monitoring::show');
     }
 
+    public function list()
+    {
+        $pain_assesments = PainAssesment::where('patient_id', request()->patient_id)->orderBy('id', 'desc')->get();
+        return view('monitoring::pain_clinic.assesment.modal.list', compact('pain_assesments'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      * @param int $id
@@ -53,7 +65,9 @@ class FollowupsController extends Controller
      */
     public function edit($id)
     {
-        return view('monitoring::edit');
+        $assesment = PainAssesment::find($id);
+        $patient_id = $assesment->patient_id;
+        return view('monitoring::pain_clinic.assesment.modal.create', compact('assesment', 'patient_id'));
     }
 
     /**
@@ -64,7 +78,8 @@ class FollowupsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+            PainAssesment::find($id)->update($request->all());
+            return redirect()->route('pain-assesment.index')->with('success', 'Pain Assesment Updated Successfully');
     }
 
     /**

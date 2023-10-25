@@ -5,8 +5,10 @@ namespace Modules\Monitoring\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Monitoring\Entities\PainManagement;
+use Modules\Patient\Entities\Patient;
 
-class PainClcAssmntController extends Controller
+class PainManagementController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +16,8 @@ class PainClcAssmntController extends Controller
      */
     public function index()
     {
-        return view('monitoring::index');
+        $patients = Patient::where('status', 'Active')->orderBy('id', 'desc')->take(20)->get();
+        return view('monitoring::pain_clinic.management.index', compact('patients'));
     }
 
     /**
@@ -23,7 +26,8 @@ class PainClcAssmntController extends Controller
      */
     public function create()
     {
-        return view('monitoring::create');
+        $patient = Patient::find(request()->patient_id);
+        return view('monitoring::pain_clinic.management.modal.create', compact('patient'));
     }
 
     /**
@@ -33,7 +37,8 @@ class PainClcAssmntController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        PainManagement::create($request->all());
+        return redirect()->route('pain-management.index')->with('success', 'Pain management Created Successfully');
     }
 
     /**
@@ -46,6 +51,12 @@ class PainClcAssmntController extends Controller
         return view('monitoring::show');
     }
 
+    public function list()
+    {
+        $pain_managements = PainManagement::where('patient_id', request()->patient_id)->orderBy('id', 'desc')->get();
+        return view('monitoring::pain_clinic.management.modal.list', compact('pain_managements'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      * @param int $id
@@ -53,7 +64,9 @@ class PainClcAssmntController extends Controller
      */
     public function edit($id)
     {
-        return view('monitoring::edit');
+        $pain_management = PainManagement::find($id);
+        $patient = Patient::find($pain_management->patient_id);
+        return view('monitoring::pain_clinic.management.modal.create', compact('pain_management', 'patient'));
     }
 
     /**
@@ -64,7 +77,8 @@ class PainClcAssmntController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        PainManagement::find($id)->update($request->all());
+        return redirect()->route('pain-management.index')->with('success', 'Pain management Updated Successfully');
     }
 
     /**

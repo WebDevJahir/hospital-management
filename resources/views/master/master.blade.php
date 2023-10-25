@@ -219,8 +219,8 @@
                         @endif
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
-                                <a class="nav-link active-page" href="{{ url('dashboard') }}"
-                                    id="dashboardsDropdown" role="button">
+                                <a class="nav-link active-page" href="{{ url('dashboard') }}" id="dashboardsDropdown"
+                                    role="button">
                                     <i class="icon-home2 nav-icon" style="float:left;padding-right: 5px;"></i>
                                     Dashboards
                                 </a>
@@ -665,6 +665,9 @@
         <!-- *************
    ************ Main container start *************
   ************* -->
+        <div id="loader-container" class="loader-container" style="display: none;">
+            <div class="loader"></div>
+        </div>
         @yield('main_content')
         <!-- *************
    ************ Main container end *************
@@ -704,14 +707,14 @@
                 loader);
         })(window, document);
 
-        function showConfirmationDialog(message, callback) {
+        function showConfirmationDialog(message, confirmMessage, callback) {
             Swal.fire({
                 title: message,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, Active it!'
+                confirmButtonText: confirmMessage
             }).then((result) => {
                 if (result.isConfirmed) {
                     callback();
@@ -745,6 +748,16 @@
                 width: 'resolve' // or a specific width value
             });
         });
+
+        function loaderShow() {
+            $("#loader-container").show();
+            $("#content").css("pointer-events", "none");
+        }
+
+        function loaderHide() {
+            $("#loader-container").hide();
+            $("#content").css("pointer-events", "auto");
+        }
     </script>
     <script src="{{ asset('js/lightbox.js') }}"></script>
     @yield('script')

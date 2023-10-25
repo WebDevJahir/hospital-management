@@ -5,13 +5,14 @@ namespace Modules\Monitoring\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Monitoring\Entities\Followups;
+use Modules\Monitoring\Entities\FollowUp;
 use Modules\Monitoring\Entities\Prescription;
 use Modules\Monitoring\Entities\Roster;
 use Modules\Patient\Entities\Patient;
 use Carbon\Carbon;
 use Modules\Admin\Entities\Package;
 use Modules\Admin\Entities\PrescriptionDoctor;
+use Modules\Monitoring\Entities\ConsultantDoctor;
 use Modules\Monitoring\Entities\Medicine;
 
 class PrescriptionController extends Controller
@@ -22,7 +23,7 @@ class PrescriptionController extends Controller
      */
     public function index()
     {
-        $patients = Patient::where('package_id', '!=', 13)->where('status', 'Active')->orderBy('id', 'desc')->take(20)->get();
+        $patients = Patient::where('status', 'Active')->orderBy('id', 'desc')->take(20)->get();
         return view('monitoring::prescription.index', compact('patients'));
     }
 
@@ -33,11 +34,11 @@ class PrescriptionController extends Controller
     public function create($id)
     {
         $patient = Patient::with('package', 'user', 'primaryDiseases')->where('id', $id)->first();
-        $followup = Followups::where('patient_id', $id)->orderBy('id', 'desc')->first();
+        $followup = FollowUp::where('patient_id', $id)->orderBy('id', 'desc')->first();
         $getMedicines = Prescription::where('patient_id', $id)->whereIn('status', ['new', 'old'])->orderBy('id', 'desc')->get();
         $getCancelMedicines = Prescription::where('patient_id', $id)->where('status', 'cancel')->orderBy('id', 'desc')->get();
         $nurse_duty = Roster::where('patient_id', $patient->user_id)->whereDate('start', '=', Carbon::now()->toDateString())->orderBy('id', 'desc')->get();
-        $doctors = PrescriptionDoctor::get();
+        $doctors = ConsultantDoctor::get();
         $medicines = Medicine::get();
         $package = Package::where('id', $patient->package_id)->first();
         return view('monitoring::prescription.create', compact('patient', 'followup', 'getMedicines', 'getCancelMedicines', 'nurse_duty', 'doctors', 'medicines', 'package'));
@@ -75,10 +76,10 @@ class PrescriptionController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function edit(Request $request)
+    public function edit(Request $request, $id)
     {
         $medicines = Medicine::get();
-        $edit_medicine = Prescription::find($request->id);
+        $edit_medicine = Prescription::find($id);
         return view('monitoring::prescription.prescription_layout.edit_medicine_modal', compact('edit_medicine', 'medicines'));
     }
 
@@ -88,7 +89,7 @@ class PrescriptionController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         $check_medicine = Medicine::where('name', $request->medicine)->first();
         if (!$check_medicine) {
@@ -96,7 +97,7 @@ class PrescriptionController extends Controller
             $medicine = Medicine::create($medicine_data);
         }
         $prescription_data = $request->only('medicine', 'note', 'dose', 'duration');
-        $prescription = Prescription::find($request->id);
+        $prescription = Prescription::find($id);
         $prescription->update($prescription_data);
         return $prescription;
     }
@@ -108,38 +109,56 @@ class PrescriptionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $prescription = Prescription::find($id);
+        $prescription->delete();
+        if ($prescription) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Medicine deleted successfully'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Medicine not deleted successfully'
+            ]);
+        }
     }
 
     public function activeMedicine(Request $request)
     {
+        $data = [
+            'status' => 'old',
+            'generate' => 'no'
+        ];
         $medicine = Prescription::find($request->id);
-        $medicine->status = 'old';
-        $medicine->generate = 'no';
-        $medicine->save();
+        $medicine->update($data);
+        return $medicine;
+    }
+
+    public function cancelMedicine(Request $request)
+    {
+        $data = [
+            'status' => 'cancel',
+            'generate' => 'no'
+        ];
+        $medicine = Prescription::find($request->id);
+        $medicine->update($data);
         return $medicine;
     }
 
     public function getInvestigation(Request $request)
     {
-        $bp_high = Followups::where('patient_id', $request->patient_id)->where('bp_high', '!=', '')->orderBy('id', 'desc')->take(5)->get(['bp_high', 'created_at']);
-        $bp_min = Followups::where('patient_id', $request->patient_id)->where('bp_min', '!=', '')->orderBy('id', 'desc')->take(5)->get(['bp_min', 'created_at']);
-        $pulse = Followups::where('patient_id', $request->patient_id)->where('pulse', '!=', '')->orderBy('id', 'desc')->take(5)->get(['pulse', 'created_at']);
-        $saturation = Followups::where('patient_id', $request->patient_id)->where('saturation', '!=', '')->orderBy('id', 'desc')->take(5)->get(['saturation', 'created_at']);
-        $temparature = Followups::where('patient_id', $request->patient_id)->where('temp', '!=', '')->orderBy('id', 'desc')->take(5)->get(['temp', 'created_at']);
-        $intake = Followups::where('patient_id', $request->patient_id)->where('intake', '!=', '')->orderBy('id', 'desc')->take(5)->get(['intake', 'created_at']);
-        $output = Followups::where('patient_id', $request->patient_id)->where('output', '!=', '')->orderBy('id', 'desc')->take(5)->get(['output', 'created_at']);
-        $sugar = Followups::where('patient_id', $request->patient_id)->where('sugar', '!=', '')->orderBy('id', 'desc')->take(5)->get(['sugar', 'created_at']);
-        $data = array(
-            'bp_high' => $bp_high,
-            'bp_min' => $bp_min,
-            'pulse' => $pulse,
-            'saturation' => $saturation,
-            'temparature' => $temparature,
-            'intake' => $intake,
-            'output' => $output,
-            'sugar' => $sugar
-        );
+        $attributes = ['bp_high', 'bp_min', 'pulse', 'saturation', 'temp', 'intake', 'output', 'sugar'];
+        $data = [];
+
+        foreach ($attributes as $attribute) {
+            $data[$attribute] = FollowUp::where('patient_id', $request->patient_id)
+                ->where($attribute, '!=', '')
+                ->orderBy('id', 'desc')
+                ->take(5)
+                ->get([$attribute, 'created_at']);
+        }
+
         return $data;
     }
 }
