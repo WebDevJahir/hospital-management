@@ -94,7 +94,7 @@
 @section('script')
     <script type="text/javascript">
         function dataModal(id) {
-            var url = id ? `/patient/patient/${id}/edit` : "{{ route('patient.create') }}";
+            var url = id ? `/patient/patients/${id}/edit` : "{{ route('patients.create') }}";
             url = url.replace(':id', id);
             //get data by ajax
             $.ajax({

@@ -106,7 +106,7 @@
             <ul style="" class="bookmarks">
                 <li>
                     <p id="reason"><span style="font-weight: bold;"><i class="icon-info1"></i>Physical:
-                        </span>{{ $followup->reason . ',' ?? '' }}
+                        </span>{{ $followup?->reason . ',' ?? '' }}
                         {{ $followup->other_reason ?? '' }} </p>
                 </li>
                 <li>
@@ -124,7 +124,7 @@
             <ul style="" class="bookmarks">
                 <li>
                     <p id="response"><span style="font-weight: bold;"><i
-                                class="icon-info1"></i>Response:</span>{{ $followup->response . ',' ?? '' }}
+                                class="icon-info1"></i>Response:</span>{{ $followup?->response . ',' ?? '' }}
                         {{ $followup->other_response ?? '' }} </p>
                 </li>
             </ul>
