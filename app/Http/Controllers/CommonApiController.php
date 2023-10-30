@@ -35,4 +35,24 @@ class CommonApiController extends Controller
 
         return $sub_category->price;
     }
+
+    public function getIncomeHead()
+    {
+        $income_head = IncomeHead::select('id', 'name')
+            ->where('project_id', request()->project_id)
+            ->latest()
+            ->get();
+
+        return response()->json($income_head);
+    }
+
+    public function getIncomeSubCategory()
+    {
+        $income_subcategory = IncomeSubCategory::select('id', 'name', 'price', 'vat')
+            ->where('income_head_id', request()->income_head_id)
+            ->latest()
+            ->get();
+
+        return response()->json($income_subcategory);
+    }
 }

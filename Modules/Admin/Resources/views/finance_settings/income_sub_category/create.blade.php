@@ -64,8 +64,8 @@
                                             <span class="input-group-text custom-group-text">Vat Type</span>
                                             <select class="form-control" name="vat_type">
                                                 <option selected>Select Vat Type</option>
-                                                <option value="Flat">Flat</option>
-                                                <option value="Percentage">Percentage</option>
+                                                <option value="1">Yes</option>
+                                                <option value="0">No</option>
                                             </select>
                                         </div>
                                     </div>

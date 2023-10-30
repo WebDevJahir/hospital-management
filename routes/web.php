@@ -29,3 +29,6 @@ Route::get('/dashboard', [AuthController::class, 'dashboard']);
 Route::get('get-account-head', [CommonApiController::class, 'getAccountHead']);
 Route::get('get-sub-category', [CommonApiController::class, 'getSubCategory']);
 Route::get('get-charge', [CommonApiController::class, 'getCharge']);
+Route::get('get-income-head', [CommonApiController::class, 'getIncomeHead'])->name('get-income-head');
+Route::get('get-income-subcategory', [CommonApiController::class, 'getIncomeSubCategory'])->name('get-income-subcategory');
+Route::get('get-income-subcategory-vat', [CommonApiController::class, 'getIncomeSubCategoryVat'])->name('get-income-subcategory-vat');

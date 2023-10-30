@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('income_head_id')->nullable();
             $table->integer('project_id')->nullable();
             $table->double('price', 8, 2)->nullable();
-            $table->string('vat_type')->nullable();
+            $table->tinyInteger('vat')->nullable();
             $table->timestamps();
         });
     }

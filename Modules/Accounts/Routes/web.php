@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,6 +12,9 @@
 |
 */
 
-Route::prefix('accounts')->group(function() {
+Route::prefix('accounts')->group(function () {
     Route::get('/', 'AccountsController@index');
+    Route::resources([
+        'invoice' => InvoiceController::class,
+    ]);
 });
