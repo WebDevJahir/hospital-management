@@ -169,12 +169,12 @@
                                         value="{{ $cancel_medicine->id ?? '' }}">
                                 </td>
                                 <td style="margin: 0px; padding:0px">
-                                    <button class="btn btn-sm cancelMedicineButton" style="background:inherit"
+                                    <button class="btn btn-sm activeMedicineButton" style="background:inherit"
                                         title="Active Again">
                                         <i class="fas fa-undo-alt text-success"></i>
                                     </button>
-                                    <button class="btn btn-sm" style="background:inherit" title="Delete"
-                                        onclick="deleteMedicineView({{ $cancel_medicine->id }})">
+                                    <button class="btn btn-sm deleteMedicineButton" style="background:inherit" title="Delete"
+                                        onclick="deleteMedicine({{ $cancel_medicine->id }})">
                                         <i class="fas fa-trash-alt text-danger"></i>
                                     </button>
                                 </td>

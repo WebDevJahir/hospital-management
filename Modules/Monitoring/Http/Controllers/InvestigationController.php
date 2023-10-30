@@ -5,6 +5,9 @@ namespace Modules\Monitoring\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Monitoring\Entities\InvestigationSubCategory;
+use Modules\Patient\Entities\Patient;
+use Modules\Monitoring\Entities\Investigation;
 
 class InvestigationController extends Controller
 {
@@ -21,9 +24,11 @@ class InvestigationController extends Controller
      * Show the form for creating a new resource.
      * @return Renderable
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('monitoring::create');
+        $patient = Patient::find($request->patient_id);
+        $sub_categories = InvestigationSubCategory::get();
+        return view('monitoring::investigation.report.modal.add_modal', compact('sub_categories', 'patient'));
     }
 
     /**
@@ -33,7 +38,25 @@ class InvestigationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        foreach ($request->sub_category_id as $key => $value) {
+            $data = [
+                'patient_id' => $request->patient_id,
+                'sub_category_id' => $value,
+                'result' => $request->result[$key],
+                'date' => $request->date,
+            ];
+            Investigation::create($data);
+        }
+
+        // $patient = Patient::where('id',$request->patient_id)->first();
+        // if($patient->status == 'Active' && $patient->package_id != 13){
+        //     $user = User::where('id',$patient->user_id)->first();
+        //     $message = 'New investigation report added';
+        //     $url = 'user-investigation';
+        //     Notification::send($user, new UserNotification($message,$url));   
+        // }
+
+        return redirect()->back()->with('success', 'Investigation Report Added Successfully');
     }
 
     /**
@@ -41,9 +64,10 @@ class InvestigationController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function show($id)
+    public function show($patient_id)
     {
-        return view('monitoring::show');
+        $investigations = Investigation::where('patient_id', $patient_id)->orderBy('id', 'desc')->get();
+        return view('monitoring::investigation.report.modal.view_modal', compact('investigations', 'patient_id'));
     }
 
     /**
@@ -53,7 +77,9 @@ class InvestigationController extends Controller
      */
     public function edit($id)
     {
-        return view('monitoring::edit');
+        $investigation = Investigation::find($id);
+        $sub_categories = InvestigationSubCategory::get();
+        return view('monitoring::investigation.report.modal.edit_modal', compact('investigation', 'sub_categories'));
     }
 
     /**
@@ -64,7 +90,9 @@ class InvestigationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $investigation = Investigation::find($id);
+        $investigation->update($request->all());
+        return redirect()->back()->with('success', 'Investigation Report Updated Successfully');
     }
 
     /**

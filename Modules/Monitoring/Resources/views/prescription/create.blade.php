@@ -2,11 +2,6 @@
 @section('title', 'Prescription - Hospice Bangladesh')
 @section('main_content')
     @parent
-    <!-- Custom style for prescription -->
-    <style type="text/css">
-        
-    </style>
-    <!-- end of custom style -->
     <div class="main-container">
         <div class="content-wrapper">
             <!-- Fixed body scroll start -->
@@ -25,6 +20,7 @@
                 </div>
 
                 @include('monitoring::prescription.prescription_layout.advice_modal')
+                @include('monitoring::prescription.next_plan.add_plan')
                 <!-- End of Advice Model -->
                 <div id="edit_modal_body">
                 </div>

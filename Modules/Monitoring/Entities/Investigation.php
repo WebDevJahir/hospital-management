@@ -9,10 +9,10 @@ class Investigation extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
-    
-    protected static function newFactory()
+    protected $guarded = [];
+
+    public function sub_category()
     {
-        return \Modules\Monitoring\Database\factories\InvestigationFactory::new();
+        return $this->belongsTo(InvestigationSubCategory::class, 'sub_category_id');
     }
 }

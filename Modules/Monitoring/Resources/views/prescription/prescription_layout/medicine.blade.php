@@ -26,9 +26,9 @@
             </div>
             <div class="col-md-3" style="text-align: center;">
                 <div style="font-weight: bold;"> Next Plan</div>
-                <span onclick="nextplanReport()" style="margin-top: -5px;" style="background:inherit"
+                <span onclick="nextplanList()" style="margin-top: -5px;" style="background:inherit"
                     title="Next plan report" type="submit"><i class="fas fa-eye text-primary"></i></span> |
-                <span class="btn btn-sm" style="background:inherit" title="Next plan add" onclick="nextplan()"
+                <span class="btn btn-sm" style="background:inherit" title="Next plan add" onclick="addNextPlan()"
                     type="submit" style="margin-top: -7px; margin-left: 6px;"><i
                         class="fas fa-plus text-success"></i></span>
             </div>
@@ -70,8 +70,8 @@
                                 <i class="fas fa-edit text-success"></i>
                             </button>
                             <br>
-                            <button class="btn btn-sm" style="background:inherit" title="Canell"
-                                onclick="cancelMedicine({{ $medicine->id }})" type="submit" style="margin:2px;">
+                            <button class="btn btn-sm cancelMedicineButton" style="background:inherit" title="Cancel"
+                                type="submit" style="margin:2px;">
                                 <i class="fas fa-trash-alt text-danger"></i>
                             </button>
                             <br>

@@ -5,9 +5,9 @@
                 <h5 class="modal-title" id="exampleModalLabel">Investigation</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form action="{{ url('add-investigation-report') }}" method="post" id="form">
-                    @csrf
+            <form action="{{ route('investigation.store') }}" method="post" id="form">
+                @csrf
+                <div class="modal-body">
                     <div class="row gutters">
                         <div class="col-4">
                             <div class="input-group mb-3">
@@ -97,12 +97,12 @@
                     <input type="hidden" name="maximum_value" id="maximum_value">
                     <input type="hidden" name="minimum_value" id="minimum_value">
                     <input type="hidden" name="patient_id" value="{{ $patient->id }}">
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="updatePrescriptionMedicine">Add</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="updatePrescriptionMedicine">Save</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -162,7 +162,7 @@
         } else {
             var row = `
             <tr>
-            <td><input type="hidden" class="form-control" placeholder="" name="sub_category[]" value="${current_sub_category}"><input type="text" class="form-control" placeholder="" value="${entered_sub_category_name}" readonly></td>
+            <td><input type="hidden" class="form-control" placeholder="" name="sub_category_id[]" value="${current_sub_category}"><input type="text" class="form-control" placeholder="" value="${entered_sub_category_name}" readonly></td>
             <td><input type="text" class="form-control" placeholder="" name="result[]" value="${entered_result}" readonly></td>
             <td><input type="text" class="form-control" placeholder="" name="unit[]" value="${entered_unit}" readonly></td>
             <td><input type="text" class="form-control" placeholder="" name="normal_value[]" value="${entered_normal_value}" readonly></td>

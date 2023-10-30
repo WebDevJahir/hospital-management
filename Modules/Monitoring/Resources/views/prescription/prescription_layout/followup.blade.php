@@ -1,11 +1,21 @@
 <div class="col-4" style="max-height: 1100px;">
-
-    <form action="{{ url('add-follow-up-discussion') }}" method="post">
+    <form action="{{ route('patient-follow-up.store') }}" method="post">
         @csrf
-
         <div class="card" style="margin-bottom:0px;padding:10px;border:2px solid #dddddd;height: 1120px;">
             <div class="card-header" style="background:#dee5f1;padding:.3rem 1.25rem .1rem 1.25rem;">
-                <h5 style="color: black;margin:0px;" class="text-center">Follow Up Discussion</h5>
+                <h5 style="color: #000000;margin:0px;" class="text-center">Follow Up Discussion
+                    <button class="btn btn-sm btn-primary text-primary" style="background:inherit; padding: 0px 5px;"
+                        title="Follow Up List" id="FollowUpList" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-card-list" viewBox="0 0 16 16">
+                            <path
+                                d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z" />
+                            <path
+                                d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
+                        </svg>
+                    </button>
+                </h5>
+
             </div>
             <hr style="margin:10px;">
             <div class="row gutters">
@@ -16,7 +26,6 @@
                             <option value="1">Select Place</option>
                             <option value="Home">Home</option>
                             <option value="Hospital">Hospital</option>
-
                         </select>
                     </div>
                 </div>
@@ -24,10 +33,9 @@
                     <div style="font-weight: bold;"> Call/Visit Type :</div>
                     <div class="input-group">
                         <select class="form-control" id="type" name="type">
-                            <option value="1">Select Call/Visit Type</option>
+                            <option value="">Select Call/Visit Type</option>
                             <option value="Schedule">Schedule</option>
                             <option value="UnSchedule">UnSchedule</option>
-
                         </select>
                     </div>
                 </div>

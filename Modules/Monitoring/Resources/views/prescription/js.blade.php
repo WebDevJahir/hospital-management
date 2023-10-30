@@ -1,5 +1,15 @@
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script type="text/javascript">
+    function loaderShow() {
+        $("#loader-container").show();
+        $("#content").css("pointer-events", "none");
+    }
+
+    function loaderHide() {
+        $("#loader-container").hide();
+        $("#content").css("pointer-events", "auto");
+    }
+
     $(document).on('change', '#status', function() {
         var status = $(this).val();
         $.ajax({
@@ -27,8 +37,7 @@
     });
 
     function addInvReport() {
-        $("#loader-container").show();
-        $("#content").css("pointer-events", "none");
+        loaderShow()
         var patient_id = ($('#patient').val())
         $('#modal-body').html(null);
         $.get('{{ route('investigation.create') }}', {
@@ -36,46 +45,123 @@
         }, function(data) {
             $('#edit_modal_body').html(data);
             $('#investigationModal').modal('show');
-            $("#loader-container").hide();
-            $("#content").css("pointer-events", "auto");
+            loaderHide()
         });
     }
 
-    function nextplan() {
-        var patient_id = ($('#patient').val())
-        $.post('{{ url('patient-next-plan') }}', {
-            _token: '{{ @csrf_token() }}',
-            patient_id: patient_id
-        }, function(data) {
+
+    function editInvestigation(id) {
+        loaderShow()
+        $('#investigationModal').modal('hide');
+        var url = "{{ route('investigation.edit', ':id') }}";
+        url = url.replace(':id', id);
+        $.get(url, function(data) {
+            loaderHide()
             $('#edit_modal_body').html(data);
-            $('#addNextPlan').modal();
+            $('#editInvestigation').modal('show');
+
         });
     }
 
+    function updateInvestigation(id) {
+        $('#updateInvestigation').html('Updating...');
+        var sub_category_id = $('#edit_sub_category').val();
+        var result = $('#edit_result').val();
+        var patient_id = $('#patient_id').val();
+        var url = "{{ route('investigation.update', ':id') }}";
+        url = url.replace(':id', id);
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                sub_category_id: sub_category_id,
+                result: result,
+                patient_id: patient_id,
+                _token: '{{ @csrf_token() }}',
+                _method: 'PUT'
+            },
+            success: function(data) {
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Investigation updated successfully.',
+                });
+                $('#editInvestigation').modal('hide');
+            }
+        });
 
-    function nextplanReport() {
+    }
+
+    function addNextPlan() {
+        $('#nextPlanModal').modal('show');
+    }
+
+    function nextplanList() {
+        loaderShow()
         var patient_id = ($('#patient').val())
-        $.get('{{ url('next-plan-report') }}', {
-            _token: '{{ @csrf_token() }}',
-            patient_id: patient_id
-        }, function(data) {
+        let url = '{{ route('next-plan.show', ':patient_id') }}';
+        url = url.replace(':patient_id', patient_id);
+        $.get(url, function(data) {
             $('#edit_modal_body').html(data);
-            $('#nextPlanReport').modal();
+            $('#planListModal').modal('show');
+            loaderHide()
         });
     }
 
-    function viewInvReport() {
-        var patient_id = ($('#patient').val())
-        $('#modal-body').html(null);
-        $.get('{{ url('view-investigation-reports') }}', {
-            patient_id: patient_id
-        }, function(data) {
-            $('#edit_modal_body').html(data);
-            $('#investigationListModel').modal();
+    $(document).on('click', '.deletePlanButton', function() {
+        var clickedButton = $(this);
+        var id = clickedButton.closest('tr').find('.next_plan_id').val();
+        var message = "Are you sure you want to delete this plan?";
+        var confirmMessage = "Yes, Delete it!";
+        showConfirmationDialog(message, confirmMessage, () => {
+            clickedButton.html('<i class="fas fa-spinner fa-spin text-danger"></i>')
+            deleteNextPlan(id);
+        })
+    });
+
+    function deleteNextPlan(id) {
+        var url = '{{ route('next-plan.destroy', ':id') }}';
+        url = url.replace(':id', id);
+        $.ajax({
+            url: url,
+            type: 'DELETE',
+            data: {
+                _token: '{{ @csrf_token() }}'
+            },
+            success: function(data) {
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Next plan deleted successfully.',
+                });
+                $('#tr' + id).fadeOut();
+            }
         });
     }
+
+    $(document).on('click', '#addNextPlanButton', function() {
+        var patient_id = $("#patient_id").val();
+        var plan = $("#plan").val();
+        var notification_date = $("#notification_date").val();
+        $.ajax({
+            url: '{{ route('next-plan.store') }}',
+            type: 'POST',
+            data: {
+                patient_id: patient_id,
+                plan: plan,
+                notification_date: notification_date,
+                _token: '{{ @csrf_token() }}'
+            },
+            success: function(data) {
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Next plan added successfully.',
+                });
+                $('#nextPlanModal').modal('hide');
+            }
+        });
+    });
 
     function addMedicine() {
+        $('#addMedicinebutton').html('Adding...');
         var patient_id = $("#patient_id").val();
         var medicine = $("#medicine").val();
         var note = $("#note").val();
@@ -83,14 +169,15 @@
         var duration = $("#duration").val();
         var date = new Date();
         $.ajax({
-            url: '{{ route('add-medicine') }}',
-            type: 'GET',
+            url: '{{ route('prescription.store') }}',
+            type: 'POST',
             data: {
                 patient_id: patient_id,
                 medicine: medicine,
                 note: note,
                 dose: dose,
-                duration: duration
+                duration: duration,
+                _token: '{{ @csrf_token() }}'
             },
             success: function(data) {
                 Toast.fire({
@@ -110,8 +197,8 @@
                     data.id + '" type="submit"><i class="fas fa-sms text-primary"></i></a>  </td> </tr>';
                 $('#activeMedicineModalTable').append(newrow);
                 $('#medicineTable').append(newrow);
-                $("#addmedicine").val('');
-                $("#addnote").val('');
+                $("#medicine").val('');
+                $("#note").val('');
                 $("#dose").val('');
                 $("#duration").val('');
             }
@@ -119,23 +206,28 @@
     }
 
     function editMedicine(id) {
-        $.get("{{ route('edit-medicine') }}", {
-            id: id
-        }, function(data) {
+        loaderShow()
+        url = '{{ route('prescription.edit', ':id') }}';
+        url = url.replace(':id', id);
+        $.get(url, function(data) {
             $('#edit_modal_body').html(data);
             $('#editMedicine').modal('show');
+            loaderHide()
         })
     }
 
     $(document).on('click', '#updatePrescriptionMedicine', function() {
+        $('#updatePrescriptionMedicine').html('Updating...');
         var id = $("#update_medicine_id").val();
         var medicine = $("#update_medicine").val();
         var note = $("#update_note").val();
         var dose = $("#update_dose").val();
         var duration = $("#update_duration").val();
+        var url = '{{ route('prescription.update', ':id') }}';
+        url = url.replace(':id', id);
         $.ajax({
-            url: '{{ route('update-medicine') }}',
-            type: 'POST',
+            url: url,
+            type: 'PUT',
             data: {
                 id: id,
                 medicine: medicine,
@@ -157,8 +249,8 @@
                         row.find('td').eq(0).html(data.medicine + '<br>' + '(' + data.dose +
                             ')' +
                             '<br>' + data.note + '-' + data.duration);
-                        row.find('td').eq(2).html(data.created_at);
-                        row.find('td').eq(3).html(
+                        row.find('td').eq(1).html(data.created_at);
+                        row.find('td').eq(2).html(
                             '<button class="btn btn-sm" style="background:inherit" title="Edit" style="margin:2px;" onclick="editMedicine(' +
                             data.id +
                             ')" type="submit"><i class="fas fa-edit text-success"></i></button> <br> <button class="btn btn-sm" style="background:inherit" title="Cancel" style="margin:2px;" onclick="cancelMedicine(' +
@@ -173,12 +265,13 @@
         });
     });
 
-    $('.cancelMedicineButton').click(function() {
+    $('.activeMedicineButton').click(function() {
         var clickedButton = $(this);
         var id = clickedButton.closest('tr').find('.cancel_medicine_id').val();
         var patient_id = $("#patient_id").val();
         var message = "Are you sure you want to active this medicine?";
-        showConfirmationDialog(message, () => {
+        var confirmMessage = "Yes, Active it!";
+        showConfirmationDialog(message, confirmMessage, () => {
             clickedButton.toggleClass('rotate');
             $.ajax({
                 url: '{{ route('active-medicine') }}',
@@ -221,35 +314,84 @@
                 }
             });
         })
-
     });
 
-    function deleteMedicineView(id) {
+    $('.cancelMedicineButton').click(function() {
+        var clickedButton = $(this);
+        var id = clickedButton.closest('tr').find('.medicine_id').val();
         var patient_id = $("#patient_id").val();
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, Delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.get('{{ url('delete-medicine') }}', {
-                    id: id
-                }, function(data) {
-                    $('#tr'.concat(id)).remove();
-
+        var message = "Are you sure you want to cancel this medicine?";
+        var confirmMessage = "Yes, Cancel it!";
+        showConfirmationDialog(message, confirmMessage, () => {
+            clickedButton.html('<i class="fas fa-spinner fa-spin text-danger"></i>')
+            $.ajax({
+                url: '{{ route('cancel-medicine') }}',
+                type: 'GET',
+                data: {
+                    id
+                },
+                success: function(data) {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Medicine has been deleted.',
-                    })
-                    window.location.href = "{{ url('prescription') }}" + "/" + patient_id;
-                });
-            }
+                        title: 'Medicine Cancelled successfully.',
+                    });
+                    clickedButton.closest('tr').fadeOut();
+                    var medicine_row = `
+                    <tr>
+                        <td>
+                            <p>
+                                ${data.medicine}
+                            </p>
+                            <p>
+                                ${data.dose}
+                            </p>
+                            <p>
+                                ${data.duration}
+                            </p>
+                        </td>
+                        <td>
+                            ${data.created_at}
+                        </td>
+                        <td>
+                            <button class="btn btn-sm" style="background:inherit" title="Edit" style="margin:2px;" onclick="editMedicineView(${data.id})" type="submit"><i class="fas fa-edit text-success"></i></button>
+                            <button class="btn btn-sm" style="background:inherit" title="Cancel" style="margin:2px;" onclick="cancelMedicine(${data.id})" type="submit"><i class="fas fa-trash-alt text-danger"></i></button>
+                        </td>
+                    </tr>
+                    `
+                    $('#Canceltable').append(medicine_row);
+                }
+            })
         })
-    }
+
+    })
+
+    $('.deleteMedicineButton').on('click', function() {
+        var clickedButton = $(this);
+        var id = clickedButton.closest('tr').find('.cancel_medicine_id').val();
+        var patient_id = $("#patient_id").val();
+        var message = "Are you sure you want to delete this medicine?";
+        var confirmMessage = "Yes, Delete it!";
+        var url = '{{ route('prescription.destroy', ':id') }}';
+        url = url.replace(':id', id);
+        showConfirmationDialog(message, confirmMessage, () => {
+            clickedButton.html('<i class="fas fa-spinner fa-spin text-danger"></i>')
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                data: {
+                    _token: '{{ @csrf_token() }}'
+                },
+                success: function(data) {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Medicine deleted successfully.',
+                    });
+                    clickedButton.closest('tr').fadeOut();
+                }
+            });
+        })
+
+    });
 
     function generatePrescription() {
         var patient_id = $("#patient_id").val();
@@ -264,6 +406,47 @@
             }
         })
     }
+
+    $('#FollowUpList').on('click', function() {
+        loaderShow()
+        var patient_id = $("#patient_id").val();
+        let url = '{{ route('patient-wise-follow-up', ':patient_id') }}';
+        url = url.replace(':patient_id', patient_id);
+        $.get(url, function(data) {
+            $('#edit_modal_body').html(data);
+            $('#followUpListModal').modal('show');
+            loaderHide()
+        });
+    })
+
+    $(document).on('click', '.deleteFollowUpButton', function() {
+        var clickedButton = $(this);
+        var id = clickedButton.closest('tr').find('.follow_up_id').val();
+        var message = "Are you sure you want to delete this follow up?";
+        var confirmMessage = "Yes, Delete it!";
+        var url = '{{ route('patient-follow-up.destroy', ':id') }}';
+        url = url.replace(':id', id);
+        console.log(url)
+        showConfirmationDialog(message, confirmMessage, () => {
+            clickedButton.html('<i class="fas fa-spinner fa-spin text-danger"></i>')
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                data: {
+                    _token: '{{ @csrf_token() }}'
+                },
+                success: function(data) {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Follow up deleted successfully.',
+                    });
+                    clickedButton.closest('tr').fadeOut();
+
+                }
+            });
+        })
+    });
+
     $('#showGraph').change(function() {
         if (this.checked) {
             $('#graph').show();

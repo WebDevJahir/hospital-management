@@ -15,7 +15,13 @@ return new class extends Migration
     {
         Schema::create('wound_describes', function (Blueprint $table) {
             $table->id();
-
+            $table->unsignedBigInteger('patient_id');
+            $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
+            $table->date('date')->nullable();
+            $table->string('location')->nullable();
+            $table->string('site')->nullable();
+            $table->string('first_occured')->nullable();
+            $table->string('wound_type')->nullable();
             $table->timestamps();
         });
     }

@@ -5,10 +5,10 @@ namespace Modules\Monitoring\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Monitoring\Entities\InvestigationSubCategory;
-use Modules\Patient\Entities\Patient;
+use Modules\Monitoring\Entities\NextPlan;
+use Modules\Monitoring\Http\Requests\NextPlanRequest;
 
-class InvestigationReportController extends Controller
+class NextPlanController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,11 +23,9 @@ class InvestigationReportController extends Controller
      * Show the form for creating a new resource.
      * @return Renderable
      */
-    public function create(Request $request)
+    public function create()
     {
-        $patient = Patient::find($request->patient_id);
-        $sub_categories = InvestigationSubCategory::get();
-        return view('monitoring::investigation.report.modal.modal', compact('sub_categories', 'patient'));
+        return view('monitoring::create');
     }
 
     /**
@@ -35,9 +33,10 @@ class InvestigationReportController extends Controller
      * @param Request $request
      * @return Renderable
      */
-    public function store(Request $request)
+    public function store(NextPlanRequest $request)
     {
-        //
+        NextPlan::create($request->all());
+        return response()->json(['success' => 'Next Plan Added Successfully']);
     }
 
     /**
@@ -45,9 +44,10 @@ class InvestigationReportController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function show($id)
+    public function show($patient_id)
     {
-        return view('monitoring::show');
+        $next_plans = NextPlan::where('patient_id', $patient_id)->orderBy('id', 'desc')->get();
+        return view('monitoring::prescription.next_plan.plan_list_modal', compact('next_plans'));
     }
 
     /**
@@ -78,6 +78,18 @@ class InvestigationReportController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $next_plan = NextPlan::find($id);
+        $next_plan->delete();
+        if ($next_plan) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Next Plan Deleted Successfully'
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'message' => 'Next Plan Not Deleted Successfully'
+            ]);
+        }
     }
 }
