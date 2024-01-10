@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Modules\Accounts\Entities\PaymentMethod;
 use Modules\Admin\Entities\IncomeHead;
 use Modules\Admin\Entities\IncomeSubCategory;
 
@@ -54,5 +55,11 @@ class CommonApiController extends Controller
             ->get();
 
         return response()->json($income_subcategory);
+    }
+
+    public function getPaymentMethod()
+    {
+        $paymentMethod = PaymentMethod::get();
+        return $paymentMethod;
     }
 }

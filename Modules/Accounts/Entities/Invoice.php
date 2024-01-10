@@ -19,7 +19,9 @@ class Invoice extends Model
         'lab_id',
         'sub_total',
         'deposit',
+        'discount_type',
         'discount',
+        'discount_amount',
         'total',
         'payment_status',
         'advance',
@@ -30,13 +32,10 @@ class Invoice extends Model
         'address',
         'admission_date',
         'discharge_date',
-        'discount_type',
-        'total_vat_amount',
-        'vat',
         'note',
-        'vat_percent',
+        'vat_type',
+        'vat',
         'vat_amount',
-        'discount_percent',
         'due',
         'collection_charge',
         'delivery_charge',
@@ -50,13 +49,11 @@ class Invoice extends Model
 
     public function patient()
     {
-        return $this->hasOne(Patient::class, 'id', 'patient_id');
+        return $this->hasOne(Patient::class, 'id', 'patient_id')->withDefault();
     }
 
     public function invoiceLines()
     {
         return $this->hasMany(InvoiceLine::class, 'invoice_id', 'id');
     }
-
-
 }

@@ -100,13 +100,13 @@
     }
 
     $(document).on('input',
-        '#discount_amount, #vat_amount, #delivery_charge, #service_charge, #collection_charge, #advance, #due',
+        '#vat_amount, #vat_percent, #delivery_charge, #service_charge, #collection_charge, #advance, #due, .unit_price, .quantity',
         function() {
             calculateTotal();
         })
 
     $('#discount').on('input', function() {
-        let discount = $(this).val();
+        let discount = $(this).val() != '' ? $(this).val() : '0';
         let sub_total = $('#sub_total').val();
         let discount_type = $('#discount_type').val();
         if (discount_type == '%') {
@@ -119,7 +119,7 @@
     })
 
     $('#vat').on('input', function() {
-        let vat = $(this).val();
+        let vat = $(this).val() != '' ? $(this).val() : '0';
         let sub_total = $('#sub_total').val();
         let vat_type = $('#vat_type').val();
         if (vat_type == '%') {
