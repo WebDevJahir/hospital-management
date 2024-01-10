@@ -24,12 +24,12 @@
                                 <table id="Example" class="table custom-table">
                                     <thead>
                                         <tr>
+                                            <th>Patient Name</th>
                                             <th>Invoice Date</th>
                                             <th>Invoice No</th>
                                             <th>Sub Total</th>
                                             <th>Discount</th>
                                             <th>Total</th>
-                                            <th>Tracking Status</th>
                                             <th>Payment Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -37,24 +37,19 @@
                                     <tbody id="incomeHeadTable">
                                         @foreach ($invoices as $invoice)
                                             <tr>
-                                                <td>{{ $invoice->invoice_date }}</td>
+                                                <td>
+                                                    {{ $invoice->patient->name }}
+                                                </td>
+                                                <td>
+                                                    {{ $invoice->invoice_date }}
+                                                    <input type="hidden" name="invoice_id" class="invoice_id"
+                                                        value="{{ $invoice->id }}">
+                                                </td>
                                                 <td>{{ $invoice->invoice_no }}</td>
                                                 <td>{{ $invoice->sub_total }}</td>
                                                 <td>{{ $invoice->discount }}</td>
                                                 <td>{{ $invoice->total }}</td>
-                                                <td>
-                                                    <select name="tracking_status" id="tracking_status"
-                                                        onchange="trackingStatus({{ $invoice->id }})" class="form-control">
-                                                        <option value="">Select</option>
-                                                        <option @if ($invoice->tracking_status == 'Ready to ship') selected @endif
-                                                            value="Ready to ship">Ready to ship</option>
-                                                        <option @if ($invoice->tracking_status == 'Shipped') selected @endif
-                                                            value="Shipped">Shipped</option>
-                                                        <option @if ($invoice->tracking_status == 'Delivered') selected @endif
-                                                            value="Delivered">Delivered</option>
-                                                    </select>
-                                                </td>
-                                                <td>{{ $invoice->payment_status }}</td>
+                                                <td class="payment_status">{{ $invoice->payment_status }}</td>
                                                 <td>
                                                     <div class="icon-btn">
                                                         <nobr>
@@ -72,6 +67,15 @@
                                                                     class="btn btn-outline-danger btn-sm delete"><i
                                                                         class="fas fa-trash"></i></button>
                                                             </form>
+                                                            <button type="button" data-toggle="tooltip" title="Pay Now"
+                                                                class="btn btn-outline-info btn-sm pay_now">
+                                                                <i class="fab fa-amazon-pay text-primary"></i>
+                                                            </button>
+                                                            <button class="btn btn-outline-success btn-sm addAdvance"
+                                                                title="Advance">
+                                                                <i class="fas fa-hand-holding-usd">
+                                                                </i>
+                                                            </button>
                                                         </nobr>
                                                     </div>
                                                 </td>
@@ -90,6 +94,7 @@
         </div>
         <!-- Content wrapper end -->
     </div>
+    <div id="modal"></div>
 @endsection
 
 
@@ -115,5 +120,76 @@
                 }
             });
         }); //end of submit
+
+
+        $(document).on('click', '.pay_now', function() {
+            loaderShow();
+            let this_event = $(this);
+            $.get('{{ route('get-payment-method') }}', function(data) {
+                loaderHide();
+                var options = {};
+                $.each(data, function(i, item) {
+                    options[item.id] = item.bank_name + ' (' + item.branch + ')'
+                });
+                Swal.fire({
+                    title: 'Select Payment method',
+                    input: 'select',
+                    inputOptions: options,
+                    showCancelButton: true,
+                    inputValidator: function(value) {
+                        return new Promise(function(resolve, reject) {
+                            if (value != null) {
+                                resolve()
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Select payment method!',
+                                })
+                            }
+                        })
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var payment_method_id = result.value;
+                        let invoice_id = this_event.closest('tr').find('#invoice_id').val();
+                        loaderShow();
+                        $.get('{{ route('update-invoice-status') }}', {
+                            payment_method_id: payment_method_id,
+                            invoice_id: invoice_id
+                        }, function(data) {
+                            loaderHide();
+                            if (data == 'failed') {
+                                Swal.fire(
+                                    'Sorry!',
+                                    'Invoice already Paid.',
+                                    'error'
+                                )
+                            } else {
+                                Swal.fire(
+                                    'Paid!',
+                                    'Invoice has been Paid.',
+                                    'success'
+                                )
+                                this_event.closest('tr').find('.payment_status').html(
+                                    'Paid');
+                            }
+                            // location.reload(true)
+                        });
+                    }
+                })
+            })
+        })
+
+        $(document).on('click', '.addAdvance', function() {
+            let this_event = $(this);
+            let invoice_id = this_event.closest('tr').find('.invoice_id').val();
+            $.get('{{ route('get-advance-modal') }}', {
+                invoice_id: invoice_id
+            }, function(data) {
+                $('#modal').html(data);
+                $('#advanceModal').modal('show');
+            })
+        })
     </script>
 @endsection

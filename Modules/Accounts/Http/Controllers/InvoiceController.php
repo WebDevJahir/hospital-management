@@ -6,10 +6,12 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use Modules\Accounts\Entities\Advance;
 use Modules\Admin\Entities\District;
 use Modules\Patient\Entities\Patient;
 use Modules\Accounts\Entities\Invoice;
 use Modules\Accounts\Entities\InvoiceLine;
+use Modules\Accounts\Entities\Payment;
 use Modules\Admin\Entities\IncomeHead;
 use Modules\Admin\Entities\IncomeSubCategory;
 use Modules\Admin\Entities\Project;
@@ -22,7 +24,7 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $invoices = Invoice::orderBy('id', 'desc')->get();
+        $invoices = Invoice::with('patient')->where('payment_status', 'Due')->orderBy('id', 'desc')->get();
         return view('accounts::invoice.index', compact('invoices'));
     }
 
@@ -89,9 +91,20 @@ class InvoiceController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Invoice $invoice)
     {
-        //
+        try {
+            DB::beginTransaction();
+            $data = $request->all();
+            $invoice->update($data);
+            $invoice->invoiceLines()->delete();
+            $this->invoiceLine($invoice, $data);
+            DB::commit();
+            return redirect()->route('invoice.index')->with('success', 'Invoice updated successfully');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -119,5 +132,49 @@ class InvoiceController extends Controller
             ];
         }
         InvoiceLine::insert($lines);
+    }
+
+    public function updateInvoiceStatus(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $invoice = Invoice::find($request->invoice_id);
+            if ($request->payment_status == 'Due') {
+                $invoice->update(['payment_status' => 'Due']);
+                $invoice->invoiceLines->map(function ($line) {
+                    $line->update(['status' => 'Due']);
+                });
+                $payment = Payment::create([
+                    'project_id' => $invoice->project_id,
+                    'invoice_id' => $invoice->id,
+                    'payment_method_id' => $request->payment_method_id,
+                    'amount' => $invoice->total,
+                    'date' => date('Y-m-d'),
+                    'note' => $request->note,
+                ]);
+                DB::commit();
+                return response()->json(['success' => 'Invoice status updated successfully']);
+            } else {
+                return response()->json(['error' => 'This Invoice is already paid']);
+            }
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function getAdvanceModal(Request $request)
+    {
+        $invoice = Invoice::find($request->invoice_id);
+        $advances = Advance::where('invoice_id', $invoice->id)
+            ->orderBy('id', 'desc')
+            ->get();
+        return view('accounts::invoice.modal.advance_modal', compact('invoice', 'advances'));
+    }
+
+    public function addAdvance(Request $request)
+    {
+        $advance = Advance::create($request->all());
+        return redirect()->back()->with('success', 'Advance Saved Successfully');
     }
 }

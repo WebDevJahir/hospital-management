@@ -163,15 +163,16 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (!empty($inoice->id))
+                                    @if (!empty($invoice->id))
                                         @foreach ($invoice->invoiceLines as $line)
                                             <tr>
                                                 <td>
                                                     <select class="form-control select2 income_head_id" data-width="100%"
                                                         name="income_head_id[]">
                                                         <option value="">Select Income Head</option>
-                                                        @foreach ($incomeHeads as $incomeHead)
-                                                            <option value="{{ $incomeHead->id }}" @if($line->income_head_id == $incomeHead->id) selected @endif>
+                                                        @foreach ($income_heads as $incomeHead)
+                                                            <option value="{{ $incomeHead->id }}"
+                                                                @if ($line->income_head_id == $incomeHead->id) selected @endif>
                                                                 {{ $incomeHead->name }}</option>
                                                         @endforeach
                                                     </select>
@@ -180,9 +181,9 @@
                                                     <select class="form-control select2 income_subcategory_id"
                                                         data-width="100%" name="income_subcategory_id[]">
                                                         <option value="">Select Subcategory</option>
-                                                        @foreach ($incomeSubcategories as $incomeSubcategory)
+                                                        @foreach ($income_subcategories as $incomeSubcategory)
                                                             <option value="{{ $incomeSubcategory->id }}"
-                                                            @if($incomeSubcategory->id == $line->income_subcategory_id) selected @endif>
+                                                                @if ($incomeSubcategory->id == $line->income_subcategory_id) selected @endif>
                                                                 {{ $incomeSubcategory->name }}</option>
                                                         @endforeach
                                                     </select>
@@ -208,7 +209,7 @@
                                                             value="{{ $line->quantity * $line->price }}" readonly>
                                                     </div>
                                                 </td>
-                                                <td style="width: 7%">
+                                                <td>
                                                     <button type="button" class="btn btn-outline-danger removeRow"><i
                                                             class="fa fa-minus-square" aria-hidden="true"></i></button>
                                                 </td>
@@ -246,7 +247,7 @@
                                                         placeholder="Amount" value="" readonly>
                                                 </div>
                                             </td>
-                                            <td style="width: 7%">
+                                            <td>
                                                 <button type="button" class="btn btn-outline-danger removeRow"><i
                                                         class="fa fa-minus-square" aria-hidden="true"></i></button>
                                             </td>
@@ -261,7 +262,8 @@
                                         <td colspan="4">
                                             <div>
                                                 <input type="text" class="form-control sub_total" id="sub_total"
-                                                    placeholder="Sub Total" value="{{ $sub_total ?? '' }}" readonly>
+                                                    placeholder="Sub Total" value="{{ $sub_total ?? '' }}"
+                                                    name="sub_total" readonly>
                                             </div>
                                         </td>
                                     </tr>
@@ -273,15 +275,17 @@
                                             <div>
                                                 <select class="form-control discount_type" id="discount_type"
                                                     name="discount_type">
-                                                    <option value="$" @if($discount_type == '$') selected @endif>Fixed
-                                                    <option value="%" @if($discount_type == '%') selected @endif>Percentage
+                                                    <option value="$"
+                                                        @if ($discount_type == '$') selected @endif>Fixed
+                                                    <option value="%"
+                                                        @if ($discount_type == '%') selected @endif>Percentage
                                                 </select>
                                             </div>
                                         </td>
                                         <td>
                                             <div>
                                                 <input type="text" class="form-control discount" id="discount"
-                                                    name="discount" placeholder="Discount"
+                                                    name="discount_percent" placeholder="Discount"
                                                     value="{{ $discount ?? '' }}">
                                             </div>
                                         </td>
@@ -289,8 +293,7 @@
                                             <div>
                                                 <input type="text" class="form-control discount_amount"
                                                     id="discount_amount" name="discount_amount"
-                                                    placeholder="Discount Amount" value="{{ $discount_amount ?? '' }}"
-                                                    </div>
+                                                    placeholder="Discount Amount" value="{{ $discount ?? '' }}" </div>
                                         </td>
                                     </tr>
                                     <tr>
@@ -301,15 +304,18 @@
                                             <div>
                                                 <select class="form-control vat_type" id="vat_type" name="vat_type"
                                                     onchange="calculateTotal()">
-                                                    <option value="$" @if($vat_type == '$') selected @endif>Fixed</option>
-                                                    <option value="%" @if($vat_type == '%') selected @endif>Percentage
+                                                    <option value="$"
+                                                        @if ($vat_type == '$') selected @endif>Fixed</option>
+                                                    <option value="%"
+                                                        @if ($vat_type == '%') selected @endif>Percentage
                                                 </select>
                                             </div>
                                         </td>
                                         <td>
                                             <div>
-                                                <input type="text" class="form-control vat" placeholder="VAT"
-                                                    name="vat" id="vat" value="{{ $vat ?? '' }}">
+                                                <input type="text" class="form-control vat"
+                                                    placeholder="VAT Percent/Amount" name="vat" id="vat"
+                                                    value="{{ $vat ?? '' }}">
                                             </div>
                                         </td>
                                         <td colspan="2">

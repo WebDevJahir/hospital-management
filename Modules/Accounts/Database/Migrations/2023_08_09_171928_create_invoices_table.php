@@ -23,7 +23,6 @@ return new class extends Migration
             $table->unsignedBigInteger('lab_id');
             $table->decimal('sub_total', 10, 2);
             $table->decimal('deposit', 10, 2);
-            $table->decimal('discount', 10, 2);
             $table->decimal('total', 10, 2);
             $table->string('payment_status');
             $table->decimal('advance', 10, 2);
@@ -35,12 +34,12 @@ return new class extends Migration
             $table->date('admission_date');
             $table->date('discharge_date');
             $table->string('discount_type');
-            $table->decimal('total_vat_amount', 10, 2);
+            $table->decimal('discount', 5, 2);
+            $table->decimal('discount_amount', 10, 2);
+            $table->string('vat_type');
             $table->decimal('vat', 5, 2);
-            $table->text('note');
-            $table->decimal('vat_percent', 5, 2);
             $table->decimal('vat_amount', 10, 2);
-            $table->decimal('discount_percent', 5, 2);
+            $table->text('note');
             $table->decimal('due', 10, 2);
             $table->decimal('collection_charge', 10, 2);
             $table->decimal('delivery_charge', 10, 2);
