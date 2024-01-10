@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('police_stations', function (Blueprint $table) {
             $table->id();
-            $table->string("name", 100);
-            $table->foreignId("city_id")->constrained("cities")->onDelete("cascade");
+            $table->string("name");
+            $table->integer("city_id");
             $table->timestamps();
         });
     }
