@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Accounts\Http\Controllers\ExpenseController;
 use Modules\Accounts\Http\Controllers\InvoiceController;
+use Modules\Accounts\Http\Controllers\LeaveController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,6 +19,7 @@ use Modules\Accounts\Http\Controllers\InvoiceController;
 Route::prefix('accounts')->group(function () {
     Route::get('/', 'AccountsController@index');
     Route::resources([
+        'leaves' => LeaveController::class,
         'invoice' => InvoiceController::class,
         'expense' => ExpenseController::class,
     ]);
@@ -24,4 +27,6 @@ Route::prefix('accounts')->group(function () {
     Route::get('get-advance-modal', [InvoiceController::class, 'getAdvanceModal'])->name('get-advance-modal');
     Route::post('add-advance', [InvoiceController::class, 'addAdvance'])->name('add-advance');
     Route::get('delete-advance', [InvoiceController::class, 'deleteAdvance'])->name('delete-advance');
+    Route::get('get-used-leave', [LeaveController::class, 'getUsedLeave'])->name('get-used-leave');
+    Route::get('get-leave', [LeaveController::class, 'getLeave'])->name('get-leave');
 });
