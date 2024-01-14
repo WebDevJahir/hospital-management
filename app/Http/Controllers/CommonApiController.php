@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Modules\Accounts\Entities\PaymentMethod;
+use Modules\Admin\Entities\ExpenseHead;
+use Modules\Admin\Entities\ExpenseSubCategory;
 use Modules\Admin\Entities\IncomeHead;
 use Modules\Admin\Entities\IncomeSubCategory;
 
@@ -61,5 +63,25 @@ class CommonApiController extends Controller
     {
         $paymentMethod = PaymentMethod::get();
         return $paymentMethod;
+    }
+
+    public function getExpenseHead()
+    {
+        $expense_head = ExpenseHead::select('id', 'name')
+            ->where('project_id', request()->project_id)
+            ->latest()
+            ->get();
+
+        return response()->json($expense_head);
+    }
+
+    public function getExpenseSubCategory()
+    {
+        $expense_subcategory = ExpenseSubCategory::select('id', 'name')
+            ->where('expense_head_id', request()->expense_head_id)
+            ->latest()
+            ->get();
+
+        return response()->json($expense_subcategory);
     }
 }

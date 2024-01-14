@@ -87,6 +87,12 @@
                                 <select id="police_station_id" name="police_station_id" class="form-control select2"
                                     data-width="92%">
                                     <option value="">Select Police Station</option>
+                                    @foreach ($police_stations as $police_station)
+                                        <option value="{{ $police_station->id }}"
+                                            @if ($police_station_id == $police_station->id) selected @endif>
+                                            {{ $police_station->name }}</option>
+                                    @endforeach
+                                    
                                 </select>
                             </div>
                         </div>

@@ -17,6 +17,7 @@ use Modules\Admin\Services\Sms;
 use Illuminate\Support\Str;
 use Modules\Accounts\Entities\Invoice;
 use Modules\Accounts\Entities\InvoiceDetail;
+use Modules\Accounts\Entities\InvoiceLine;
 use Modules\Admin\Entities\Project;
 use Modules\Admin\Services\SendMail;
 use Modules\Patient\Http\Requests\PatientRequest;
@@ -178,15 +179,18 @@ class PatientController extends Controller
         $now = Carbon::now();
 
         $invoice_no = Invoice::max('invoice_no');
-        $invoice_array = explode('-', $invoice_no);
-        $invoice_no = $invoice_array[0] . '-' . ($invoice_array[1] + 1);
-        $invoice_no = $invoice_no ?: $now->format('Ym') . '-1';
+        if ($invoice_no) {
+            $invoice_array = explode('-', $invoice_no);
+            $invoice_no = $invoice_array[0] . '-' . ($invoice_array[1] + 1);
+        } else {
+            $invoice_no = Date('Y') . '-' . '01';
+        }
 
         $patientData = [
             'package_id' => $request->package_id,
-            'last_payment_date' => '',
-            'due_payment_date' => '',
-            'reminder_date' => '',
+            'last_payment_date' => null,
+            'due_payment_date' => null,
+            'reminder_date' => null,
             'status' => $request->status,
         ];
 
@@ -199,7 +203,7 @@ class PatientController extends Controller
             $patientData['reminder_date'] = $package->duration === 'continue' ? 'continue' : $reminderDate->toDateString();
 
             $invoiceData = [
-                'patient_id' => $patient->user_id,
+                'patient_id' => $patient->id,
                 'invoice_date' => $now->toDateString(),
                 'invoice_no' => $invoice_no++,
                 'invoice_type' => 'package',
@@ -218,6 +222,7 @@ class PatientController extends Controller
             ];
 
             $invoiceDetailData = [
+                'project_id' => $package->project_id,
                 'income_head_id' => $package->income_head_id,
                 'income_subcategory_id' => $package->income_sub_category_id,
                 'quantity' => 1,
@@ -229,12 +234,13 @@ class PatientController extends Controller
 
         DB::beginTransaction();
         $patient->update($patientData);
+        // dd($invoiceDetailData);
         if (isset($invoiceData)) {
             $invoice = Invoice::create($invoiceData);
             $invoiceDetailData['invoice_id'] = $invoice->id;
-            InvoiceDetail::create($invoiceDetailData);
+            InvoiceLine::create($invoiceDetailData);
         }
         DB::commit();
-        return redirect()->route('patient.index')->with('success', 'Patient plan and status updated successfully');
+        return redirect()->route('patients.index')->with('success', 'Patient plan and status updated successfully');
     }
 }

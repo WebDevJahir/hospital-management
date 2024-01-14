@@ -5,7 +5,7 @@
                 <h5 class="modal-title" id="exampleModalLabel">Payments</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('add-advance')}}" method="post">
+            <form action="{{ route('add-advance') }}" method="post">
                 @csrf
                 <div class="modal-body">
                     <div class="table-responsive">
@@ -14,9 +14,9 @@
                                 <tr>
                                     <th>Invoice No</th>
                                     <th>Patient Name</th>
-                                    <th>Total Amount</th>
-                                    <th>Total Advance</th>
-                                    <th>Total Due</th>
+                                    <th>Total</th>
+                                    <th>Paid</th>
+                                    <th>Due</th>
                                     <th>Collection</th>
                                     <th>Remain</th>
                                     <th></th>
@@ -26,12 +26,14 @@
                                 <tr>
                                     <td>
                                         <input type="text" name="invoice_id" id="invoice_id"
-                                            value="{{ $invoice->invoice_no }}" class="form-control" readonly="">
+                                            value="{{ $invoice->id }}" class="form-control" readonly="">
                                     </td>
                                     <td>
                                         <input type="hidden" name="patient_id" id="patient_id" value=""
                                             class="form-control">
                                         <input type="text" name="patient_name" value="{{ $invoice->patient->name }}"
+                                            class="form-control" readonly="">
+                                        <input type="hidden" name="patient_id" value="{{ $invoice->patient->id }}"
                                             class="form-control" readonly="">
                                     </td>
                                     <td>
@@ -49,7 +51,8 @@
                                     <td>
                                         <div>
                                             <input type="number" name="paid" id="paid" class="form-control"
-                                                value="0">
+                                                value="0"
+                                                @if ($invoice->due == 0) readonly="" style="background:#e7d2d2;" @endif>
                                         </div>
                                     </td>
                                     <td>
@@ -75,8 +78,8 @@
                                 <tr>
                                     <th>Date</th>
                                     <th>Patient Name</th>
-                                    <th>Total Due</th>
-                                    <th>Advance</th>
+                                    <th>Due</th>
+                                    <th>Paid</th>
                                     <th>Remain</th>
                                 </tr>
                             </thead>
@@ -85,26 +88,26 @@
                                     <tr>
                                         <td>
                                             <input type="text" class="form-control" placeholder=""
-                                                value="{{ $details->created_at }}" readonly="">
+                                                value="{{ $advance->created_at }}" readonly="">
                                         </td>
                                         <td>
                                             <input type="text" class="form-control" placeholder=""
-                                                value="{{ $details->user->name }}" readonly="">
+                                                value="{{ $advance->patient->name }}" readonly="">
                                         </td>
                                         <td>
                                             <input type="text" class="form-control" placeholder=""
-                                                value="{{ $details->total }}" readonly="">
+                                                value="{{ $advance->total }}" readonly="">
                                         </td>
                                         <td>
                                             <input type="text" class="form-control" placeholder=""
-                                                value="{{ $details->paid }}" readonly="">
+                                                value="{{ $advance->paid }}" readonly="">
                                         </td>
                                         <td>
                                             <input type="text" class="form-control" placeholder=""
-                                                value="{{ $details->due }}" readonly="">
+                                                value="{{ $advance->due }}" readonly="">
                                         </td>
                                         <td>
-                                            <a href="{{ url('delete-advance', $details->id) }}"
+                                            <a href="{{ url('delete-advance', $advance->id) }}"
                                                 style="cursor: pointer; padding-right: 5px;"><i
                                                     class="fas fa-trash-alt text-danger"></i>
                                             </a>

@@ -14,6 +14,7 @@ use Modules\Accounts\Entities\InvoiceLine;
 use Modules\Accounts\Entities\Payment;
 use Modules\Admin\Entities\IncomeHead;
 use Modules\Admin\Entities\IncomeSubCategory;
+use Modules\Admin\Entities\PoliceStation;
 use Modules\Admin\Entities\Project;
 
 class InvoiceController extends Controller
@@ -36,7 +37,8 @@ class InvoiceController extends Controller
     {
         $patients = Patient::all();
         $projects = Project::take(10)->get();
-        return view('accounts::invoice.create', compact('patients', 'projects'));
+        $police_stations = PoliceStation::all();
+        return view('accounts::invoice.create', compact('patients', 'projects', 'police_stations'));
     }
 
     /**
@@ -49,7 +51,8 @@ class InvoiceController extends Controller
         try {
             DB::beginTransaction();
             $data = $request->all();
-            $data['invoice_no'] = 'INV-' . date('Ymd') . time();
+            $data['invoice_no'] = 'INV-' . date('Ymd') . '-' . time();
+            $data['payment_status'] = 'Due';
             $invoice = Invoice::create($data);
             $this->invoiceLine($invoice, $data);
             DB::commit();
@@ -79,10 +82,11 @@ class InvoiceController extends Controller
     {
         $patients = Patient::all();
         $projects = Project::get();
+        $police_stations = PoliceStation::all();
         $income_heads = IncomeHead::where('project_id', $invoice->project_id)->get();
         $income_subcategory_ids = InvoiceLine::where('invoice_id', $invoice->id)->pluck('income_subcategory_id')->toArray();
         $income_subcategories = IncomeSubCategory::whereIn('id', $income_subcategory_ids)->get();
-        return view('accounts::invoice.create', compact('invoice', 'patients', 'projects', 'income_heads', 'income_subcategories'));
+        return view('accounts::invoice.create', compact('invoice', 'patients', 'projects', 'income_heads', 'income_subcategories', 'police_stations'));
     }
 
     /**
@@ -169,12 +173,25 @@ class InvoiceController extends Controller
         $advances = Advance::where('invoice_id', $invoice->id)
             ->orderBy('id', 'desc')
             ->get();
+        $invoice->paid = $advances->sum('paid') + $invoice->advance;
+        $invoice->due = $invoice->total - $invoice->paid;
         return view('accounts::invoice.modal.advance_modal', compact('invoice', 'advances'));
     }
 
     public function addAdvance(Request $request)
     {
         $advance = Advance::create($request->all());
+        $invoice = Invoice::find($request->invoice_id);
+        $advances = Advance::where('invoice_id', $invoice->id)
+            ->orderBy('id', 'desc')
+            ->get();
+        $totalPaid = $advances->sum('paid') + $invoice->advance;
+        if ($totalPaid >= $invoice->total) {
+            $invoice->update(['payment_status' => 'Paid']);
+        } else {
+            $invoice->update(['payment_status' => 'Due']);
+        }
+
         return redirect()->back()->with('success', 'Advance Saved Successfully');
     }
 }

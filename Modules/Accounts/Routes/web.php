@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Accounts\Http\Controllers\ExpenseController;
 use Modules\Accounts\Http\Controllers\InvoiceController;
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,7 @@ Route::prefix('accounts')->group(function () {
     Route::get('/', 'AccountsController@index');
     Route::resources([
         'invoice' => InvoiceController::class,
+        'expense' => ExpenseController::class,
     ]);
     Route::get('update-invoice-status', [InvoiceController::class, 'updateInvoiceStatus'])->name('update-invoice-status');
     Route::get('get-advance-modal', [InvoiceController::class, 'getAdvanceModal'])->name('get-advance-modal');

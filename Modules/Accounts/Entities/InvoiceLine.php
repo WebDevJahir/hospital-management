@@ -15,6 +15,8 @@ class InvoiceLine extends Model
         'project_id',
         'income_head_id',
         'income_subcategory_id',
+        'assign_date',
+        'return_date',
         'quantity',
         'price',
         'total',
