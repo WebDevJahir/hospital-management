@@ -97,7 +97,6 @@
     <div id="modal"></div>
 @endsection
 
-
 @section('script')
     <script type="text/javascript">
         $('.deleteData').submit(function(e) {

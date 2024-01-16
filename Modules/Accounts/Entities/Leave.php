@@ -2,8 +2,11 @@
 
 namespace Modules\Accounts\Entities;
 
+use App\Models\User;
+use Modules\Admin\Entities\Employee;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Leave extends Model
 {
@@ -27,4 +30,14 @@ class Leave extends Model
         'status',
         'approved_by'
     ];
+
+    public function employee(): BelongsTo
+    {
+        return $this->belongsTo(Employee::class);
+    }
+
+    public function approvedBy()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
 }

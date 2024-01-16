@@ -17,7 +17,7 @@ class LeaveController extends Controller
      */
     public function index()
     {
-        return view('accounts::index');
+        //
     }
 
     /**
@@ -48,7 +48,7 @@ class LeaveController extends Controller
 
             Leave::create($data);
 
-            return redirect()->route('leaves.index')->with('success', 'Invoice created successfully');
+            return redirect()->route('pending-leaves')->with('success', 'Invoice created successfully');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -57,9 +57,10 @@ class LeaveController extends Controller
     /**
      * Show the specified resource.
      */
-    public function show($id)
+    public function show(Leave $leave)
     {
-        return view('accounts::show');
+        // $leave->load('employee', 'approvedBy');
+        // return view('accounts::leaves.modal.show_modal', compact('leave'));
     }
 
     /**
@@ -118,6 +119,38 @@ class LeaveController extends Controller
             return $leave->sick_leave;
         } elseif ($request->leave_type == 'educational_leave') {
             return $leave->educational_leave;
+        }
+    }
+
+    public function pendingLeaves()
+    {
+        $leaves = Leave::with('employee')->where('status', 0)->orderBy('id', 'desc')->get();
+        return view('accounts::leaves.pending', compact('leaves'));
+    }
+
+    public function approvedLeaves()
+    {
+        $leaves = Leave::with('employee')->where('status', '1')->orderBy('id', 'desc')->get();
+        return view('accounts::leaves.approved', compact('leaves'));
+    }
+
+    public function leaveDetails(Request $request)
+    {
+        $leave = Leave::with('employee', 'approvedBy')->where('id', $request->leave_id)->first();
+
+        return view('accounts::leaves.modal.show_modal', compact('leave'));
+    }
+
+    public function approveLeave(Request $request)
+    {
+        $approve = Leave::find($request->id);
+        if ($approve->status == 1) {
+            return 'fail';
+        } else {
+            $approve->status = 1;
+            $approve->approved_by = auth()->user()->id;
+            $approve->save();
+            return 'success';
         }
     }
 }
