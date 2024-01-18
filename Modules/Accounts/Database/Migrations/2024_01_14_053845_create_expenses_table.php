@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
-            $talle->string('invoice_no')->nullable();
+            $table->string('invoice_no')->nullable();
             $table->date('date')->nullable();
-            $table->foreignId('project_id')->nullable()->constrained('projects')->onDelete('cascade');\
+            $table->foreignId('project_id')->nullable()->constrained('projects')->onDelete('cascade');
             $table->string('type')->nullable();
             $table->string('payment_status')->nullable();
             $table->string('employee_id')->nullable();

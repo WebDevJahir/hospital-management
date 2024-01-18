@@ -6,6 +6,7 @@ use Modules\Accounts\Http\Controllers\InvoiceController;
 use Modules\Accounts\Http\Controllers\RosterController;
 use Modules\Accounts\Http\Controllers\SalaryController;
 use Modules\Admin\Http\Controllers\EmployeeController;
+use Modules\Accounts\Http\Controllers\LeaveController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,7 @@ use Modules\Admin\Http\Controllers\EmployeeController;
 Route::prefix('accounts')->group(function () {
     Route::get('/', 'AccountsController@index');
     Route::resources([
+        'leaves' => LeaveController::class,
         'invoice' => InvoiceController::class,
         'expense' => ExpenseController::class,
         'roster' => RosterController::class,
@@ -37,4 +39,11 @@ Route::prefix('accounts')->group(function () {
     Route::get('get-roster-report', [RosterController::class, 'index'])->name('get-roster-report');
     Route::get('get-employee-info', [EmployeeController::class, 'getEmployeeInfo'])->name('get-employee-info');
     Route::get('get-roster-count', [RosterController::class, 'getRosterCount'])->name('get-roster-count');
+    Route::get('get-used-leave', [LeaveController::class, 'getUsedLeave'])->name('get-used-leave');
+    Route::get('get-leave', [LeaveController::class, 'getLeave'])->name('get-leave');
+    Route::get('pending-leaves', [LeaveController::class, 'pendingLeaves'])->name('pending-leaves');
+    Route::get('approved-leaves', [LeaveController::class, 'approvedLeaves'])->name('approved-leaves');
+    Route::get('leave-details', [LeaveController::class, 'leaveDetails'])->name('leave-details');
+    // /approve-leave
+    Route::get('approve-leave', [LeaveController::class, 'approveLeave'])->name('approve-leave');
 });
