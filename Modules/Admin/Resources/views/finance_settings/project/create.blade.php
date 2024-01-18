@@ -5,7 +5,7 @@
     @php
         $is_old = old('client_no') ? true : false;
         $form_heading = !empty($sale->id) ? 'Update' : 'Add';
-        $form_url = !empty($sale->id) ? route('project.update', $sale->id) : route('project.store');
+        $form_url = !empty($sale->id) ? route('projects.update', $sale->id) : route('projects.store');
         $form_method = !empty($sale->id) ? 'PUT' : 'POST';
     @endphp
 
@@ -99,7 +99,7 @@
                                                                 onclick="edit({{ $project->id }})"
                                                                 class="btn btn-outline-warning btn-sm"><i
                                                                     class="fas fa-pen"></i></a>
-                                                            <form action="{{ route('project.destroy', $project->id) }}"
+                                                            <form action="{{ route('projects.destroy', $project->id) }}"
                                                                 method="POST" data-toggle="tooltip" title="Delete"
                                                                 class="d-inline deleteData">
                                                                 @csrf
@@ -131,46 +131,46 @@
 
 @section('script')
     <script type="text/javascript">
-    function edit(project_id) {
-                let projects = @json($projects);
-                projects.find(project => {
-                    if (project.id == project_id) {
-                        $('input[name="name"]').val(project.name);
-                        $('input[name="address"]').val(project.address);
-                        $('input[name="email"]').val(project.email);
-                        $('input[name="phone"]').val(project.phone);
-                        $('input[name="website"]').val(project.website);
-                        $('form').data('id', project.id);
-                        let form_url = "{{ route('project.update', ':id') }}";
-                        form_url = form_url.replace(':id', $('form').data('id'));
-                        $('form').attr('action', form_url);
-                        $('form').attr('method', 'POST');
-                        $('form').append('<input type="hidden" name="_method" value="PUT">');
-                    }
-                });
-            }
+        function edit(project_id) {
+            let projects = @json($projects);
+            projects.find(project => {
+                if (project.id == project_id) {
+                    $('input[name="name"]').val(project.name);
+                    $('input[name="address"]').val(project.address);
+                    $('input[name="email"]').val(project.email);
+                    $('input[name="phone"]').val(project.phone);
+                    $('input[name="website"]').val(project.website);
+                    $('form').data('id', project.id);
+                    let form_url = "{{ route('projects.update', ':id') }}";
+                    form_url = form_url.replace(':id', $('form').data('id'));
+                    $('form').attr('action', form_url);
+                    $('form').attr('method', 'POST');
+                    $('form').append('<input type="hidden" name="_method" value="PUT">');
+                }
+            });
+        }
 
 
-            $('.deleteData').submit(function(e) {
-                e.preventDefault();
-                let form = this;
-                let id = $(this).data('id');
-                let url = "{{ route('project.destroy', ':id') }}";
-                url = url.replace(':id', id);
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#0d6efd',
-                    cancelButtonColor: '#dc3545',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
-                });
-            })
+        $('.deleteData').submit(function(e) {
+            e.preventDefault();
+            let form = this;
+            let id = $(this).data('id');
+            let url = "{{ route('projects.destroy', ':id') }}";
+            url = url.replace(':id', id);
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#0d6efd',
+                cancelButtonColor: '#dc3545',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        })
         $(document).ready(function() {
             $('#Example').DataTable({
                 "order": []

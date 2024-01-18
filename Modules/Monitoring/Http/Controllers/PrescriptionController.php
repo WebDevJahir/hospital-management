@@ -53,10 +53,12 @@ class PrescriptionController extends Controller
     {
         $check_medicine = Medicine::where('name', $request->medicine)->first();
         if (!$check_medicine) {
-            $medicine_data = $request->only('medicine');
-            $medicine = Medicine::create($medicine_data);
+            $medicine = new Medicine();
+            $medicine->name = $request->medicine;
+            $medicine->save();
         }
         $prescription_data = $request->only('patient_id', 'medicine', 'note', 'dose', 'duration');
+        $prescription_data['status'] = 'new';
         $prescription = Prescription::create($prescription_data);
         return $prescription;
     }

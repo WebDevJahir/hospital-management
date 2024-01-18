@@ -38,7 +38,8 @@ class OpdPrescriptionController extends Controller
         $patients = Patient::all();
         $doctors = ConsultantDoctor::all();
         $medicines = Medicine::get();
-        return view('monitoring::opd_prescription.create', compact('patients', 'doctors', 'medicines'));
+        $opd_patient_info = null;
+        return view('monitoring::opd_prescription.create', compact('patients', 'doctors', 'medicines', 'opd_patient_info'));
     }
 
     /**

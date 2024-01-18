@@ -11,7 +11,22 @@
                 <div class="row gutters">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="table-container">
-                            <div class="t-employeeer">Patient list
+                            <div class="t-employeeer">
+                                <div class="t-header">
+                                    <div class="th-title">
+                                        <div style="">
+                                            <div class="d-flex justify-content-between">
+                                                <span style="margin-top: 5px;">OPD Prescription Create</span>
+                                                <span class="th-count"><a href="{{ route('opd-prescription.create') }}"
+                                                        class="btn btn-sm btn-info"
+                                                        style="border-radius: 5px; margin-left:5px;">
+                                                        <i class="fas fa-plus"></i> Add New
+                                                    </a>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <hr />
                             <div class="table-responsive">

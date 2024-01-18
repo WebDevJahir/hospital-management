@@ -36,7 +36,21 @@
                 <div class="row gutters">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="table-container">
-                            <div class="t-employeeer"> Death Certificate List </div>
+                            <div class="t-header">
+                                <div class="th-title">
+                                    <div style="">
+                                        <div class="d-flex justify-content-between">
+                                            <span style="margin-top: 5px;">Death Certificates</span>
+                                            <span class="th-count"><a href="{{ route('death-certificate.create') }}"
+                                                    class="btn btn-sm btn-info"
+                                                    style="border-radius: 5px; margin-left:5px;">
+                                                    <i class="fas fa-plus"></i> Add New
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <hr />
                             <div class="table-responsive">
                                 <table id="tableOfData" class="table custom-table">

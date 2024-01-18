@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Accounts\Http\Controllers\ExpenseController;
 use Modules\Accounts\Http\Controllers\InvoiceController;
+use Modules\Accounts\Http\Controllers\RosterController;
+use Modules\Accounts\Http\Controllers\SalaryController;
+use Modules\Admin\Http\Controllers\EmployeeController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,9 +23,18 @@ Route::prefix('accounts')->group(function () {
     Route::resources([
         'invoice' => InvoiceController::class,
         'expense' => ExpenseController::class,
+        'roster' => RosterController::class,
+        'salary' => SalaryController::class,
     ]);
     Route::get('update-invoice-status', [InvoiceController::class, 'updateInvoiceStatus'])->name('update-invoice-status');
     Route::get('get-advance-modal', [InvoiceController::class, 'getAdvanceModal'])->name('get-advance-modal');
     Route::post('add-advance', [InvoiceController::class, 'addAdvance'])->name('add-advance');
     Route::get('delete-advance', [InvoiceController::class, 'deleteAdvance'])->name('delete-advance');
+    Route::get('get-same-month-roster-patient', [RosterController::class, 'getSameMonthRosterPatient'])->name('get-same-month-roster-patient');
+    Route::get('roster-add-modal-view', [RosterController::class, 'rosterAddModalView'])->name('roster-add-modal-view');
+    Route::get('roster-store', [RosterController::class, 'store'])->name('roster-store');
+    Route::get('get-roster/{patient_id}', [RosterController::class, 'getRoster'])->name('get-roster');
+    Route::get('get-roster-report', [RosterController::class, 'index'])->name('get-roster-report');
+    Route::get('get-employee-info', [EmployeeController::class, 'getEmployeeInfo'])->name('get-employee-info');
+    Route::get('get-roster-count', [RosterController::class, 'getRosterCount'])->name('get-roster-count');
 });

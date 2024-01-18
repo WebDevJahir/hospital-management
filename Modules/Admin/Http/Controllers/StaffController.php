@@ -8,12 +8,13 @@ use Modules\Admin\Entities\Staff;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Contracts\Support\Renderable;
+use Modules\Admin\Entities\Employee;
 
 class StaffController extends Controller
 {
     public function index()
     {
-        $staffs = Staff::orderBy('id', 'desc')->get();
+        $staffs = Employee::orderBy('id', 'desc')->get();
         return view('admin::staff.staff_list', compact('staffs'));
     }
 
@@ -48,7 +49,7 @@ class StaffController extends Controller
             $addUser->password = Hash::make($request->password);
             $addUser->chat_id = '40';
             if ($addUser->save()) {
-                $addStaff = new Staff();
+                $addStaff = new Employee();
                 $addStaff->name = $request->name;
                 $addStaff->last_name = $request->last_name;
                 $addStaff->user_id = $addUser->id;
@@ -97,7 +98,7 @@ class StaffController extends Controller
 
     public function edit(Request $request)
     {
-        $staff = Staff::find($request->staff_id);
+        $staff = Employee::find($request->staff_id);
         return view('staff.modals.staffEditModel', compact('staff'));
     }
 
@@ -114,7 +115,7 @@ class StaffController extends Controller
             'present_address' => 'required',
 
         ]);
-        $check_image = Staff::where('id', $id)->first();
+        $check_image = Employee::where('id', $id)->first();
         if ($request->hasfile('image')) {
             $file_path = str_ireplace("public/", "/", $request->image->store('public/staff/image'));
         } else {
@@ -127,7 +128,7 @@ class StaffController extends Controller
             $userUpdate->name = $request->name . $request->last_name;
             $userUpdate->password = Hash::make($request->password);
             if ($userUpdate->update()) {
-                $updateStaff = Staff::where('id', $id)->first();
+                $updateStaff = Employee::where('id', $id)->first();
                 $updateStaff->name = $request->name;
                 $updateStaff->last_name = $request->last_name;
                 $updateStaff->father_name = $request->father_name;
@@ -175,7 +176,7 @@ class StaffController extends Controller
             $userUpdate->name = $request->name . ' ' . $request->last_name;
             $userUpdate->password = Hash::make($request->password);
             if ($userUpdate->update()) {
-                $updateStaff = Staff::where('id', $id)->first();
+                $updateStaff = Employee::where('id', $id)->first();
                 $updateStaff->name = $request->name;
                 $updateStaff->last_name = $request->last_name;
                 $updateStaff->father_name = $request->father_name;
@@ -223,7 +224,7 @@ class StaffController extends Controller
         }
     }
 
-    public function destroy(Staff $staff)
+    public function destroy(Employee $staff)
     {
         User::where('id', $staff->user_id)->first()->delete();
         $staff->delete();

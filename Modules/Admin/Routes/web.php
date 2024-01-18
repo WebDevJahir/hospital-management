@@ -25,6 +25,7 @@ use Modules\Admin\Http\Controllers\MedicalSupportController;
 use Modules\Admin\Http\Controllers\MedicalProcedureController;
 use Modules\Admin\Http\Controllers\IncomeSubCategoryController;
 use Modules\Admin\Http\Controllers\ExpenseSubCategoryController;
+use Modules\Admin\Http\Controllers\PackageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,7 +47,7 @@ Route::prefix('admin')->group(function () {
         'doctors' => DoctorController::class,
         'income-head' => IncomeHeadController::class,
         'income-sub-category' => IncomeSubCategoryController::class,
-        'project' => ProjectController::class,
+        'projects' => ProjectController::class,
         'expense-head' => ExpenseHeadController::class,
         'expense-sub-category' => ExpenseSubCategoryController::class,
         'district' => DistrictController::class,

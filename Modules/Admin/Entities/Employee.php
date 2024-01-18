@@ -2,8 +2,10 @@
 
 namespace Modules\Admin\Entities;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Accounts\Entities\RosterStaff;
 
 class Employee extends Model
 {
@@ -63,5 +65,28 @@ class Employee extends Model
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    public function rosterStaff()
+    {
+        return $this->hasMany(RosterStaff::class);
+    }
+
+    public function scopeRosterCount($query, $month, $year)
+    {
+        return $query->withCount([
+            'rosterStaff as morning_roster_count' => function ($query) use ($month, $year) {
+                $query->where('type', 'morning')->whereMonth('start', $month)->whereYear('start', $year);
+            },
+            'rosterStaff as evening_roster_count' => function ($query) use ($month, $year) {
+                $query->where('type', 'evening')->whereMonth('start', $month)->whereYear('start', $year);
+            },
+            'rosterStaff as night_roster_count' => function ($query) use ($month, $year) {
+                $query->where('type', 'night')->whereMonth('start', $month)->whereYear('start', $year);
+            },
+            'rosterStaff as visit_roster_count' => function ($query) use ($month, $year) {
+                $query->where('type', 'visit')->whereMonth('start', $month)->whereYear('start', $year);
+            },
+        ]);
     }
 }

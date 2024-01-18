@@ -91,4 +91,12 @@ class EmployeeController extends Controller
         Employee::find($id)->delete();
         return redirect()->route('admin.employee.index')->with('success', 'Employee deleted successfully');
     }
+
+    public function getEmployeeInfo(Request $request)
+    {
+        $employee = Employee::find($request->employee_id);
+        return response()->json([
+            'employee' => $employee,
+        ]);
+    }
 }

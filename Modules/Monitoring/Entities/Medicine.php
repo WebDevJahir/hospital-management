@@ -9,10 +9,7 @@ class Medicine extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
-    
-    protected static function newFactory()
-    {
-        return \Modules\Monitoring\Database\factories\MedicineFactory::new();
-    }
+    protected $fillable = [
+        'name', 'note'
+    ];
 }

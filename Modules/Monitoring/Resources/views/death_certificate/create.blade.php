@@ -3,9 +3,9 @@
 @section('main_content')
     @parent
     @php
-        $form_heading = $death_certificate->id ? 'Edit Death Certificate' : 'Add Death Certificate';
-        $form_url = $death_certificate->id ? route('death-certificate.update', $death_certificate->id) : route('death-certificate.store');
-        $form_method = $death_certificate->id ? 'PUT' : 'POST';
+        $form_heading = !empty($death_certificate) ? 'Edit Death Certificate' : 'Add Death Certificate';
+        $form_url = !empty($death_certificate) ? route('death-certificate.update', $death_certificate->id) : route('death-certificate.store');
+        $form_method = !empty($death_certificate) ? 'PUT' : 'POST';
     @endphp
     <div class="main-container">
         <div class="content-wrapper">
@@ -16,7 +16,21 @@
                             {{ method_field($form_method) }}
                             @csrf
                             <div class="table-container">
-                                <div class="t-header mb-3">{{ $form_heading }}</div>
+                                <div class="t-header">
+                                    <div class="th-title">
+                                        <div style="">
+                                            <div class="d-flex justify-content-between">
+                                                <span style="margin-top: 5px;">{{ $form_heading }}</span>
+                                                <span class="th-count"><a href="{{ route('death-certificate.index') }}"
+                                                        class="btn btn-sm btn-info"
+                                                        style="border-radius: 5px; margin-left:5px;">
+                                                        <i class="fas fa-list"></i> List
+                                                    </a>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="box box-primary">
                                     <div class="box-body">
                                         <div class="col-md-12">
@@ -28,7 +42,7 @@
                                                         <option value="">Select Patient</option>
                                                         @foreach ($patients as $single_patient)
                                                             <option value="{{ $single_patient->id }}"
-                                                                @if ($death_certificate && $death_certificate->patient_id == $single_patient->id) selected @endif>
+                                                                @if (!empty($death_certificate) && $death_certificate->patient_id == $single_patient->id) selected @endif>
                                                                 {{ $single_patient->name }}</option>
                                                         @endforeach
                                                     </select>
@@ -38,7 +52,7 @@
                                                         <label class="">Date of Issue :</label>
                                                         <input type="date" name="issue_date" id="issue_date_id"
                                                             class="form-control" placeholder="Date of Issue"
-                                                            value="{{ $death_certificate ? $death_certificate->issue_date : '' }}">
+                                                            value="{{ !empty($death_certificate) ? $death_certificate->issue_date : '' }}">
                                                     </div>
                                                 </div>
                                                 {{-- @dd($patient) --}}
@@ -48,7 +62,7 @@
                                                         <input type="date" id="registration_date"
                                                             name="registration_date" class="form-control"
                                                             placeholder="Enter From Date"
-                                                            value="{{ $death_certificate ? $death_certificate->registration_date : '' }}">
+                                                            value="{{ !empty($death_certificate) ? $death_certificate->registration_date : '' }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -56,7 +70,7 @@
                                                         <label class="">Registration No :</label>
                                                         <input type="number" id="registration_no" name="registration_no"
                                                             class="form-control" placeholder="Enter registration no"
-                                                            value="{{ $death_certificate ? $death_certificate->patient->registration_no : '' }}">
+                                                            value="{{ !empty($death_certificate) ? $death_certificate->patient->registration_no : '' }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -64,7 +78,7 @@
                                                         <label class="">Date of Birth :</label>
                                                         <input type="date" name="date_of_birth" id="date_of_birth"
                                                             class="form-control" placeholder="Date of Birth"
-                                                            value="{{ $death_certificate ? $death_certificate->date_of_birth : '' }}">
+                                                            value="{{ !empty($death_certificate) ? $death_certificate->date_of_birth : '' }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -73,10 +87,10 @@
                                                         <select class="form-control" name="gender" id="gender">
                                                             <option value="">Select Sex</option>
                                                             <option value="Male"
-                                                                @if ($death_certificate && $death_certificate->gender == 'Male') selected @endif>Male
+                                                                @if (!empty($death_certificate) && $death_certificate->gender == 'Male') selected @endif>Male
                                                             </option>
                                                             <option value="Female"
-                                                                @if ($death_certificate && $death_certificate->gender == 'Female') selected @endif>Female
+                                                                @if (!empty($death_certificate) && $death_certificate->gender == 'Female') selected @endif>Female
                                                             </option>
                                                         </select>
                                                     </div>
@@ -87,16 +101,16 @@
                                                         <select class="form-control" name="religion" id="religion">
                                                             <option value="">Select Religion</option>
                                                             <option value="Islam"
-                                                                @if ($death_certificate && $death_certificate->religion == 'Islam') selected @endif>
+                                                                @if (!empty($death_certificate) && $death_certificate->religion == 'Islam') selected @endif>
                                                                 Muslim</option>
                                                             <option value="Hindu"
-                                                                @if ($death_certificate && $death_certificate->religion == 'Hindu') selected @endif>
+                                                                @if (!empty($death_certificate) && $death_certificate->religion == 'Hindu') selected @endif>
                                                                 Hindu</option>
                                                             <option value="Christian"
-                                                                @if ($death_certificate && $death_certificate->religion == 'Christian') selected @endif>
+                                                                @if (!empty($death_certificate) && $death_certificate->religion == 'Christian') selected @endif>
                                                                 Christian</option>
                                                             <option value="Buddhist"
-                                                                @if ($death_certificate && $death_certificate->religion == 'Buddhist') selected @endif>
+                                                                @if (!empty($death_certificate) && $death_certificate->religion == 'Buddhist') selected @endif>
                                                                 Buddhist</option>
                                                         </select>
                                                     </div>
@@ -106,7 +120,7 @@
                                                         <label class="">Nationality :</label>
                                                         <input type="text" name="nationality" id="nationality"
                                                             class="form-control" placeholder="Nationality"
-                                                            value="{{ $death_certificate ? $death_certificate->nationality : '' }}"
+                                                            value="{{ !empty($death_certificate) ? $death_certificate->nationality : '' }}"
                                                             required>
                                                     </div>
                                                 </div>
@@ -116,15 +130,15 @@
                                                         <select class="form-control " name="marital_status"
                                                             id="marital_status">
                                                             <option value="" selected>Select Marital status</option>
-                                                            <option @if ($death_certificate && $death_certificate->marital_status == 'Married') selected @endif
+                                                            <option @if (!empty($death_certificate) && $death_certificate->marital_status == 'Married') selected @endif
                                                                 value="Married">Married</option>
-                                                            <option @if ($death_certificate && $death_certificate->marital_status == 'Single') selected @endif
+                                                            <option @if (!empty($death_certificate) && $death_certificate->marital_status == 'Single') selected @endif
                                                                 value="Single">Single</option>
-                                                            <option @if ($death_certificate && $death_certificate->marital_status == 'Widow') selected @endif
+                                                            <option @if (!empty($death_certificate) && $death_certificate->marital_status == 'Widow') selected @endif
                                                                 value="Widow">Widow</option>
-                                                            <option @if ($death_certificate && $death_certificate->marital_status == 'Separated') selected @endif
+                                                            <option @if (!empty($death_certificate) && $death_certificate->marital_status == 'Separated') selected @endif
                                                                 value="Separated">Separated</option>
-                                                            <option @if ($death_certificate && $death_certificate->marital_status == 'Divorced') selected @endif
+                                                            <option @if (!empty($death_certificate) && $death_certificate->marital_status == 'Divorced') selected @endif
                                                                 value="Divorced">Divorced</option>
                                                         </select>
                                                     </div>
@@ -134,7 +148,7 @@
                                                         <label class="">NID No./Passport No. :</label>
                                                         <input type="text" class="form-control" name="nid"
                                                             id="nid" placeholder="NID No./Passport No"
-                                                            value="{{ $death_certificate ? $death_certificate->nid_passport : '' }}">
+                                                            value="{{ !empty($death_certificate) ? $death_certificate->nid_passport : '' }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -144,10 +158,10 @@
                                                             <div class="form-group">
                                                                 <input type="radio" name="fs_type" id="fs_type"
                                                                     value="Father"
-                                                                    @if ($death_certificate && $death_certificate->fs_type == 'Father') checked @endif>Father
+                                                                    @if (!empty($death_certificate) && $death_certificate->fs_type == 'Father') checked @endif>Father
                                                                 <input type="radio" name="fs_type" id="fs_type"
                                                                     value="Spouse"
-                                                                    @if ($death_certificate && $death_certificate->fs_type == 'Spouse') checked @endif>Spouse
+                                                                    @if (!empty($death_certificate) && $death_certificate->fs_type == 'Spouse') checked @endif>Spouse
                                                             </div>
                                                         </div>
                                                         <div class="col-md-8">
@@ -155,7 +169,7 @@
                                                                 <input type="text" class="form-control"
                                                                     name="father_spouse_name" id="spouse_name"
                                                                     placeholder="Father’s/Spouse Name"
-                                                                    value="{{ $death_certificate ? $death_certificate->father_spouse_name : '' }}">
+                                                                    value="{{ !empty($death_certificate) ? $death_certificate->father_spouse_name : '' }}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -167,7 +181,7 @@
                                                             no. etc.) :</label>
                                                         <input type="text" class="form-control" name="present_address"
                                                             id="present_address" placeholder="Present Address"
-                                                            value="{{ $death_certificate ? $death_certificate->present_address : '' }}">
+                                                            value="{{ !empty($death_certificate) ? $death_certificate->present_address : '' }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -177,7 +191,7 @@
                                                         <input type="text" class="form-control"
                                                             name="permanent_address" id="permanent_address"
                                                             placeholder="Permanent Address"
-                                                            value="{{ $death_certificate ? $death_certificate->permanent_address : '' }}">
+                                                            value="{{ !empty($death_certificate) ? $death_certificate->permanent_address : '' }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -186,7 +200,7 @@
                                                         <input type="text" name="primary_diagnosis"
                                                             id="primary_diagnosis" class="form-control"
                                                             placeholder="Primary Diagnosis"
-                                                            value="{{ $death_certificate ? $death_certificate->primary_diagnosis : '' }}">
+                                                            value="{{ !empty($death_certificate) ? $death_certificate->primary_diagnosis : '' }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -194,7 +208,7 @@
                                                         <label class="">Date of Death :</label>
                                                         <input type="date" name="death_date" id="death_date"
                                                             class="form-control" placeholder="Date of Death"
-                                                            value="{{ $death_certificate ? $death_certificate->death_date : '' }}">
+                                                            value="{{ !empty($death_certificate) ? $death_certificate->death_date : '' }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -204,13 +218,13 @@
                                                             required>
                                                             <option value="">Select Place of Death</option>
                                                             <option value="Present Address"
-                                                                @if ($death_certificate && $death_certificate->death_place == 'Present Address') selected @endif>
+                                                                @if (!empty($death_certificate) && $death_certificate->death_place == 'Present Address') selected @endif>
                                                                 Present Address</option>
                                                             <option value="Permanent Address"
-                                                                @if ($death_certificate && $death_certificate->death_place == 'Permanent Address') selected @endif>
+                                                                @if (!empty($death_certificate) && $death_certificate->death_place == 'Permanent Address') selected @endif>
                                                                 Permanent Address</option>
                                                             <option value="Other"
-                                                                @if ($death_certificate && $death_certificate->death_place == 'Other') selected @endif>
+                                                                @if (!empty($death_certificate) && $death_certificate->death_place == 'Other') selected @endif>
                                                                 Other</option>
                                                         </select>
                                                         <input type="hidden" id="other_place" name="other_place"
@@ -222,7 +236,7 @@
                                                         <label class="">Cause of Death :</label>
                                                         <input type="text" name="death_cause" class="form-control"
                                                             placeholder="Cause of Death"
-                                                            value="{{ $death_certificate ? $death_certificate->death_cause : '' }}">
+                                                            value="{{ !empty($death_certificate) ? $death_certificate->death_cause : '' }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -230,7 +244,7 @@
                                                         <label class="">Time of Death :</label>
                                                         <input type="time" name="death_time" id="death_time"
                                                             class="form-control" placeholder="Time of Death"
-                                                            value="{{ $death_certificate ? $death_certificate->death_time : '' }}">
+                                                            value="{{ !empty($death_certificate) ? $death_certificate->death_time : '' }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -238,7 +252,7 @@
                                                         <label class="">Received By :</label>
                                                         <input type="text" name="received_by" class="form-control"
                                                             placeholder="Received By"
-                                                            value="{{ $death_certificate ? $death_certificate->received_by : '' }}">
+                                                            value="{{ !empty($death_certificate) ? $death_certificate->received_by : '' }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -246,7 +260,7 @@
                                                         <label class="">Relation :</label>
                                                         <input type="text" name="relation" class="form-control"
                                                             placeholder="relation"
-                                                            value="{{ $death_certificate ? $death_certificate->relation : '' }}">
+                                                            value="{{ !empty($death_certificate) ? $death_certificate->relation : '' }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -257,7 +271,7 @@
                                                             <option value="">Select Doctor Name</option>
                                                             @foreach ($doctors as $doctor)
                                                                 <option value="{{ $doctor->id }}"
-                                                                    @if ($death_certificate && $death_certificate->doctor_id == $doctor->id) selected @endif>
+                                                                    @if (!empty($death_certificate) && $death_certificate->doctor_id == $doctor->id) selected @endif>
                                                                     {{ $doctor->doctor_name }}</option>
                                                             @endforeach
                                                         </select>

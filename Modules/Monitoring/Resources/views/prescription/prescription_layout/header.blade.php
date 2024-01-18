@@ -2,7 +2,20 @@
 
     <!-- Table container start -->
     <div class="table-container m-0 p-0" style="border:2px;">
-        <div class="row">
+        <div class="t-header">
+            <div class="th-title">
+                <div>
+                    <div class="d-flex justify-content-between">
+                        <span style="margin-top: 5px;">Prescription Create</span>
+                        <span class="th-count"><a href="{{ route('prescription.index') }}" class="btn btn-sm btn-info"
+                                style="border-radius: 5px; margin-left:5px;">
+                                <i class="fas fa-list"></i> List</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 10px;">
             <div class="col-md-2">
                 <h5 class="text-center" style="padding-top:10px;">Select Patient</h5>
             </div>
