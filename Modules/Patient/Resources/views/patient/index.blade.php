@@ -36,13 +36,15 @@
                 <div class="row gutters">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="table-container">
-                            <div class="t-employeeer">Patient list
-                                <button type="button" class="btn-info btn-rounded" onclick="dataModal()">Add Patient</button>
+                            <div class="t-employeeer">
+                                <div class="t-header">Patient list 
+                                </div>
                             </div>
                             <hr />
                             <div class="table-responsive">
-                                <table id="tableOfData" class="table custom-table">
-                                    <thead>
+                                <table id="Example"
+                                    class="table custom-table dataTable no-footer table-striped table-bordered">
+                                    <thead class="table-primary">
                                         <tr>
                                             <th>Reg No</th>
                                             <th>Full Name</th>
@@ -65,26 +67,29 @@
                                                 <td>{{ $patient->password ?? '' }}</td>
                                                 <td>{{ $patient->status ?? '' }}</td>
                                                 <td>
-                                                    {{-- @if (in_array(13, $permission)) --}}
-                                                    <button class="btn btn-sm" style="background:inherit" title="Edit"
-                                                        onclick="dataModal({{ $patient->id }})" type="submit"><i
-                                                            class="fas fa-edit text-success"></i></button>
-                                                    {{-- @endif --}}
+                                                    <div class="icon-btn">
+                                                        <nobr>
+                                                            <a class="btn btn-outline-warning" style="background:inherit"
+                                                                title="Edit" onclick="dataModal({{ $patient->id }})"
+                                                                type="submit"><i class="fas fa-edit text-warning"></i></a>
+                                                            <a onclick="editPlan({{ $patient->id }})"
+                                                                class="btn btn-outline-success" style="background:inherit"
+                                                                title="Plan and Status"><i
+                                                                    class="fas fa-user-tag text-success"></i></a>
 
-                                                    <button onclick="editPlan({{ $patient->id }})" class="btn btn-sm"
-                                                        style="background:inherit" title="Plan and Status"><i
-                                                            class="fas fa-user-tag text-success"></i></button>
-                                                    {{-- @if (in_array(14, $permission)) --}}
-                                                    <form action="{{ route('employee.destroy', $patient->id) }}"
-                                                        method="POST" style="display: inline-block">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button class="btn btn-sm" style="background:inherit" title="Delete"
-                                                            onclick="deleteData(event)" type="submit"><i
-                                                                class="fas fa-trash text-danger"></i></button>
-                                                    </form>
-                                                    {{-- @endif --}}
+                                                            <form action="{{ route('employee.destroy', $patient->id) }}"
+                                                                method="POST" style="display: inline-block">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button class="btn btn-outline-danger"
+                                                                    style="background:inherit" title="Delete"
+                                                                    onclick="deleteData(event)" type="submit"><i
+                                                                        class="fas fa-trash text-danger"></i></button>
+                                                            </form>
+                                                        </nobr>
+                                                    </div>
                                                 </td>
+
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -156,7 +161,7 @@
         }
 
         $(document).ready(function() {
-            $('#tableOfData').DataTable({
+            $('#Example').DataTable({
                 "order": []
             });
         });

@@ -3,76 +3,7 @@
 @section('main_content')
     @parent
     <style type="text/css">
-        .switch {
-            position: relative;
-            width: 65px;
-            height: 27px;
-            margin: 0px;
-            appearance: none;
-            outline: none;
-            cursor: pointer;
-            background-color: #ff3f34;
-            border-radius: 25px;
-            transition: all 1s;
-        }
 
-        .switch:before {
-            content: "";
-            width: 23px;
-            height: 23px;
-            border-radius: 50%;
-            background-color: #fff;
-            position: absolute;
-            transition: all .5s;
-            transform: translate(2px, 2px);
-            transition-timing-function: cubic-bezier(0.81, -0.02, 0, 2.13);
-            transition-delay: .1s;
-            box-shadow: inset 2px 0px 4px rgba(0, 0, 0, .5),
-                -2px 0px 2px rgba(0, 0, 0, .5);
-            animation: off 1s forwards;
-        }
-
-        .switch:checked {
-            background-color: #0fbcf9;
-            transition: all 1s;
-        }
-
-        .switch:checked:before {
-            transition: all .5s;
-            transform: translate(40px, 2px);
-            transition-timing-function: cubic-bezier(0.81, -0.02, 0, 2.13);
-            box-shadow: inset -2px 0px 4px rgba(0, 0, 0, .5),
-                2px 0px 2px rgba(0, 0, 0, .5);
-            transition-delay: .1s;
-            right: 43px;
-            animation: on 1s forwards;
-        }
-
-        @keyframes on {
-
-            0%,
-            50%,
-            100% {
-                width: 23px;
-            }
-
-            25% {
-                width: 33px;
-            }
-        }
-
-        @keyframes off {
-
-            0%,
-            50%,
-            100% {
-                width: 23px;
-            }
-
-            25% {
-                width: 33px;
-            }
-        }
     </style>
     @php
         $is_old = old('client_no') ? true : false;
@@ -164,10 +95,10 @@
                                             <small id="emailHelp" class="form-text text-muted"></small>
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    {{-- <div class="form-group">
                                         <div style="font-weight: bold;"><span> Frontend Visible </span></div><input
                                             type="checkbox" name="status" id="status" class="switch" value="1">
-                                    </div>
+                                    </div> --}}
                                     <div class="col-4">
                                         <div class="input-group mb-3">
                                             <button type="submit" class="btn btn-outline-primary">Save</button>
@@ -178,8 +109,9 @@
                             <hr />
 
                             <div class="table-responsive">
-                                <table id="Example" class="table custom-table">
-                                    <thead>
+                                <table id="Example"
+                                    class="table custom-table dataTable no-footer table-striped table-bordered">
+                                    <thead class="table-primary">
                                         <tr>
                                             <th>Package Name</th>
                                             <th>Project</th>
@@ -192,9 +124,10 @@
                                     <tbody id="MedicalProcedureTable">
                                         @foreach ($packages as $package)
                                             <tr id="tr{{ $package->id }}">
-                                                <td id="product_name{{ $package->id }}">{{ $package->subCategory->name }}
+                                                <td id="product_name{{ $package->id }}">
+                                                    {{ $package?->incomeSubCategory?->name }}
                                                 </td>
-                                                <td id="quantity{{ $package->id }}">{{ $package->project->name }}</td>
+                                                <td id="quantity{{ $package->id }}">{{ $package?->project?->name }}</td>
                                                 <td id="price{{ $package->id }}">{{ $package->time }}</td>
                                                 <td id="total_price{{ $package->id }}">{{ $package->duration }}</td>
                                                 <td id="total_price{{ $package->id }}">{{ $package->price }}</td>
@@ -300,7 +233,7 @@
                     $('select[name="project_id"]').val(package.project_id);
                     $('select[name="status"]').val(package.status);
                     $('form').data('id', project.id);
-                    let form_url = "{{ route('project.update', ':id') }}";
+                    let form_url = "{{ route('packages.update', ':id') }}";
                     form_url = form_url.replace(':id', $('form').data('id'));
                     $('form').attr('action', form_url);
                     $('form').attr('method', 'POST');
@@ -314,7 +247,7 @@
             e.preventDefault();
             let form = this;
             let id = $(this).data('id');
-            let url = "{{ route('project.destroy', ':id') }}";
+            let url = "{{ route('packages.destroy', ':id') }}";
             url = url.replace(':id', id);
             Swal.fire({
                 title: 'Are you sure?',

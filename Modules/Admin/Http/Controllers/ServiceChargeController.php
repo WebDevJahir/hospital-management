@@ -5,7 +5,7 @@ namespace Modules\Admin\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Admin\Entities\City;
+use Modules\Admin\Entities\District;
 use Modules\Admin\Entities\PoliceStation;
 use Modules\Admin\Entities\ServiceCharge;
 use Modules\Admin\Http\Requests\ServiceChargeRequest;
@@ -18,10 +18,10 @@ class ServiceChargeController extends Controller
      */
     public function index()
     {
-        $cities = City::all();
+        $districts = District::all();
         $police_stations = PoliceStation::all();
         $service_charges = ServiceCharge::all();
-        return view('admin::basic_settings.service_charge.create', compact("cities", "police_stations", "service_charges"));
+        return view('admin::basic_settings.service_charge.create', compact("police_stations", "districts", "service_charges"));
     }
 
     /**

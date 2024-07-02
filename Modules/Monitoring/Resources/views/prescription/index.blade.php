@@ -47,8 +47,9 @@
                             </div>
                             <hr />
                             <div class="table-responsive">
-                                <table id="tableOfData" class="table custom-table">
-                                    <thead>
+                                <table id="Example"
+                                    class="table custom-table dataTable no-footer table-striped table-bordered">
+                                    <thead class="table-primary">
                                         <tr>
                                             <th>Reg No</th>
                                             <th>Full Name</th>
@@ -71,11 +72,14 @@
                                                 <td>{{ $patient->password ?? '' }}</td>
                                                 <td>{{ $patient->status ?? '' }}</td>
                                                 <td>
-                                                    <a class="btn m-0 p-0 btn-sm" style="background:inherit"
-                                                        title="Generate"
-                                                        href="{{ route('prescription.create', $patient->id) }}"><i
-                                                            style="font-size:18px;"
-                                                            class="p-0 m-0 fas fa-prescription text-success"></i></a>
+                                                    <div class="icon-btn">
+                                                        <nobr>
+                                                            <a class="btn btn-sm btn-outline-success"
+                                                                style="background:inherit" title="Generate"
+                                                                href="{{ route('prescription.create', $patient->id) }}"><i
+                                                                    class=" fas fa-prescription text-success"></i></a>
+                                                        </nobr>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -148,7 +152,7 @@
         }
 
         $(document).ready(function() {
-            $('#tableOfData').DataTable({
+            $('#Example').DataTable({
                 "order": []
             });
         });

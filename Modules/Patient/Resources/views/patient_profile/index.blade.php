@@ -36,46 +36,56 @@
                 <div class="row gutters">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="table-container">
-                            <div class="t-employeeer">Patient list
-                                <button type="button" class="btn-info btn-rounded" onclick="dataModal()">Add Patient</button>
-                            </div>
-                            <hr />
-                            <div class="table-responsive">
-                                <table id="tableOfData" class="table custom-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Reg No</th>
-                                            <th>Full Name</th>
-                                            <th>Package</th>
-                                            <th>Phone</th>
-                                            <th>Email</th>
-                                            <th>Password</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($patients as $patient)
-                                            <tr id="tr{{ $patient->id }}">
-                                                <td>{{ $patient->registration_no }}</td>
-                                                <td>{{ $patient->name }}</td>
-                                                <td>{{ $patient->package->incomeSubCategory->name ?? '' }}</td>
-                                                <td>{{ $patient->contact_no ?? '' }}</td>
-                                                <td>{{ $patient->user->email ?? '' }}</td>
-                                                <td>{{ $patient->password ?? '' }}</td>
-                                                <td>{{ $patient->status ?? '' }}</td>
-                                                <td>
-                                                    {{-- @if (in_array(13, $permission)) --}}
-                                                    <a href="{{ route('patient-profile-edit', $patient->id) }}"
-                                                        class="btn btn-sm" style="background:inherit" title="View"><i
-                                                            class="fas fa-edit text-success"></i>
-                                                    </a>
-                                                    {{-- @endif --}}
-                                                </td>
+                            <div class="t-employeeer">
+                                <div class="t-header">Patient Profile List
+                                    <button type="button" class="btn-info btn-rounded"">Add Patient</button>
+                                </div>
+                                <hr />
+                                <div class="table-responsive">
+                                    <table id="Example"
+                                        class="table custom-table dataTable no-footer table-striped table-bordered">
+                                        <thead class="table-primary">
+                                            <tr>
+                                                <th>Reg No</th>
+                                                <th>Full Name</th>
+                                                <th>Package</th>
+                                                <th>Phone</th>
+                                                <th>Email</th>
+                                                <th>Password</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($patients as $patient)
+                                                <tr>
+                                                    <td>{{ $patient->registration_no }}</td>
+                                                    <td>{{ $patient->name }}</td>
+                                                    <td>{{ $patient->package->incomeSubCategory->name ?? '' }}</td>
+                                                    <td>{{ $patient->contact_no ?? '' }}</td>
+                                                    <td>{{ $patient->user->email ?? '' }}</td>
+                                                    <td>{{ $patient->password ?? '' }}</td>
+                                                    <td>{{ $patient->status ?? '' }}</td>
+
+                                                    <td>
+                                                        {{-- @if (in_array(13, $permission)) --}}
+                                                        <div class="icon-btn">
+                                                            <nobr>
+                                                                <a href="{{ route('patient-profile-edit', $patient->id) }}"
+                                                                    class="btn btn-sm btn-outline-warning"
+                                                                    style="background:inherit" title="View"><i
+                                                                        class="fas fa-edit text-warning"></i>
+                                                                </a>
+                                                                {{-- @endif --}}
+                                                            </nobr>
+                                                        </div>
+                                                    </td>
+
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                         <!-- Table container end -->
@@ -89,9 +99,11 @@
     </div>
 
     <div class="dataModal"></div>
-@endsection
-
-
-@section('script')
-
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#Example').DataTable({
+                "order": []
+            });
+        });
+    </script>
 @endsection

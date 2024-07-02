@@ -1,12 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Accounts\Http\Controllers\AppointmentController;
 use Modules\Accounts\Http\Controllers\ExpenseController;
 use Modules\Accounts\Http\Controllers\InvoiceController;
 use Modules\Accounts\Http\Controllers\RosterController;
 use Modules\Accounts\Http\Controllers\SalaryController;
 use Modules\Admin\Http\Controllers\EmployeeController;
 use Modules\Accounts\Http\Controllers\LeaveController;
+use Modules\Accounts\Http\Controllers\ScheduleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +29,8 @@ Route::prefix('accounts')->group(function () {
         'expense' => ExpenseController::class,
         'roster' => RosterController::class,
         'salary' => SalaryController::class,
+        'schedule' => ScheduleController::class,
+        'appointments' => AppointmentController::class,
     ]);
     Route::get('update-invoice-status', [InvoiceController::class, 'updateInvoiceStatus'])->name('update-invoice-status');
     Route::get('get-advance-modal', [InvoiceController::class, 'getAdvanceModal'])->name('get-advance-modal');
@@ -46,4 +50,7 @@ Route::prefix('accounts')->group(function () {
     Route::get('leave-details', [LeaveController::class, 'leaveDetails'])->name('leave-details');
     // /approve-leave
     Route::get('approve-leave', [LeaveController::class, 'approveLeave'])->name('approve-leave');
+    Route::get('available-schedule-days', [AppointmentController::class, 'availableScheduleDays'])->name('available-schedule-days');
+    Route::get('check-serial', [AppointmentController::class, 'checkSerial'])->name('check-serial');
+    Route::get('appointments-approve', [AppointmentController::class, 'appointmentApproved'])->name('appointments.approve');
 });

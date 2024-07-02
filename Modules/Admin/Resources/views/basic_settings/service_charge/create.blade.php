@@ -24,11 +24,11 @@
                                 <div class="row gutters">
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">City</span>
-                                            <select class="form-control" name="city_id" id="city_id">
-                                                <option value="">Select City</option>
-                                                @foreach ($cities as $city)
-                                                    <option value="{{ $city->id }}">{{ $city->name }}</option>
+                                            <span class="input-group-text custom-group-text">District</span>
+                                            <select class="form-control select2" name="city_id" id="city_id">
+                                                <option value="">Select District</option>
+                                                @foreach ($districts as $district)
+                                                    <option value="{{ $district->id }}">{{ $district->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -41,13 +41,13 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-3">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text custom-group-text">Charge</span>
                                             <input type="text" class="form-control" placeholder="charge" name="charge">
                                         </div>
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-1">
                                         <div class="input-group mb-3">
                                             <button type="submit" class="btn btn-outline-primary">Save</button>
                                         </div>
@@ -57,8 +57,9 @@
                             <hr />
 
                             <div class="table-responsive">
-                                <table id="Example" class="table custom-table">
-                                    <thead>
+                                <table id="Example"
+                                    class="table custom-table dataTable no-footer table-striped table-bordered">
+                                    <thead class="table-primary">
                                         <tr>
                                             <th>City</th>
                                             <th>Police Station</th>

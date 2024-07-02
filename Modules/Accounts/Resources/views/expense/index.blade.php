@@ -14,11 +14,12 @@
                 <div class="row gutters">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="table-container">
-                            <div class="t-header">Expenses</div>
+                            <div class="t-header mb-2">Expenses</div>
 
                             <div class="table-responsive">
-                                <table id="Example" class="table custom-table">
-                                    <thead>
+                                <table id="Example"
+                                    class="table custom-table dataTable no-footer table-striped table-bordered ">
+                                    <thead class="table-primary">
                                         <tr>
                                             <th>Date</th>
                                             <th>Type</th>
@@ -176,5 +177,9 @@
                 $('#advanceModal').modal('show');
             })
         })
+
+        $('#Example').DataTable({
+            "order": []
+        });
     </script>
 @endsection

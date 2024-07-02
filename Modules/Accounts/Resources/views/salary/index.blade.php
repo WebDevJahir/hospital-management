@@ -14,11 +14,12 @@
                 <div class="row gutters">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="table-container">
-                            <div class="t-header">Salary</div>
+                            <div class="t-header mb-3">Salary</div>
 
                             <div class="table-responsive">
-                                <table id="Example" class="table custom-table">
-                                    <thead>
+                                <table id="Example"
+                                    class="table custom-table dataTable no-footer table-striped table-bordered">
+                                    <thead class="table-primary">
                                         <tr>
                                             <th>Employee Name</th>
                                             <th>Month</th>
@@ -95,6 +96,9 @@
                     this.submit();
                 }
             })
+        });
+        $('#Example').DataTable({
+            "order": []
         });
     </script>
 @endsection

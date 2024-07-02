@@ -14,7 +14,8 @@
                                 <span class="input-group-text custom-group-text">
                                     Patient Name:
                                 </span>
-                                <input type="text" disabled class="form-control" value="{{ $patient->user->name }}">
+                                <input type="text" disabled class="form-control"
+                                    value="{{ $patient?->user?->name }}">
                             </div>
                         </div>
                         <div class="col-4">
@@ -30,7 +31,7 @@
                                 <span class="input-group-text custom-group-text">
                                     Email:
                                 </span>
-                                <input type="text" disabled class="form-control" value="{{ $patient->user->email }}">
+                                <input type="text" disabled class="form-control" value="{{ $patient?->user?->email }}">
                             </div>
                         </div>
                     </div>

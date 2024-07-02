@@ -18,6 +18,7 @@
                 <div class="row gutters">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="table-container">
+
                             <div class="t-header">Income Head</div>
                             <hr />
                             <form action="{{ $form_url }}" method="{{ $form_method }}">
@@ -52,8 +53,10 @@
                             <hr />
 
                             <div class="table-responsive">
-                                <table id="Example" class="table custom-table">
-                                    <thead>
+
+                                <table id="Example"
+                                    class="table custom-table dataTable no-footer table-striped table-bordered">
+                                    <thead class="table-primary">
                                         <tr>
                                             <th>Income Head</th>
                                             <th>Project Name</th>
@@ -62,9 +65,10 @@
                                     </thead>
                                     <tbody id="incomeHeadTable">
                                         @foreach ($income_heads as $head)
-                                            <tr id="tr{{ $head->id }}">
-                                                <td id="name{{ $head->id }}">{{ $head->name }}</td>
-                                                <td id="pr{{ $head->id }}">
+                                            <tr>
+                                                <td>{{ $head->name }}</td>
+                                                <td>
+                                                    {{ $head?->project?->name }}
                                                 </td>
                                                 <td>
                                                     <div class="icon-btn">

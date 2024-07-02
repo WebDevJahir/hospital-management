@@ -30,8 +30,9 @@
                             </div>
                             <hr />
                             <div class="table-responsive">
-                                <table id="tableOfData" class="table custom-table">
-                                    <thead>
+                                <table id="Example"
+                                    class="table custom-table dataTable no-footer table-striped table-bordered">
+                                    <thead class="table-primary">
                                         <tr>
                                             <th>Name</th>
                                             <th>Gender</th>
@@ -84,4 +85,11 @@
         <!-- Content wrapper end -->
     </div>
     <div class="dataModal"></div>
+@endsection
+@section('scripts')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#Example').DataTable();
+        });
+    </script>
 @endsection

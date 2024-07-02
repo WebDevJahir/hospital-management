@@ -11,67 +11,71 @@
     <div class="main-container">
         <div class="content-wrapper">
             <div class="fixedBodyScroll">
-                <div class="row">
-                    <div class="col-md-4 col-4">
-                        <div class="form-group">
-                            <label for="patient_id">Patient</label>
-                            <select name="patient_id" id="patient_id" class="form-control">
-                                <option value="">Select Patient</option>
-                                @foreach ($patients as $patient)
-                                    <option value="{{ $patient->id }}">
-                                        {{ $patient->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Patient Information</h4>
-                                <hr />
-                                {{-- name, contact address --}}
-                                <table>
-                                    <tr>
-                                        <td style="font-weight: bold;">Name</td>
-                                        <td>:</td>
-                                        <td id="patient_name"></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="font-weight: bold;">Registration No</td>
-                                        <td>:</td>
-                                        <td id="reg_no"></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="font-weight: bold;">Address</td>
-                                        <td>:</td>
-                                        <td id="patient_address"></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="font-weight: bold;">Contact</td>
-                                        <td>:</td>
-                                        <td id="contact_no"></td>
-                                    </tr>
-                                </table>
+                <div class="table-container">
+                    <div class="t-header mb-3">Roster</div>
+                    <div class="row">
+                        <div class="col-md-4 col-4">
+                            <div class="form-group">
+                                <label for="patient_id">Patient</label>
+                                <select name="patient_id" id="patient_id" class="form-control">
+                                    <option value="">Select Patient</option>
+                                    @foreach ($patients as $patient)
+                                        <option value="{{ $patient->id }}">
+                                            {{ $patient->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                        </div>
-                        <hr />
-                        <p>Same month patient list</p>
-                        <div class="card">
-                            <div class="card-body">
-                                <ol id="patientListTable">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Patient Information</h4>
+                                    <hr />
+                                    {{-- name, contact address --}}
+                                    <table>
+                                        <tr>
+                                            <td style="font-weight: bold;">Name</td>
+                                            <td>:</td>
+                                            <td id="patient_name"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">Registration No</td>
+                                            <td>:</td>
+                                            <td id="reg_no"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">Address</td>
+                                            <td>:</td>
+                                            <td id="patient_address"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">Contact</td>
+                                            <td>:</td>
+                                            <td id="contact_no"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <hr />
+                            <p>Same month patient list</p>
+                            <div class="card">
+                                <div class="card-body">
+                                    <ol id="patientListTable">
 
-                                </ol>
+                                    </ol>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8">
-                        <div class="container">
-                            <div class=""></div>
-                            <div id='calendar'></div>
+                        <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8">
+                            <div class="container">
+                                <div class=""></div>
+                                <div id='calendar'></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="edit_modal_body"></div>
+    </div>
+    <div id="edit_modal_body"></div>
     </div>
 @endsection
 @section('script')

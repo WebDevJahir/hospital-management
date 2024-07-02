@@ -18,81 +18,80 @@
                 <div class="row gutters">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="table-container">
-                            <div class="t-header">Invoices</div>
-
-                            <div class="table-responsive">
-                                <table id="Example" class="table custom-table">
-                                    <thead>
+                            <div class="t-header mb-2">Invoices</div>
+                            <table id="Example"
+                                class="table custom-table dataTable no-footer table-striped table-bordered ">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Patient Name</th>
+                                        <th>Invoice Date</th>
+                                        <th>Invoice No</th>
+                                        <th>Sub Total</th>
+                                        <th>Discount</th>
+                                        <th>Total</th>
+                                        <th>Payment Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="incomeHeadTable">
+                                    @foreach ($invoices as $invoice)
                                         <tr>
-                                            <th>Patient Name</th>
-                                            <th>Invoice Date</th>
-                                            <th>Invoice No</th>
-                                            <th>Sub Total</th>
-                                            <th>Discount</th>
-                                            <th>Total</th>
-                                            <th>Payment Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="incomeHeadTable">
-                                        @foreach ($invoices as $invoice)
-                                            <tr>
-                                                <td>
-                                                    {{ $invoice->patient->name }}
-                                                </td>
-                                                <td>
-                                                    {{ $invoice->invoice_date }}
-                                                    <input type="hidden" name="invoice_id" class="invoice_id"
-                                                        value="{{ $invoice->id }}">
-                                                </td>
-                                                <td>{{ $invoice->invoice_no }}</td>
-                                                <td>{{ $invoice->sub_total }}</td>
-                                                <td>{{ $invoice->discount }}</td>
-                                                <td>{{ $invoice->total }}</td>
-                                                <td class="payment_status">{{ $invoice->payment_status }}</td>
-                                                <td>
-                                                    <div class="icon-btn">
-                                                        <nobr>
-                                                            <a data-toggle="tooltip" title="Edit"
-                                                                href="{{ route('invoice.edit', $invoice->id) }}"
-                                                                class="btn btn-outline-success btn-sm"><i
-                                                                    class="fas fa-pen"></i></a>
+                                            <td>
+                                                {{ $invoice->patient->name }}
+                                            </td>
+                                            <td>
+                                                {{ $invoice->invoice_date }}
+                                                <input type="hidden" name="invoice_id" class="invoice_id"
+                                                    value="{{ $invoice->id }}">
+                                            </td>
+                                            <td>{{ $invoice->invoice_no }}</td>
+                                            <td>{{ $invoice->sub_total }}</td>
+                                            <td>{{ $invoice->discount }}</td>
+                                            <td>{{ $invoice->total }}</td>
+                                            <td class="payment_status">{{ $invoice->payment_status }}</td>
+                                            <td>
+                                                <div class="icon-btn">
+                                                    <nobr>
+                                                        <a data-toggle="tooltip" title="Edit"
+                                                            href="{{ route('invoice.edit', $invoice->id) }}"
+                                                            class="btn btn-outline-success btn-sm"><i
+                                                                class="fas fa-pen"></i></a>
 
-                                                            <form action="{{ route('invoice.destroy', $invoice->id) }}"
-                                                                method="POST" data-toggle="tooltip" title="Delete"
-                                                                class="d-inline deleteData">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit"
-                                                                    class="btn btn-outline-danger btn-sm delete"><i
-                                                                        class="fas fa-trash"></i></button>
-                                                            </form>
-                                                            <button type="button" data-toggle="tooltip" title="Pay Now"
-                                                                class="btn btn-outline-info btn-sm pay_now">
-                                                                <i class="fab fa-amazon-pay text-primary"></i>
-                                                            </button>
-                                                            <button class="btn btn-outline-success btn-sm addAdvance"
-                                                                title="Advance">
-                                                                <i class="fas fa-hand-holding-usd">
-                                                                </i>
-                                                            </button>
-                                                        </nobr>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                                                        <form action="{{ route('invoice.destroy', $invoice->id) }}"
+                                                            method="POST" data-toggle="tooltip" title="Delete"
+                                                            class="d-inline deleteData">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit"
+                                                                class="btn btn-outline-danger btn-sm delete"><i
+                                                                    class="fas fa-trash"></i></button>
+                                                        </form>
+                                                        <button type="button" data-toggle="tooltip" title="Pay Now"
+                                                            class="btn btn-outline-info btn-sm pay_now">
+                                                            <i class="fab fa-amazon-pay text-primary"></i>
+                                                        </button>
+                                                        <button class="btn btn-outline-success btn-sm addAdvance"
+                                                            title="Advance">
+                                                            <i class="fas fa-hand-holding-usd">
+                                                            </i>
+                                                        </button>
+                                                    </nobr>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
-                        <!-- Table container end -->
                     </div>
+                    <!-- Table container end -->
                 </div>
-                <!-- Row end -->
             </div>
-            <!-- Fixed body scroll end -->
+            <!-- Row end -->
         </div>
-        <!-- Content wrapper end -->
+        <!-- Fixed body scroll end -->
+    </div>
+    <!-- Content wrapper end -->
     </div>
     <div id="modal"></div>
 @endsection
@@ -190,5 +189,9 @@
                 $('#advanceModal').modal('show');
             })
         })
+
+        $('#Example').DataTable({
+            "order": []
+        });
     </script>
 @endsection

@@ -50,8 +50,9 @@
                             <hr />
 
                             <div class="table-responsive">
-                                <table id="Example" class="table custom-table">
-                                    <thead>
+                                <table id="Example"
+                                class="table custom-table dataTable no-footer table-striped table-bordered">
+                                <thead class="table-primary"> 
                                         <tr>
                                             <th>Name</th>
                                             <th>District</th>

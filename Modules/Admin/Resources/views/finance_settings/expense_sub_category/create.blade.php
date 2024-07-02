@@ -78,62 +78,62 @@
                             </form>
                             <hr />
 
-                            <div class="table-responsive">
-                                <table id="Example" class="table custom-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Expense Sub Category</th>
-                                            <th>Expense Head</th>
-                                            <th>Project Name</th>
-                                            <th>Price</th>
-                                            <th>Vat</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="incomeHeadTable">
-                                        @if ($expense_subcategories->isNotEmpty())
-                                            @foreach ($expense_subcategories as $sub_category)
-                                                <tr>
-                                                    <td>{{ $sub_category->name }}</td>
-                                                    <td>{{ $sub_category?->incomeHead?->name }}</td>
-                                                    <td>{{ $sub_category?->project?->name }}</td>
-                                                    <td>{{ $sub_category->price }}</td>
-                                                    <td>{{ $sub_category->vat_type }}</td>
-                                                    <td>
-                                                        <div class="icon-btn">
-                                                            <nobr>
-                                                                <a data-toggle="tooltip" title="Edit"
-                                                                    onclick="edit({{ $sub_category->id }})"
-                                                                    class="btn btn-outline-warning btn-sm"><i
-                                                                        class="fas fa-pen"></i></a>
-                                                                <form
-                                                                    action="{{ route('income-sub-category.destroy', $sub_category->id) }}"
-                                                                    method="POST" data-toggle="tooltip" title="Delete"
-                                                                    class="d-inline deleteData">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <button type="submit"
-                                                                        class="btn btn-outline-danger btn-sm delete"><i
-                                                                            class="fas fa-trash"></i></button>
-                                                                </form>
-                                                            </nobr>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </div>
+                            <table id="Example"
+                                class="table custom-table dataTable no-footer table-striped table-bordered">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Expense Sub Category</th>
+                                        <th>Expense Head</th>
+                                        <th>Project Name</th>
+                                        <th>Price</th>
+                                        <th>Vat</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="incomeHeadTable">
+                                    @if ($expense_subcategories->isNotEmpty())
+                                        @foreach ($expense_subcategories as $sub_category)
+                                            <tr>
+                                                <td>{{ $sub_category->name }}</td>
+                                                <td>{{ $sub_category?->incomeHead?->name }}</td>
+                                                <td>{{ $sub_category?->project?->name }}</td>
+                                                <td>{{ $sub_category->price }}</td>
+                                                <td>{{ $sub_category->vat_type }}</td>
+                                                <td>
+                                                    <div class="icon-btn">
+                                                        <nobr>
+                                                            <a data-toggle="tooltip" title="Edit"
+                                                                onclick="edit({{ $sub_category->id }})"
+                                                                class="btn btn-outline-warning btn-sm"><i
+                                                                    class="fas fa-pen"></i></a>
+                                                            <form
+                                                                action="{{ route('income-sub-category.destroy', $sub_category->id) }}"
+                                                                method="POST" data-toggle="tooltip" title="Delete"
+                                                                class="d-inline deleteData">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit"
+                                                                    class="btn btn-outline-danger btn-sm delete"><i
+                                                                        class="fas fa-trash"></i></button>
+                                                            </form>
+                                                        </nobr>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
                         </div>
-                        <!-- Table container end -->
                     </div>
+                    <!-- Table container end -->
                 </div>
-                <!-- Row end -->
             </div>
-            <!-- Fixed body scroll end -->
+            <!-- Row end -->
         </div>
-        <!-- Content wrapper end -->
+        <!-- Fixed body scroll end -->
+    </div>
+    <!-- Content wrapper end -->
     </div>
 @endsection
 

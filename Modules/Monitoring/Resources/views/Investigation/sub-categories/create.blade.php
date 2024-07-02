@@ -22,15 +22,12 @@
                             <form action="{{ $form_url }}" method="{{ $form_method }}">
                                 @csrf
                                 <div class="row gutters">
-                                    <div class="col-3">
+                                    <div class="col-4">
                                         <div class="form-group">
-                                            <div style="font-weight: bold;">Category</div>
                                             <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <label class="input-group-text" for=""><span
-                                                            class="icon-folder-plus"></span></label>
-                                                </div>
-                                                <select class="form-control select2" data-width=90% id="category" name="category_id">
+                                                <span class="input-group-text custom-group-text">Category</span>
+                                                <select class="form-control select2" data-width=90% id="category"
+                                                    name="category_id">
                                                     @foreach ($categories as $category)
                                                         <option value="{{ $category->id }}">{{ $category->category_name }}
                                                         </option>
@@ -40,14 +37,10 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-3">
+                                    <div class="col-4">
                                         <div class="form-group">
-                                            <div style="font-weight: bold;">Test Name</div>
                                             <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="basic-addon1"><span
-                                                            class="icon-add-to-list"></span></span>
-                                                </div>
+                                                <span class="input-group-text custom-group-text">Test Name</span>
                                                 <input type="text" id="subCategoryName" class="form-control"
                                                     placeholder="Sub Category Name" aria-label="Username"
                                                     aria-describedby="basic-addon1" name="sub_category_name">
@@ -55,14 +48,10 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-3">
+                                    <div class="col-4">
                                         <div class="form-group">
-                                            <div style="font-weight: bold;">Normal Value</div>
                                             <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="basic-addon1"><span
-                                                            class="icon-price-tag"></span></span>
-                                                </div>
+                                                <span class="input-group-text custom-group-text">Normal Value</span>
                                                 <input type="number" class="form-control" id="minimum_value"
                                                     placeholder="Minimum" aria-label="Username"
                                                     aria-describedby="basic-addon1" name="minimum_value">
@@ -73,14 +62,10 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-3">
+                                    <div class="col-4">
                                         <div class="form-group">
-                                            <div style="font-weight: bold;">Unit</div>
                                             <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="basic-addon1"><span
-                                                            class="icon-add-to-list"></span></span>
-                                                </div>
+                                                <span class="input-group-text custom-group-text">Unit</span>
                                                 <input type="text" id="unit" class="form-control"
                                                     placeholder="Unit Name" aria-label="Username"
                                                     aria-describedby="basic-addon1" name="unit">
@@ -97,8 +82,9 @@
                             <hr />
 
                             <div class="table-responsive">
-                                <table id="Example" class="table custom-table">
-                                    <thead>
+                                <table id="Example"
+                                    class="table custom-table dataTable no-footer table-striped table-bordered">
+                                    <thead class="table-primary">
                                         <tr>
                                             <th>Category</th>
                                             <th>Sub Category</th>

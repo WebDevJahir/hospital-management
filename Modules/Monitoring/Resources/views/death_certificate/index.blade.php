@@ -53,8 +53,9 @@
                             </div>
                             <hr />
                             <div class="table-responsive">
-                                <table id="tableOfData" class="table custom-table">
-                                    <thead>
+                                <table id="Example"
+                                    class="table custom-table dataTable no-footer table-striped table-bordered">
+                                    <thead class="table-primary">
                                         <tr>
                                             <th>Reg No</th>
                                             <th>Full Name</th>
@@ -119,5 +120,10 @@
 
 
 @section('script')
-
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#Example').DataTable({
+            "order": []
+        });
+    });
 @endsection

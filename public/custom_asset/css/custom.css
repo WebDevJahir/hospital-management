@@ -1,0 +1,117 @@
+.custom-group-text {
+    border: 1px solid #1449ff !important;
+    background: #2091d9 !important;
+    color: white !important;
+}
+
+.icon-btn .btn {
+    padding: 3px 8px;
+    line-height: 16px;
+    font-size: 10px;
+}
+
+.switch {
+    position: relative;
+    width: 65px;
+    height: 27px;
+    margin: 0px;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+    background-color: #0fbcf9;
+    border-radius: 25px;
+    transition: all 1s;
+}
+
+.switch:before {
+    content: "";
+    width: 23px;
+    height: 23px;
+    border-radius: 50%;
+    background-color: #fff;
+    position: absolute;
+    transition: all .5s;
+    transform: translate(2px, 2px);
+    transition-timing-function: cubic-bezier(0.81, -0.02, 0, 2.13);
+    transition-delay: .1s;
+    box-shadow: inset 2px 0px 4px rgba(0, 0, 0, .5),
+        -2px 0px 2px rgba(0, 0, 0, .5);
+    animation: off 1s forwards;
+}
+
+.switch:checked {
+    background-color: #14ff10;
+    transition: all 1s;
+}
+
+.switch:checked:before {
+    transition: all .5s;
+    transform: translate(40px, 2px);
+    transition-timing-function: cubic-bezier(0.81, -0.02, 0, 2.13);
+    box-shadow: inset -2px 0px 4px rgba(0, 0, 0, .5),
+        2px 0px 2px rgba(0, 0, 0, .5);
+    transition-delay: .1s;
+    right: 43px;
+    animation: on 1s forwards;
+}
+
+@keyframes on {
+
+    0%,
+    50%,
+    100% {
+        width: 23px;
+    }
+
+    25% {
+        width: 33px;
+    }
+}
+
+.loader-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    /* Ensure it's on top of other content */
+}
+
+.loader {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes off {
+
+    0%,
+    50%,
+    100% {
+        width: 23px;
+    }
+
+    25% {
+        width: 33px;
+    }
+
+}

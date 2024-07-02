@@ -44,7 +44,6 @@ Route::prefix('monitoring')->group(function () {
         'pain-assesment' => PainAssesmentController::class,
         'pain-management' => PainManagementController::class,
         'pain-monitoring' => PainMonitoringController::class,
-        'wound-describe' => WoundDescribeController::class,
         'wound-management' => WoundManagementController::class,
         'psychological-status' => PsychologicalStatusesController::class,
     ]);

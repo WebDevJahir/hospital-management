@@ -1,5 +1,5 @@
 @php
-    $url = !empty($wound_describe) ? route('wound-describe.update', $wound_describe->id) : route('wound-describe.store');
+    $url = !empty($wound_describe) ? route('wound-describes.update', $wound_describe->id) : route('wound-describes.store');
     $method = !empty($wound_describe) ? 'PUT' : 'POST';
     $patient_id = !empty($wound_describe) ? $wound_describe->patient_id : $patient_id;
     $date = !empty($wound_describe) ? $wound_describe->date : date('d-m-Y');

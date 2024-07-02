@@ -16,8 +16,9 @@
                             <div class="t-header">Patients Morphin list</div>
                             <hr />
                             <div class="table-responsive">
-                                <table id="Example" class="table">
-                                    <thead>
+                                <table id="Example"
+                                    class="table custom-table dataTable no-footer table-striped table-bordered">
+                                    <thead class="table-primary">
                                         <tr>
                                             <th>Reg No</th>
                                             <th>Full Name</th>
@@ -36,16 +37,18 @@
                                                 <td>{{ $patient->user->email }}</td>
                                                 <td>{{ $patient->status }}</td>
                                                 <td>
-                                                    <nobr>
-                                                        <button onclick="addPainMgt({{ $patient->id }})"
-                                                            class="btn btn-sm edit" type="button">
-                                                            <i class="fas fa-plus text-success"></i>
-                                                        </button>
-                                                        <button onclick="getPainMgtList({{ $patient->id }})"
-                                                            class="btn btn-sm edit" type="button">
-                                                            <i class="fas fa-eye text-success"></i>
-                                                        </button>
-                                                    </nobr>
+                                                    <div class="icon-btn">
+                                                        <nobr>
+                                                            <button onclick="addPainMgt({{ $patient->id }})"
+                                                                class="btn btn-sm btn-outline-success" type="button">
+                                                                <i class="fas fa-plus text-success"></i>
+                                                            </button>
+                                                            <button onclick="getPainMgtList({{ $patient->id }})"
+                                                                class="btn btn-sm btn-outline-success" type="button">
+                                                                <i class="fas fa-eye text-success"></i>
+                                                            </button>
+                                                        </nobr>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforeach
