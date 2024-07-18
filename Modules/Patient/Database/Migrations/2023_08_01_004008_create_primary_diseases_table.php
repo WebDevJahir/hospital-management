@@ -15,7 +15,15 @@ return new class extends Migration
     {
         Schema::create('primary_diseases', function (Blueprint $table) {
             $table->id();
-
+            $table->unsignedBigInteger('patient_id');
+            $table->string('primary_diagnosis');
+            $table->string('suffering_time');
+            $table->string('site_of_mitatases');
+            $table->string('present_condition');
+            $table->string('prognosis');
+            $table->string('allergy');
+            $table->string('referrals');
+            $table->string('others');
             $table->timestamps();
         });
     }

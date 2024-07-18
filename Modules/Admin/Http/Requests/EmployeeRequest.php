@@ -13,7 +13,13 @@ class EmployeeRequest extends FormRequest
      */
     public function rules()
     {
-        return ['first_name' => 'required', 'email' => 'required|email|unique:employees,email,' . $this->id, 'contact_no' => 'required|unique:employees,mobile,' . $this->id, 'document_no' => 'required', 'username' => 'required|unique:employees,username,' . $this->id, 'present_address' => 'required'];
+        return [
+            'first_name' => 'required',
+            'email' => 'required|email|unique:employees,email,' . $this->id,
+            'contact_number' => 'required',
+            'document_no' => 'required',
+            'present_address' => 'required'
+        ];
     }
 
     /**

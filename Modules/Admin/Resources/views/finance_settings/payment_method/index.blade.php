@@ -1,12 +1,11 @@
 @extends('master.master')
-@section('title', 'Income Head - Hospice Bangladesh')
+@section('title', 'Expense Head - Hospice Bangladesh')
 @section('main_content')
     @parent
     @php
-        $is_old = old('client_no') ? true : false;
-        $form_heading = !empty($sale->id) ? 'Update' : 'Add';
-        $form_url = !empty($sale->id) ? route('income-head.update', $sale->id) : route('income-head.store');
-        $form_method = !empty($sale->id) ? 'PUT' : 'POST';
+        $form_heading = 'Add';
+        $form_url = route('payment-methods.store');
+        $form_method = 'POST';
     @endphp
 
     <div class="main-container">
@@ -18,30 +17,29 @@
                 <div class="row gutters">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="table-container">
-
-                            <div class="t-header">Income Head</div>
+                            <div class="t-header">Payment Method</div>
                             <hr />
-                            <form action="{{ $form_url }}" method="{{ $form_method }}" class="incomeHeadForm">
+                            <form action="{{ $form_url }}" method="{{ $form_method }}">
                                 @csrf
                                 <div class="row gutters">
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Name <span
-                                                    class="text-danger">*</span></span>
-                                            <input type="text" class="form-control" placeholder="Income Head Name"
-                                                name="name" value="{{ $is_old ? old('name') : '' }}" required>
+                                            <span class="input-group-text custom-group-text">Account Name</span>
+                                            <input type="text" class="form-control" placeholder="Account Name"
+                                                name="name">
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Project
-                                                Name <span class="text-danger">*</span></span>
-                                            <select class="form-control" name="project_id" required>
-                                                <option selected>Select Project</option>
-                                                @foreach ($projects as $project)
-                                                    <option value="{{ $project->id }}">{{ $project->name }}</option>
-                                                @endforeach
-                                            </select>
+                                            <span class="input-group-text custom-group-text">Branch</span>
+                                            <input type="text" class="form-control" placeholder="Branch" name="branch">
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text custom-group-text">Account No</span>
+                                            <input type="text" class="form-control" placeholder="Account No"
+                                                name="account_no">
                                         </div>
                                     </div>
                                     <div class="col-4">
@@ -54,32 +52,32 @@
                             <hr />
 
                             <div class="table-responsive">
-
                                 <table id="Example"
                                     class="table custom-table dataTable no-footer table-striped table-bordered">
                                     <thead class="table-primary">
                                         <tr>
-                                            <th>Income Head</th>
-                                            <th>Project Name</th>
+                                            <th>Payment Method</th>
+                                            <th>Branch</th>
+                                            <th>Account No</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody id="incomeHeadTable">
-                                        @foreach ($income_heads as $head)
-                                            <tr>
-                                                <td>{{ $head->name }}</td>
-                                                <td>
-                                                    {{ $head?->project?->name }}
-                                                </td>
+                                        @foreach ($payment_methods as $method)
+                                            <tr id="tr">
+                                                <td>{{ $method?->name }}</td>
+                                                <td>{{ $method?->branch }}</td>
+                                                <td>{{ $method?->account_no }}</td>
                                                 <td>
                                                     <div class="icon-btn">
                                                         <nobr>
                                                             <a data-toggle="tooltip" title="Edit"
-                                                                onclick="edit({{ $head->id }})"
+                                                                onclick="edit({{ $method->id }})"
                                                                 class="btn btn-outline-warning btn-sm"><i
                                                                     class="fas fa-pen"></i></a>
 
-                                                            <form action="{{ route('income-head.destroy', $head->id) }}"
+                                                            <form
+                                                                action="{{ route('payment-methods.destroy', $method->id) }}"
                                                                 method="POST" data-toggle="tooltip" title="Delete"
                                                                 class="d-inline deleteData">
                                                                 @csrf
@@ -111,15 +109,15 @@
 
 @section('script')
     <script type="text/javascript">
-        function edit(head_id) {
-            let income_heads = @json($income_heads);
-            income_heads.find(head => {
-                if (head.id == head_id) {
-                    $('input[name="name"]').val(head.name);
-                    $('select[name="project_id"]').val(head.project_id);
-                    $('form').data('id', head.id);
-                    let form_url = "{{ route('income-head.update', ':id') }}";
-                    form_url = form_url.replace(':id', $('form').data('id'));
+        function edit(payment_method_id) {
+            let payment_methods = @json($payment_methods);
+            payment_methods.find(payment_method => {
+                if (payment_method.id == payment_method_id) {
+                    $('input[name="name"]').val(payment_method.name);
+                    $('input[name="branch"]').val(payment_method.branch);
+                    $('input[name="account_no"]').val(payment_method.account_no);
+                    let form_url = "{{ route('payment-methods.update', ':id') }}";
+                    form_url = form_url.replace(':id', payment_method.id);
                     $('form').attr('action', form_url);
                     $('form').attr('method', 'POST');
                     $('form').append('<input type="hidden" name="_method" value="PUT">');
@@ -130,7 +128,7 @@
             e.preventDefault();
             let form = this;
             let id = $(this).data('id');
-            let url = "{{ route('income-head.destroy', ':id') }}";
+            let url = "{{ route('payment-methods.destroy', ':id') }}";
             url = url.replace(':id', id);
             Swal.fire({
                 title: 'Are you sure?',
@@ -145,27 +143,11 @@
                     form.submit();
                 }
             });
-        }); //end of submit
+        });
         $(document).ready(function() {
             $('#Example').DataTable({
                 "order": []
             });
-        });
-
-        $('.incomeHeadForm').submit(function(e) {
-            e.preventDefault();
-            let name = $('input[name="name"]').val();
-            let project_id = $('select[name="project_id"]').val();
-            if (name == '' || project_id == 'Select Project') {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Please fill all the fields!',
-                });
-                return false;
-            } else {
-                this.submit();
-            }
         });
     </script>
 @endsection

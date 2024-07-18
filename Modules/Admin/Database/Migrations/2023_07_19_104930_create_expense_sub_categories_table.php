@@ -15,7 +15,9 @@ return new class extends Migration
     {
         Schema::create('expense_sub_categories', function (Blueprint $table) {
             $table->id();
-
+            $table->string('name', 100);
+            $table->unsignedBigInteger('expense_head_id')->cascadeOnDelete();
+            $table->unsignedBigInteger('project_id')->nullable();
             $table->timestamps();
         });
     }

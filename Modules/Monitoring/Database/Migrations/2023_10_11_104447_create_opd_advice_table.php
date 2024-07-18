@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('opd_advice', function (Blueprint $table) {
+        Schema::create('opd_advices', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('opd_patient_infos_id');
             $table->date('date');

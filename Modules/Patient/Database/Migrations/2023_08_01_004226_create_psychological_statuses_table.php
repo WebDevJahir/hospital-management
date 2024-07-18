@@ -15,7 +15,14 @@ return new class extends Migration
     {
         Schema::create('psychological_statuses', function (Blueprint $table) {
             $table->id();
-
+            $table->unsignedBigInteger('patient_id');
+            $table->string('date');
+            $table->string('anxioius_or_worried');
+            $table->string('family_anxioius_or_worried');
+            $table->string('feeling_depressed');
+            $table->string('felt_at_peach');
+            $table->string('share_feeling');
+            $table->string('much_information');
             $table->timestamps();
         });
     }

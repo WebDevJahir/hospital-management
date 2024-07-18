@@ -15,7 +15,11 @@ return new class extends Migration
     {
         Schema::create('concern_diseases', function (Blueprint $table) {
             $table->id();
-
+            $table->unsignedBigInteger('patient_id')->cascadeOnDelete();
+            $table->string('inform_diagnosis')->nullable();
+            $table->string('inform_prognosis')->nullable();
+            $table->string('inform_diagnosis_familly')->nullable();
+            $table->string('inform_prognosis_family')->nullable();
             $table->timestamps();
         });
     }

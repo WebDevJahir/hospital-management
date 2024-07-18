@@ -7,6 +7,11 @@
         $form_heading = !empty($sale->id) ? 'Update' : 'Add';
         $form_url = !empty($sale->id) ? route('projects.update', $sale->id) : route('projects.store');
         $form_method = !empty($sale->id) ? 'PUT' : 'POST';
+        $name = !empty($sale->name) ? $sale->name : '';
+        $address = !empty($sale->address) ? $sale->address : '';
+        $email = !empty($sale->email) ? $sale->email : '';
+        $phone = !empty($sale->phone) ? $sale->phone : '';
+        $website = !empty($sale->website) ? $sale->website : '';
     @endphp
 
     <div class="main-container">
@@ -20,26 +25,32 @@
                         <div class="table-container">
                             <div class="t-header">Project</div>
                             <hr />
-                            <form action="{{ $form_url }}" method="{{ $form_method }}" enctype="multipart/form-data">
+                            <form action="{{ $form_url }}" method="{{ $form_method }}" enctype="multipart/form-data"
+                                class="projectForm">
                                 @csrf
                                 <div class="row gutters">
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Name</span>
-                                            <input type="text" class="form-control" placeholder="Income Head Name"
-                                                name="name">
+                                            <span class="input-group-text custom-group-text">Project Name <span
+                                                    class="text-danger">*</span></span>
+                                            <input type="text" class="form-control" placeholder="Project Name"
+                                                name="name" value="{{ $is_old ? old('name') : $name }}" required>
                                         </div>
                                     </div>
                                     <div class="col-8">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Address</span>
-                                            <input type="text" class="form-control" placeholder="Address" name="address">
+                                            <span class="input-group-text custom-group-text">Address <span
+                                                    class="text-danger">*</span></span>
+                                            <input type="text" class="form-control" placeholder="Address" name="address"
+                                                value="{{ $is_old ? old('address') : $address }}" required>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Email</span>
-                                            <input type="text" class="form-control" placeholder="Email" name="email">
+                                            <span class="input-group-text custom-group-text">Email <span
+                                                    class="text-danger">*</span></span>
+                                            <input type="text" class="form-control" placeholder="Email" name="email"
+                                                value="{{ $is_old ? old('email') : $email }}" required>
                                         </div>
                                     </div>
                                     <div class="col-4">
@@ -175,6 +186,23 @@
             $('#Example').DataTable({
                 "order": []
             });
+        });
+
+        $('.projectForm').submit(function(e) {
+            e.preventDefault();
+            let name = $('input[name="name"]').val();
+            let address = $('input[name="address"]').val();
+            let email = $('input[name="email"]').val();
+            if (name == '' || address == '' || email == '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please fill all the required fields!',
+                });
+                return false;
+            } else {
+                this.submit();
+            }
         });
     </script>
 @endsection

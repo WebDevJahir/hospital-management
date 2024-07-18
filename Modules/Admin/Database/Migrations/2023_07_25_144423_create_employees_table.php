@@ -55,7 +55,7 @@ return new class extends Migration
             $table->integer('sick_leave')->default(0);
             $table->integer('emergency_leave')->default(0);
             $table->integer('pay_leave')->default(0);
-            $table->integer('educational_leave')->default(0);
+            $table->integer('special_leave')->default(0);
             $table->string('status')->nullable();
             $table->decimal('deduction', 10, 2)->default(0.00);
             $table->string('username')->nullable();

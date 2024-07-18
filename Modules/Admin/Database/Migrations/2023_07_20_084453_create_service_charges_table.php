@@ -15,7 +15,9 @@ return new class extends Migration
     {
         Schema::create('service_charges', function (Blueprint $table) {
             $table->id();
-
+            $table->unsignedBigInteger('city_id');
+            $table->integer('zone');
+            $table->integer('charge');
             $table->timestamps();
         });
     }

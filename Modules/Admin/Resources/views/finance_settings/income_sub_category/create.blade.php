@@ -4,9 +4,18 @@
     @parent
     @php
         $is_old = old('client_no') ? true : false;
-        $form_heading = !empty($sale->id) ? 'Update' : 'Add';
-        $form_url = !empty($sale->id) ? route('income-sub-category.update', $sale->id) : route('income-sub-category.store');
-        $form_method = !empty($sale->id) ? 'PUT' : 'POST';
+        $form_heading = !empty($income_subcategory->id) ? 'Update' : 'Add';
+        $form_url = !empty($income_subcategory->id)
+            ? route('income-sub-category.update', $income_subcategory->id)
+            : route('income-sub-category.store');
+        $form_method = !empty($income_subcategory->id) ? 'PUT' : 'POST';
+        $form_id = !empty($income_subcategory->id) ? 'updateForm' : 'saveForm';
+        $form_name = !empty($income_subcategory->id) ? 'update' : 'save';
+        $name = $is_old ? old('name') : $income_subcategory->name ?? '';
+        $income_head_id = $is_old ? old('income_head_id') : $income_subcategory->income_head_id ?? '';
+        $project_id = $is_old ? old('project_id') : $income_subcategory->project_id ?? '';
+        $price = $is_old ? old('price') : $income_subcategory->price ?? 0;
+        $vat_type = $is_old ? old('vat_type') : $income_subcategory->vat_type ?? '';
     @endphp
 
     <div class="main-container">
@@ -20,39 +29,42 @@
                         <div class="table-container">
                             <div class="t-header">Income Sub Category</div>
                             <hr />
-                            <form action="{{ $form_url }}" method="{{ $form_method }}">
+                            <form action="{{ $form_url }}" method="{{ $form_method }}" class="incomeSubHeadForm">
                                 @csrf
                                 <div class="row gutters">
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Name</span>
+                                            <span class="input-group-text custom-group-text">Name <span
+                                                    class="text-danger">*</span></span>
                                             <input type="text" class="form-control"
-                                                placeholder="Income Sub Category Name" name="name">
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Income Head</span>
-                                            <select class="form-control" name="income_head_id">
-                                                <option selected>Select Income Head</option>
-                                                @foreach ($income_heads as $income_head)
-                                                    <option value="{{ $income_head->id }}">{{ $income_head->name }}</option>
-                                                @endforeach
-                                            </select>
+                                                placeholder="Income Sub Category Name" name="name"
+                                                value="{{ $is_old ? old('name') : '' }}" required>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text custom-group-text">Project
-                                                Name</span>
-                                            <select class="form-control" name="project_id">
+                                                Name <span class="text-danger">*</span></span>
+                                            <select class="form-control" name="project_id" id="project_id" required>
                                                 <option selected>Select Project</option>
                                                 @foreach ($projects as $project)
-                                                    <option value="{{ $project->id }}">{{ $project->name }}</option>
+                                                    <option value="{{ $project->id }}"
+                                                        @if ($project->id == $project_id) selected @endif>
+                                                        {{ $project->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="col-4">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text custom-group-text">Income Head <span
+                                                    class="text-danger">*</span></span>
+                                            <select class="form-control" name="income_head_id" id="income_head_id" required>
+                                                <option selected>Select Income Head</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
                                     <div class="col-4">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text custom-group-text">Price</span>
@@ -64,8 +76,10 @@
                                             <span class="input-group-text custom-group-text">Vat Type</span>
                                             <select class="form-control" name="vat_type">
                                                 <option selected>Select Vat Type</option>
-                                                <option value="1">Yes</option>
-                                                <option value="0">No</option>
+                                                <option value="1" @if ($vat_type == 1) selected @endif>Yes
+                                                </option>
+                                                <option value="0" @if ($vat_type == 0) selected @endif>No
+                                                </option>
                                             </select>
                                         </div>
                                     </div>
@@ -82,7 +96,7 @@
                                 <div>
                                     <table id="Example"
                                         class="table custom-table dataTable no-footer table-striped table-bordered">
-                                        <thead class="table-primary">   
+                                        <thead class="table-primary">
                                             <tr>
                                                 <th>Income Sub Category</th>
                                                 <th>Income Head</th>
@@ -162,31 +176,69 @@
             });
         }
 
+
+        $('.deleteData').submit(function(e) {
+            e.preventDefault();
+            let form = this;
+            let id = $(this).data('id');
+            let url = "{{ route('income-sub-category.destroy', ':id') }}";
+            url = url.replace(':id', id);
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#0d6efd',
+                cancelButtonColor: '#dc3545',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        }); //end of submit
+
         $(document).ready(function() {
-            let table = new DataTable('#Example');
+            $('#Example').DataTable({
+                "order": []
+            });
+        });
 
+        $('#project_id').on('change', function() {
+            let project_id = $(this).val();
+            $.ajax({
+                url: "{{ route('get-income-heads') }}",
+                type: 'GET',
+                data: {
+                    project_id: project_id
+                },
+                success: function(response) {
+                    let income_heads = response;
+                    let html = '<option selected>Select Income Head</option>';
+                    income_heads.forEach(income_head => {
+                        html +=
+                            `<option value="${income_head.id}">${income_head.name}</option>`;
+                    });
+                    $('#income_head_id').html(html);
+                }
+            });
+        });
 
-
-            $('.deleteData').submit(function(e) {
-                e.preventDefault();
-                let form = this;
-                let id = $(this).data('id');
-                let url = "{{ route('income-sub-category.destroy', ':id') }}";
-                url = url.replace(':id', id);
+        $('.incomeSubHeadForm').submit(function(e) {
+            e.preventDefault();
+            let name = $('input[name="name"]').val();
+            let project_id = $('select[name="project_id"]').val();
+            let income_head_id = $('select[name="income_head_id"]').val();
+            if (name == '' || project_id == 'Select Project' || income_head_id == 'Select Income Head') {
                 Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#0d6efd',
-                    cancelButtonColor: '#dc3545',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please fill all the fields!',
                 });
-            }); //end of submit
+                return false;
+            } else {
+                this.submit();
+            }
         });
     </script>
 @endsection

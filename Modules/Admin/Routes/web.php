@@ -26,6 +26,7 @@ use Modules\Admin\Http\Controllers\MedicalProcedureController;
 use Modules\Admin\Http\Controllers\IncomeSubCategoryController;
 use Modules\Admin\Http\Controllers\ExpenseSubCategoryController;
 use Modules\Admin\Http\Controllers\PackageController;
+use Modules\Admin\Http\Controllers\PaymentMethodController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +65,7 @@ Route::prefix('admin')->group(function () {
         'banners' => BannerController::class,
         'packages' => PackageController::class,
         'promo-codes' => PromoCodeController::class,
+        'payment-methods' => PaymentMethodController::class,
     ]);
     Route::match(['get', 'post'], 'vat', [VatController::class, 'index'])->name('vat');
 });

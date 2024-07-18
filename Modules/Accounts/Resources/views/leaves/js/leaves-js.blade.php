@@ -1,6 +1,5 @@
 <script>
     function getTotalDays() {
-
         var from = moment($('#from_date').val());
         var to = moment($('#to_date').val());
         if (Date.parse($('#from_date').val()) == Date.parse($('#to_date').val())) {

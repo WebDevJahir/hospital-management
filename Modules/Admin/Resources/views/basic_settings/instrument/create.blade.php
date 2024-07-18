@@ -6,6 +6,11 @@
         $form_heading = 'Add';
         $form_url = route('instrument.store');
         $form_method = 'POST';
+        $is_old = old('name') ? true : false;
+        $project_id = $is_old ? old('project_id') : '';
+        $income_head_id = $is_old ? old('income_head_id') : '';
+        $income_sub_category_id = $is_old ? old('income_sub_category_id') : '';
+        $charge = $is_old ? old('charge') : '';
     @endphp
 
     <div class="main-container">
@@ -19,12 +24,13 @@
                         <div class="table-container">
                             <div class="t-header">Instruments</div>
                             <hr />
-                            <form action="{{ $form_url }}" method="{{ $form_method }}">
+                            <form action="{{ $form_url }}" method="{{ $form_method }}" class="instrumentForm" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row gutters">
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Project</span>
+                                            <span class="input-group-text custom-group-text">Project <span
+                                                    class="text-danger">*</span></span>
                                             <select class="form-control" name="project_id" id="project_id">
                                                 <option value="">Select Project</option>
                                                 @foreach ($projects as $project)
@@ -35,7 +41,8 @@
                                     </div>
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Income Head</span>
+                                            <span class="input-group-text custom-group-text">Income Head <span
+                                                    class="text-danger">*</span></span>
                                             <select class="form-control" name="income_head_id" id="income_head_id">
                                                 <option value="">Select Income Head</option>
                                             </select>
@@ -43,7 +50,8 @@
                                     </div>
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Sub Category</span>
+                                            <span class="input-group-text custom-group-text">Sub Category <span
+                                                    class="text-danger">*</span></span>
                                             <select class="form-control" name="income_sub_category_id"
                                                 id="income_sub_category_id">
                                                 <option value="">Select Income Sub Head</option>
@@ -52,7 +60,8 @@
                                     </div>
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Charge</span>
+                                            <span class="input-group-text custom-group-text">Charge <span
+                                                    class="text-danger">*</span></span>
                                             <input type="text" class="form-control" placeholder="charge" name="charge">
                                         </div>
                                     </div>
@@ -263,6 +272,24 @@
             $('#Example').DataTable({
                 "order": []
             });
+        });
+
+        $('.instrumentForm').submit(function(e) {
+            e.preventDefault();
+            let project_id = $('select[name="project_id"]').val();
+            let income_head_id = $('select[name="income_head_id"]').val();
+            let income_sub_category_id = $('select[name="income_sub_category_id"]').val();
+            let charge = $('input[name="charge"]').val();
+            if (project_id == '' || income_head_id == '' || income_sub_category_id == '' || charge == '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'All fields are required!',
+                });
+                return false;
+            } else {
+                this.submit();
+            }
         });
     </script>
 @endsection

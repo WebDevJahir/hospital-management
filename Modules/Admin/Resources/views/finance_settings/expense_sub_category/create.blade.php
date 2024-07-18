@@ -3,9 +3,16 @@
 @section('main_content')
     @parent
     @php
+        $is_old = old('name') ? true : false;
         $form_heading = 'Add';
         $form_url = route('expense-sub-category.store');
         $form_method = 'POST';
+        $name = $is_old ? old('name') : '';
+        $price = $is_old ? old('price') : '';
+        $vat = $is_old ? old('vat') : '';
+        $vat_type = $is_old ? old('vat_type') : '';
+        $income_head_id = $is_old ? old('income_head_id') : '';
+        $project_id = $is_old ? old('project_id') : '';
     @endphp
 
     <div class="main-container">
@@ -19,24 +26,28 @@
                         <div class="table-container">
                             <div class="t-header">Expense Sub Category</div>
                             <hr />
-                            <form action="{{ $form_url }}" method="{{ $form_method }}">
+                            <form action="{{ $form_url }}" method="{{ $form_method }}" class="expenseSubCatForm">
                                 @csrf
                                 <div class="row gutters">
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Name</span>
+                                            <span class="input-group-text custom-group-text">Name <span
+                                                    class="text-danger">*</span></span>
                                             <input type="text" class="form-control"
-                                                placeholder="Income Sub Category Name" name="name">
+                                                placeholder="Income Sub Category Name" name="name"
+                                                value="{{ $name }}" required>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Expense Head</span>
-                                            <select class="form-control" name="income_head_id">
+                                            <span class="input-group-text custom-group-text">Expense Head <span
+                                                    class="text-danger">*</span></span>
+                                            <select class="form-control" name="expense_head_id" id="expense_head_id">
                                                 <option selected>Select Expense Head</option>
                                                 @foreach ($expense_heads as $expense_head)
-                                                    <option value="{{ $expense_head->id }}">{{ $expense_head->name }}
-                                                    </option>
+                                                    <option value="{{ $expense_head->id }}"
+                                                        @if ($income_head_id == $expense_head->id) selected @endif>
+                                                        {{ $expense_head->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -44,11 +55,13 @@
                                     <div class="col-4">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text custom-group-text">Project
-                                                Name</span>
-                                            <select class="form-control" name="project_id">
+                                                Name <span class="text-danger">*</span></span>
+                                            <select class="form-control" name="project_id" id="project_id">
                                                 <option selected>Select Project</option>
                                                 @foreach ($projects as $project)
-                                                    <option value="{{ $project->id }}">{{ $project->name }}</option>
+                                                    <option value="{{ $project->id }}"
+                                                        @if ($project_id == $project->id) selected @endif>
+                                                        {{ $project->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -141,7 +154,7 @@
 @section('script')
     <script type="text/javascript">
         function edit(sub_cat_id) {
-            let incomeexpense_subcategories_subcategories = @json($expense_subcategories);
+            let expense_subcategories = @json($expense_subcategories);
             expense_subcategories.find(sub_cat => {
                 if (sub_cat.id == sub_cat_id) {
                     $('input[name="name"]').val(sub_cat.name);
@@ -186,6 +199,23 @@
                     }
                 });
             }); //end of submit
+
+            $('.expenseSubCatForm').submit(function(e) {
+                e.preventDefault();
+                let name = $('input[name="name"]').val();
+                let expense_head_id = $('select[name="expense_head_id"]').val();
+                let project_id = $('select[name="project_id"]').val();
+                if(name == '' || expense_head_id == 'Select Expense Head' || project_id == 'Select Project'){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Please fill all the required fields!',
+                    });
+                    return false;
+                }else{
+                    this.submit();
+                }
+            });
         });
     </script>
 @endsection

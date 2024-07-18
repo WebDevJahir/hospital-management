@@ -6,6 +6,9 @@
         $form_heading = 'Add';
         $form_url = route('expense-head.store');
         $form_method = 'POST';
+        $is_old = old('name') ? true : false;
+        $name = $is_old ? old('name') : '';
+        $project_id = $is_old ? old('project_id') : '';
     @endphp
 
     <div class="main-container">
@@ -19,21 +22,22 @@
                         <div class="table-container">
                             <div class="t-header">Expense Head</div>
                             <hr />
-                            <form action="{{ $form_url }}" method="{{ $form_method }}">
+                            <form action="{{ $form_url }}" method="{{ $form_method }}" class="expenseHeadForm">
                                 @csrf
                                 <div class="row gutters">
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Name</span>
+                                            <span class="input-group-text custom-group-text">Name <span
+                                                    class="text-danger">*</span></span>
                                             <input type="text" class="form-control" placeholder="Income Head Name"
-                                                name="name">
+                                                name="name" value="{{ $name }}" required>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text custom-group-text">Project
-                                                Name</span>
-                                            <select class="form-control" name="project_id">
+                                                Name <span class="text-danger">*</span></span>
+                                            <select class="form-control" name="project_id" id="project_id" required>
                                                 <option selected>Select Project</option>
                                                 @foreach ($projects as $project)
                                                     <option value="{{ $project->id }}">{{ $project->name }}</option>
@@ -144,6 +148,22 @@
             $('#Example').DataTable({
                 "order": []
             });
+        });
+
+        $('.expenseHeadForm').submit(function(e) {
+            e.preventDefault();
+            let name = $('input[name="name"]').val();
+            let project_id = $('select[name="project_id"]').val();
+            if (name == '' || project_id == 'Select Project') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please fill all the required fields!',
+                });
+                return false;
+            } else {
+                this.submit();
+            }
         });
     </script>
 @endsection

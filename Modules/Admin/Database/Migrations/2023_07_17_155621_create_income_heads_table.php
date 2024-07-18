@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('income_heads', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('project_id')->nullable();
+            $table->integer('project_id')->cascadeOnDelete();
             $table->timestamps();
         });
     }

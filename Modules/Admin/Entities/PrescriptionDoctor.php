@@ -9,7 +9,7 @@ use Modules\Accounts\Entities\Schedule;
 class PrescriptionDoctor extends Model
 {
     protected $fillable = [
-        'doctor_name',
+        'name',
         'status',
         'description'
     ];

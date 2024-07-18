@@ -15,7 +15,11 @@ return new class extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-
+            $table->unsignedBigInteger('patient_id')->cascadeOnDelete();
+            $table->unsignedBigInteger('prescription_doctor_id')->cascadeOnDelete();
+            $table->date('date');
+            $table->integer('serial_no');
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }

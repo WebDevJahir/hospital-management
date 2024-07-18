@@ -15,7 +15,11 @@ return new class extends Migration
     {
         Schema::create('investigation_sub_categories', function (Blueprint $table) {
             $table->id();
-
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->string('sub_category_name', 100);
+            $table->string('unit', 100);
+            $table->string('maximum_value');
+            $table->string('minimum_value');
             $table->timestamps();
         });
     }

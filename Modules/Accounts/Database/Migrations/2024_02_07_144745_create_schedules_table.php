@@ -15,7 +15,12 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-
+            $table->unsignedBigInteger('prescription_doctor_id');
+            $table->string('day');
+            $table->string('start_time')->nullable();
+            $table->string('end_time')->nullable();
+            $table->string('per_patient_time')->nullable();
+            $table->string('total_serial')->default('active');
             $table->timestamps();
         });
     }

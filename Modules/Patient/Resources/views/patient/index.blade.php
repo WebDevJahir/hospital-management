@@ -36,8 +36,19 @@
                 <div class="row gutters">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="table-container">
-                            <div class="t-employeeer">
-                                <div class="t-header">Patient list 
+                            <div class="t-header mb-3">
+                                <div class="th-title">
+                                    <div style="">
+                                        <div class="d-flex justify-content-between">
+                                            <span style="margin-top: 5px;">Patient List</span>
+                                            <span class="th-count">
+                                                <a href="{{ route('patients.create') }}"
+                                                    class="btn btn-sm btn-outline-primary" style="background:inherit;"
+                                                    title="Add Employee"><i class="fas fa-plus"
+                                                        style="margin-right: 5px;"></i>Add New</a>
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <hr />
@@ -70,8 +81,9 @@
                                                     <div class="icon-btn">
                                                         <nobr>
                                                             <a class="btn btn-outline-warning" style="background:inherit"
-                                                                title="Edit" onclick="dataModal({{ $patient->id }})"
-                                                                type="submit"><i class="fas fa-edit text-warning"></i></a>
+                                                                title="Edit"
+                                                                href="{{ route('patients.edit', $patient->id) }}"><i
+                                                                    class="fas fa-edit text-warning"></i></a>
                                                             <a onclick="editPlan({{ $patient->id }})"
                                                                 class="btn btn-outline-success" style="background:inherit"
                                                                 title="Plan and Status"><i
@@ -112,20 +124,6 @@
 
 @section('script')
     <script type="text/javascript">
-        function dataModal(id) {
-            var url = id ? `/patient/patients/${id}/edit` : "{{ route('patients.create') }}";
-            url = url.replace(':id', id);
-            //get data by ajax
-            $.ajax({
-                url: url,
-                type: "GET",
-                success: function(response) {
-                    $('.dataModal').html(response);
-                    $('#dataModal').modal('show');
-                }
-            });
-        }
-
         function editPlan(id) {
             var url = "{{ route('patient.plan.and.statu.edit') }}"
             //get data by ajax

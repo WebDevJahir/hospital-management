@@ -6,6 +6,11 @@
         $form_heading = 'Add';
         $form_url = route('product.store');
         $form_method = 'POST';
+        $is_old = old('project_id') ? true : false;
+        $project_id = $is_old ? old('project_id') : '';
+        $income_head_id = $is_old ? old('income_head_id') : '';
+        $income_sub_category_id = $is_old ? old('income_sub_category_id') : '';
+        $charge = $is_old ? old('charge') : '';
     @endphp
 
     <div class="main-container">
@@ -19,41 +24,46 @@
                         <div class="table-container">
                             <div class="t-header">Instruments</div>
                             <hr />
-                            <form action="{{ $form_url }}" method="{{ $form_method }}">
+                            <form action="{{ $form_url }}" method="{{ $form_method }}" class="productForm" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row gutters">
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Project</span>
+                                            <span class="input-group-text custom-group-text">Project <span
+                                                    class="text-danger">*</span></span>
                                             <select class="form-control" name="project_id" id="project_id">
                                                 <option value="">Select Project</option>
                                                 @foreach ($projects as $project)
-                                                    <option value="{{ $project->id }}">{{ $project->name }}</option>
+                                                    <option value="{{ $project->id }}" @if ($project->id == $project_id) selected @endif>
+                                                        {{ $project->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Income Head</span>
-                                            <select class="form-control" name="income_head_id" id="income_head_id">
+                                            <span class="input-group-text custom-group-text">Income Head <span
+                                                    class="text-danger">*</span></span>
+                                            <select class="form-control" name="income_head_id" id="income_head_id" required>
                                                 <option value="">Select Income Head</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Sub Category</span>
+                                            <span class="input-group-text custom-group-text">Sub Category <span
+                                                    class="text-danger">*</span></span>
                                             <select class="form-control" name="income_sub_category_id"
-                                                id="income_sub_category_id">
+                                                id="income_sub_category_id" required>
                                                 <option value="">Select Income Sub Head</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Charge</span>
-                                            <input type="text" class="form-control" placeholder="charge" name="charge">
+                                            <span class="input-group-text custom-group-text">Charge <span
+                                                    class="text-danger">*</span></span>
+                                            <input type="text" class="form-control" placeholder="charge" name="charge" value="{{ $charge }}" required>
                                         </div>
                                     </div>
                                     <div class="col-4">
@@ -102,8 +112,7 @@
                                                                 class="btn btn-outline-warning btn-sm"><i
                                                                     class="fas fa-pen"></i></a>
 
-                                                            <form
-                                                                action="{{ route('product.destroy', $product->id) }}"
+                                                            <form action="{{ route('product.destroy', $product->id) }}"
                                                                 method="POST" data-toggle="tooltip" title="Delete"
                                                                 class="d-inline deleteData">
                                                                 @csrf
@@ -263,6 +272,24 @@
             $('#Example').DataTable({
                 "order": []
             });
+        }); 
+
+        $('.productForm').submit(function(e) {
+            e.preventDefault();
+            let project_id = $('select[name="project_id"]').val();
+            let income_head_id = $('select[name="income_head_id"]').val();
+            let income_sub_category_id = $('select[name="income_sub_category_id"]').val();
+            let charge = $('input[name="charge"]').val();
+            if (project_id == '' || income_head_id == '' || income_sub_category_id == '' || charge == '') {
+                Swal.fire({
+                    title: 'Please fill all the required fields!',
+                    icon: 'error',
+                    confirmButtonColor: '#0d6efd',
+                });
+                return false;
+            } else {
+                this.submit();
+            }
         });
     </script>
 @endsection

@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Patient\Http\Requests;
+namespace Modules\Admin\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PatientRequest extends FormRequest
+class PaymentMethodRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,9 +14,7 @@ class PatientRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'contact_no' => 'required',
-            'email' => 'required',
+            //
         ];
     }
 

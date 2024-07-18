@@ -17,7 +17,8 @@ class LeaveController extends Controller
      */
     public function index()
     {
-        //
+        $leaves = Leave::with('employee')->orderBy('id', 'desc')->get();
+        return view('accounts::leaves.index', compact('leaves'));
     }
 
     /**
@@ -45,10 +46,9 @@ class LeaveController extends Controller
             } else {
                 $data['total_days'] = $days->diffInDays($request->to_date);
             }
+            $leave = Leave::create($data);
 
-            Leave::create($data);
-
-            return redirect()->route('pending-leaves')->with('success', 'Invoice created successfully');
+            return redirect()->route('pending-leaves')->with('success', 'Leave request submitted successfully');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -68,15 +68,45 @@ class LeaveController extends Controller
      */
     public function edit($id)
     {
-        return view('accounts::edit');
+        $emplyees = Employee::get();
+        $leave = Leave::find($id);
+        $employee = Employee::where('id', $leave->employee_id)->first();
+        if ($leave->leave_type == 'pay_leave') {
+            $totalLeave = $employee->pay_leave;
+        } elseif ($leave->leave_type == 'casual_leave') {
+            $totalLeave = $employee->casual_leave;
+        } elseif ($leave->leave_type == 'emergency_leave') {
+            $totalLeave = $employee->emergency_leave;
+        } elseif ($leave->leave_type == 'sick_leave') {
+            $totalLeave = $employee->sick_leave;
+        } elseif ($leave->leave_type == 'educational_leave') {
+            $totalLeave = $employee->educational_leave;
+        }
+        $usedleave = Leave::where('employee_id', $leave->employee_id)->where('status', 1)->where('leave_type', $leave->leave_type)->sum('total_days');
+        $restLeave = $totalLeave - $usedleave;
+        return view('accounts::leaves.create', compact('emplyees', 'leave', 'totalLeave', 'usedleave', 'restLeave'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id): RedirectResponse
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            $data = $request->all();
+            $days = Carbon::parse($request->from_date);
+            if ($request->from_date == $request->to_date) {
+                $data['total_days'] = 1;
+            } else {
+                $data['total_days'] = $days->diffInDays($request->to_date);
+            }
+            $leave = Leave::find($id);
+            $leave->update($data);
+
+            return redirect()->route('pending-leaves')->with('success', 'Leave request updated successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -84,7 +114,14 @@ class LeaveController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $leave = Leave::find($id);
+            $leave->delete();
+
+            return redirect()->route('leaves.index')->with('success', 'Leave request deleted successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     public function getUsedLeave(Request $request)

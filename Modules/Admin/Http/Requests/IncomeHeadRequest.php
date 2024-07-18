@@ -14,7 +14,7 @@ class IncomeHeadRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' =>'bail|required|unique:income_heads,name,'.$this->income_head,
+            // 'name' =>'required|unique:income_heads,name,'.$this->income_head, 
         ];
     }
 

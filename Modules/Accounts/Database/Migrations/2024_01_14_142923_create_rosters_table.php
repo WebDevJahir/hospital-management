@@ -15,7 +15,11 @@ return new class extends Migration
     {
         Schema::create('rosters', function (Blueprint $table) {
             $table->id();
-
+            $table->unsignedBigInteger('patient_id');
+            $table->date('start')->nullable();
+            $table->string('note')->nullable();
+            $table->string('type')->nullable();
+            $table->string('title')->nullable();
             $table->timestamps();
         });
     }

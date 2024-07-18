@@ -18,21 +18,6 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <div class="input-group mb-3">
-                                        <span class="input-group-text custom-group-text">Package*</span>
-                                        <select name="package_id" id="package_id" class="form-control" required="">
-                                            <option value="">Select Package</option>
-                                            @foreach ($packages as $package)
-                                                <option @if ($patient->package_id == $package->id) selected @endif
-                                                    value="{{ $package->id }}">
-                                                    {{ $package?->incomeSubCategory?->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <div class="input-group mb-3">
                                         <span class="input-group-text custom-group-text">Status*</span>
                                         <select class="form-control" id="status" name="status" required="">
                                             <option @if ($patient->status == 'Active') selected @endif value="Active">

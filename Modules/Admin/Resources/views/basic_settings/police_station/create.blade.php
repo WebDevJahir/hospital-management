@@ -6,6 +6,8 @@
         $form_heading = 'Add';
         $form_url = route('police-station.store');
         $form_method = 'POST';
+        $name = old('name') ? old('name') : '';
+        $district_id = old('city_id') ? old('city_id') : '';
     @endphp
 
     <div class="main-container">
@@ -19,23 +21,27 @@
                         <div class="table-container">
                             <div class="t-header">Thana</div>
                             <hr />
-                            <form action="{{ $form_url }}" method="{{ $form_method }}">
+                            <form action="{{ $form_url }}" method="{{ $form_method }}" class="policeStationForm">
                                 @csrf
                                 <div class="row gutters">
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Name</span>
-                                            <input type="text" class="form-control" placeholder="City Name"
-                                                name="name">
+                                            <span class="input-group-text custom-group-text">Name <span
+                                                    class="text-danger">*</span></span>
+                                            <input type="text" class="form-control" placeholder="Police Station Name"
+                                                name="name" value="{{ $name }}" required>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">City</span>
-                                            <select class="form-control" name="city_id">
+                                            <span class="input-group-text custom-group-text">City <span
+                                                    class="text-danger">*</span></span>
+                                            <select class="form-control" name="district_id" required>
                                                 <option value="">Select City</option>
                                                 @foreach ($districts as $district)
-                                                    <option value="{{ $district->id }}">{{ $district->name }}</option>
+                                                    <option value="{{ $district->id }}"
+                                                        @if ($district->id == $district_id) selected @endif>
+                                                        {{ $district->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -51,8 +57,8 @@
 
                             <div class="table-responsive">
                                 <table id="Example"
-                                class="table custom-table dataTable no-footer table-striped table-bordered">
-                                <thead class="table-primary"> 
+                                    class="table custom-table dataTable no-footer table-striped table-bordered">
+                                    <thead class="table-primary">
                                         <tr>
                                             <th>Name</th>
                                             <th>District</th>
@@ -143,6 +149,21 @@
             $('#Example').DataTable({
                 "order": []
             });
+        });
+
+        $('.policeStationForm').submit(function(e) {
+            e.preventDefault();
+            let name = $('input[name="name"]').val();
+            let city_id = $('select[name="city_id"]').val();
+            if (name == '' || city_id == '') {
+                Swal.fire({
+                    title: 'Please fill all the required fields!',
+                    icon: 'error',
+                    confirmButtonColor: '#0d6efd',
+                });
+            } else {
+                this.submit();
+            }
         });
     </script>
 @endsection

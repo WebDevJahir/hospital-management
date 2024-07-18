@@ -16,10 +16,11 @@ return new class extends Migration
         Schema::create('income_sub_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('income_head_id')->nullable();
-            $table->integer('project_id')->nullable();
+            $table->integer('income_head_id')->cascadeOnDelete();
+            $table->integer('project_id')->cascadeOnDelete();
             $table->double('price', 8, 2)->nullable();
             $table->tinyInteger('vat')->nullable();
+            $table->tinyInteger('vat_type')->nullable();
             $table->timestamps();
         });
     }

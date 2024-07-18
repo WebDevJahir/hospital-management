@@ -7,6 +7,9 @@
         $form_heading = !empty($doctor->id) ? 'Update' : 'Add';
         $form_url = !empty($doctor->id) ? route('doctors.update', $doctor->id) : route('doctors.store');
         $form_method = !empty($doctor->id) ? 'PUT' : 'POST';
+        $name = !empty($doctor->name) ? $doctor->name : '';
+        $status = !empty($doctor->status) ? $doctor->status : '';
+        $description = !empty($doctor->description) ? $doctor->description : '';
     @endphp
 
     <div class="main-container">
@@ -20,20 +23,23 @@
                         <div class="table-container">
                             <div class="t-header">Doctor</div>
                             <hr />
-                            <form action="{{ $form_url }}" method="{{ $form_method }}">
+                            <form action="{{ $form_url }}" method="{{ $form_method }}" class="doctorForm">
                                 @csrf
                                 <div class="row gutters">
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Name</span>
+                                            <span class="input-group-text custom-group-text">Name <span
+                                                    class="text-danger">*</span></span>
                                             <input type="text" class="form-control" placeholder="Doctor Name"
-                                                name="doctor_name">
+                                                name="name" value="{{ $is_old ? old('name') : $name }}" required>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Status</span>
-                                            <select class="form-control" name="status">
+                                            <span class="input-group-text custom-group-text">Status <span
+                                                    class="text-danger">*</span></span>
+                                            <select class="form-control" name="status"
+                                                value="{{ $is_old ? old('status') : $status }}" required>
                                                 <option selected>Select Status</option>
                                                 <option value="Active">Active</option>
                                                 <option value="Inactive">Inactive</option>
@@ -42,14 +48,16 @@
                                     </div>
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Description</span>
+                                            <span class="input-group-text custom-group-text">Description <span
+                                                    class="text-danger">*</span></span>
                                             <input type="text" class="form-control" placeholder="Description"
-                                                name="description">
+                                                name="description" value="{{ $is_old ? old('description') : $description }}"
+                                                required>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <button type="submit" class="btn btn-outline-primary">Save</button>
+                                            <button type="submit" class="btn btn-outline-primary btn-lg">Save</button>
                                         </div>
                                     </div>
                                 </div>
@@ -68,9 +76,8 @@
                                     <tbody id="incomeHeadTable">
                                         @foreach ($doctors as $doctor)
                                             <tr>
-                                                <td>{{ $doctor->doctor_name }}</td>
+                                                <td>{{ $doctor->name }}</td>
                                                 <td>{{ $doctor->status }}</td>
-                                                <td>{{ $doctor->description }}</td>
 
                                                 <td>
                                                     <div class="icon-btn">
@@ -115,7 +122,7 @@
             let doctors = @json($doctors);
             doctors.find(doctor => {
                 if (doctor.id == doctor_id) {
-                    $('input[name="doctor_name"]').val(doctor.doctor_name);
+                    $('input[name="name"]').val(doctor.name);
                     $('select[name="status"]').val(doctor.status);
                     $('input[name="description"]').val(doctor.description);
                     $('form').data('id', doctor.id);
@@ -152,6 +159,25 @@
             $('#Example').DataTable({
                 "order": []
             });
+        });
+
+        $('.doctorForm').submit(function(e) {
+            //check validation
+
+            e.preventDefault();
+            let name = $('input[name="name"]').val();
+            let status = $('select[name="status"]').val();
+            let description = $('input[name="description"]').val();
+            if (name == '' || status == '' || description == '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'All fields are required!',
+                });
+                return false;
+            } else {
+                this.submit();
+            }
         });
     </script>
 @endsection

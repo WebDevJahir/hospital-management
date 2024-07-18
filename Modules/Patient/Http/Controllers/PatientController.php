@@ -40,19 +40,9 @@ class PatientController extends Controller
      */
     public function create()
     {
-        $max_reg_no = Patient::latest()->value('registration_no');
-
         $districts = District::latest()->get();
         $police_stations = PoliceStation::latest()->get();
-
-        $package = Package::with('incomeSubCategory')
-            ->whereHas('incomeSubCategory', function ($query) {
-                $query->where('name', 'Free');
-            })
-            ->first();
-        $reg_no = $max_reg_no ? $max_reg_no + 1 : Date('Y') . '-' . '01';
-
-        return view('patient::patient.modals.modal', compact('reg_no', 'districts', 'police_stations', 'package'));
+        return view('patient::patient.create', compact('districts', 'police_stations'));
     }
 
     /**
@@ -62,13 +52,21 @@ class PatientController extends Controller
      */
     public function store(PatientRequest $request)
     {
-        $reg_no = Patient::max('registration_no') ? Patient::max('registration_no') + 1 : Date('Y') . '-' . '01';
+        $max_reg_no = Patient::latest()->first()->registration_no;
+
+        if ($max_reg_no == null) {
+            $reg_no = Date('Y') . '-' . '01';
+        } else {
+            $registration_array = explode('-', $max_reg_no);
+            $reg_no = $registration_array[0] . '-' . ($registration_array[1] + 1);
+        }
 
         $data = $request->all();
         $data['registration_no'] = $reg_no;
 
         //data for user table
         $data['password'] =  Hash::make($data['password']);
+        $data['text_password'] = $data['password'];
         try {
             DB::beginTransaction();
             $user = User::create($data);
@@ -97,7 +95,7 @@ class PatientController extends Controller
                 ];
                 $sent = SendMail::handel($patient->email, $messageData);
             }
-            return redirect()->route('patient.index')->with('success', 'Patient created successfully');
+            return response()->json(['status' => 'created'], 200);
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->withInput()->withErrors($e->getMessage());
@@ -121,11 +119,10 @@ class PatientController extends Controller
      */
     public function edit(Patient $patient)
     {
-        $reg_no = Patient::latest()->value('registration_no');
         $districts = District::latest()->get();
-        $police_stations = PoliceStation::whereDistricId($patient->district_id)->latest()->get();
+        $police_stations = PoliceStation::whereDistrictId($patient->district_id)->latest()->get();
 
-        return view('patient::patient.modals.modal', compact('patient', 'reg_no', 'districts', 'police_stations'));
+        return view('patient::patient.create', compact('patient', 'districts', 'police_stations'));
     }
 
     /**
@@ -136,19 +133,19 @@ class PatientController extends Controller
      */
     public function update(PatientRequest $request, Patient $patient)
     {
-        $data = $request->except('_token', '_method', 'confirm_password', 'email', 'package');
+        $data = $request->except('_token', '_method', 'confirm_password', 'email');
         //data for user table
         $userData = $request->only(['name', 'email', 'contact_no']);
         $userData['password'] =  Hash::make($data['password']);
+        $userData['text_password'] = $data['password'];
         try {
             DB::beginTransaction();
             $user = User::find($patient->user_id);
             $user->update($userData);
-            //patient data
             $patient->update($data);
             DB::commit();
 
-            return redirect()->route('patient.index')->with('success', 'Patient updated successfully');
+            return response()->json(['status' => 'updated'], 200);
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->withInput()->withErrors($e->getMessage());
@@ -162,84 +159,90 @@ class PatientController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $patient = Patient::find($id);
+        $user = User::find($patient->user_id);
+        $user->delete();
+        $patient->delete();
+        return redirect()->route('patients.index')->with('success', 'Patient deleted successfully');
     }
 
     public function planAndStatusEdit()
     {
         $patient = Patient::find(request()->id);
-        $packages = Package::latest()->get();
-        return view('patient::patient.modals.plan_modal', compact('patient', 'packages'));
+        return view('patient::patient.modals.plan_modal', compact('patient'));
     }
 
     public function planAndStatusUpdate(Request $request, $id)
     {
         $patient = Patient::with('package')->findOrFail($request->id);
-        $package = Package::find($request->package_id);
         $now = Carbon::now();
 
-        $invoice_no = Invoice::max('invoice_no');
-        if ($invoice_no) {
-            $invoice_array = explode('-', $invoice_no);
-            $invoice_no = $invoice_array[0] . '-' . ($invoice_array[1] + 1);
-        } else {
-            $invoice_no = Date('Y') . '-' . '01';
-        }
+        // $invoice_no = Invoice::max('invoice_no');
+        // if ($invoice_no) {
+        //     $invoice_array = explode('-', $invoice_no);
+        //     $invoice_no = $invoice_array[0] . '-' . ($invoice_array[1] + 1);
+        // } else {
+        //     $invoice_no = Date('Y') . '-' . '01';
+        // }
 
-        $patientData = [
-            'package_id' => $request->package_id,
-            'last_payment_date' => null,
-            'due_payment_date' => null,
-            'reminder_date' => null,
-            'status' => $request->status,
-        ];
+        // $patientData = [
+        //     'package_id' => $request->package_id,
+        //     'last_payment_date' => null,
+        //     'due_payment_date' => null,
+        //     'reminder_date' => null,
+        //     'status' => $request->status,
+        // ];
 
-        if ($request->package_id != '13' && $request->status != 'Died') {
-            $dueDate = $now->addDays($package->duration);
-            $reminderDate = $dueDate->copy()->subDays(3);
+        // if ($request->package_id != '13' && $request->status != 'Died') {
+        //     $dueDate = $now->addDays($package->duration);
+        //     $reminderDate = $dueDate->copy()->subDays(3);
 
-            $patientData['last_payment_date'] = $package->duration === 'continue' ? 'continue' : $now->toDateString();
-            $patientData['due_payment_date'] = $package->duration === 'continue' ? 'continue' : $dueDate->toDateString();
-            $patientData['reminder_date'] = $package->duration === 'continue' ? 'continue' : $reminderDate->toDateString();
+        //     $patientData['last_payment_date'] = $package->duration === 'continue' ? 'continue' : $now->toDateString();
+        //     $patientData['due_payment_date'] = $package->duration === 'continue' ? 'continue' : $dueDate->toDateString();
+        //     $patientData['reminder_date'] = $package->duration === 'continue' ? 'continue' : $reminderDate->toDateString();
 
-            $invoiceData = [
-                'patient_id' => $patient->id,
-                'invoice_date' => $now->toDateString(),
-                'invoice_no' => $invoice_no++,
-                'invoice_type' => 'package',
-                'sub_total' => $package->price,
-                //'discount' => 0,
-                //'delivery_method' => null,
-                //'advance' => 0,
-                'city_id' => $patient->city_id,
-                //'collection_charge' => 0,
-                //'delivery_charge' => 0,
-                //'service_charge' => 0,
-                'due' => $package->price,
-                'total' => $package->price,
-                'project_id' => $package->id,
-                'payment_status' => 'due',
-            ];
+        //     $invoiceData = [
+        //         'patient_id' => $patient->id,
+        //         'invoice_date' => $now->toDateString(),
+        //         'invoice_no' => $invoice_no++,
+        //         'invoice_type' => 'package',
+        //         'sub_total' => $package->price,
+        //         //'discount' => 0,
+        //         //'delivery_method' => null,
+        //         //'advance' => 0,
+        //         'city_id' => $patient->city_id,
+        //         //'collection_charge' => 0,
+        //         //'delivery_charge' => 0,
+        //         //'service_charge' => 0,
+        //         'due' => $package->price,
+        //         'total' => $package->price,
+        //         'project_id' => $package->id,
+        //         'payment_status' => 'due',
+        //     ];
 
-            $invoiceDetailData = [
-                'project_id' => $package->project_id,
-                'income_head_id' => $package->income_head_id,
-                'income_subcategory_id' => $package->income_sub_category_id,
-                'quantity' => 1,
-                'price' => $package->price,
-                'total' => $package->price,
-                'invoice_date' => $now->toDateString(),
-            ];
-        }
+        //     $invoiceDetailData = [
+        //         'project_id' => $package->project_id,
+        //         'income_head_id' => $package->income_head_id,
+        //         'income_subcategory_id' => $package->income_sub_category_id,
+        //         'quantity' => 1,
+        //         'price' => $package->price,
+        //         'total' => $package->price,
+        //         'invoice_date' => $now->toDateString(),
+        //     ];
+        // }
 
         DB::beginTransaction();
-        $patient->update($patientData);
+        $patient->update(
+            [
+                'status' => $request->status,
+            ]
+        );
         // dd($invoiceDetailData);
-        if (isset($invoiceData)) {
-            $invoice = Invoice::create($invoiceData);
-            $invoiceDetailData['invoice_id'] = $invoice->id;
-            InvoiceLine::create($invoiceDetailData);
-        }
+        // if (isset($invoiceData)) {
+        //     $invoice = Invoice::create($invoiceData);
+        //     $invoiceDetailData['invoice_id'] = $invoice->id;
+        //     InvoiceLine::create($invoiceDetailData);
+        // }
         DB::commit();
         return redirect()->route('patients.index')->with('success', 'Patient plan and status updated successfully');
     }

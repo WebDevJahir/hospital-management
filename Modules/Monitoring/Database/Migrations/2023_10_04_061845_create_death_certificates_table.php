@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('death_certificates', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('patient_id')->nullable();
+            $table->unsignedBigInteger('patient_id')->cascadeOnDelete();
             $table->date('issue_date')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->string('nationality')->nullable();

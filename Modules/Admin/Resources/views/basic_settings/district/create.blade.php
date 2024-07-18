@@ -6,6 +6,8 @@
         $form_heading = 'Add';
         $form_url = route('district.store');
         $form_method = 'POST';
+        $is_old = old('name') ? true : false;
+        $name = $is_old ? old('name') : '';
     @endphp
 
     <div class="main-container">
@@ -19,14 +21,15 @@
                         <div class="table-container">
                             <div class="t-header">District</div>
                             <hr />
-                            <form action="{{ $form_url }}" method="{{ $form_method }}">
+                            <form action="{{ $form_url }}" method="{{ $form_method }}" class="districtForm">
                                 @csrf
                                 <div class="row gutters">
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Name</span>
-                                            <input type="text" class="form-control" placeholder="City Name"
-                                                name="name">
+                                            <span class="input-group-text custom-group-text">Name <span
+                                                    class="text-danger">*</span></span>
+                                            <input type="text" class="form-control" placeholder="District Name"
+                                                name="name" value="{{ $name }}" required>
                                         </div>
                                     </div>
                                     <div class="col-4">
@@ -128,6 +131,21 @@
             $('#Example').DataTable({
                 "order": []
             });
+        });
+
+        $('.districtForm').submit(function(e) {
+            e.preventDefault();
+            let name = $('input[name="name"]').val();
+            if (name == '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Name is required!',
+                });
+                return false;
+            } else {
+                this.submit();
+            }
         });
     </script>
 @endsection

@@ -5,11 +5,10 @@ namespace Modules\Admin\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Admin\Entities\IncomeHead;
-use Modules\Admin\Entities\Project;
-use Modules\Admin\Http\Requests\IncomeHeadRequest;
+use Modules\Accounts\Entities\PaymentMethod;
+use Modules\Accounts\Http\Requests\PaymentMethodRequest;
 
-class IncomeHeadController extends Controller
+class PaymentMethodController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,9 +16,8 @@ class IncomeHeadController extends Controller
      */
     public function index()
     {
-        $income_heads = IncomeHead::all();
-        $projects = Project::all();
-        return view('admin::finance_settings.income_head.create', compact('income_heads', 'projects'));
+        $payment_methods = PaymentMethod::all();
+        return view('admin::finance_settings.payment_method.index', compact('payment_methods'));
     }
 
     /**
@@ -36,11 +34,11 @@ class IncomeHeadController extends Controller
      * @param Request $request
      * @return Renderable
      */
-    public function store(IncomeHeadRequest $request)
+    public function store(Request $request)
     {
         $data = $request->all();
-        IncomeHead::create($data);
-        return redirect()->back()->with('success', 'Income Head Created Successfully');
+        PaymentMethod::create($data);
+        return redirect()->back()->with('success', 'Payment Method Created Successfully');
     }
 
     /**
@@ -60,7 +58,6 @@ class IncomeHeadController extends Controller
      */
     public function edit($id)
     {
-        return view('admin::edit');
     }
 
     /**
@@ -69,11 +66,11 @@ class IncomeHeadController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(IncomeHead $income_head, IncomeHeadRequest $request)
+    public function update(PaymentMethod $payment_method, PaymentMethodRequest $request)
     {
-        $data = $request->except('_token', '_method');
-        $income_head->update($data);
-        return redirect()->back()->with('success', 'Income Head Updated Successfully');
+        $data = $request->all();
+        $payment_method->update($data);
+        return redirect()->back()->with('success', 'Payment Method Updated Successfully');
     }
 
     /**
@@ -81,9 +78,9 @@ class IncomeHeadController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function destroy(IncomeHead $income_head)
+    public function destroy(PaymentMethod $payment_method)
     {
-        $income_head->delete();
-        return redirect()->back()->with('success', 'Income Head Deleted Successfully');
+        $payment_method->delete();
+        return redirect()->back()->with('success', 'Payment Method Deleted Successfully');
     }
 }

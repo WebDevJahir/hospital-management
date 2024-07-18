@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('next_plans', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('patient_id');
+            $table->unsignedBigInteger('patient_id')->cascadeOnDelete();
             $table->string('plan');
             $table->string('notification_date');
             $table->timestamps();

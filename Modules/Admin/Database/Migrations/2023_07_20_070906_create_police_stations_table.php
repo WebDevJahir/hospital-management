@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('police_stations', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->integer("city_id");
+            $table->integer("district_id");
             $table->timestamps();
         });
     }

@@ -2,33 +2,8 @@
 @section('title', 'Expense Head - Hospice Bangladesh')
 @section('main_content')
     @parent
-    <style>
-        section {
-            border: 2px solid gray;
-            padding: 10px;
-            border-radius: 10px;
-        }
-
-        .legend {
-            margin-top: -22px;
-            margin-bottom: 10px;
-        }
-
-        .legend-title {
-            background-color: white;
-            padding: 0 10px;
-            margin-left: 10px;
-            font-size: 15px;
-            font-weight: bold;
-        }
-
-        .input-group-text {
-            width: 130px;
-        }
-    </style>
-
     <div class="main-container">
-        <!-- Page employeeer start -->
+        <!-- Page header start -->
         <div class="content-wrapper">
             <!-- Fixed body scroll start -->
             <div class="fixedBodyScroll">
@@ -36,12 +11,25 @@
                 <div class="row gutters">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="table-container">
-                            <div class="t-employeeer">Employee list
-                                <button type="button" class="btn-info btn-rounded" onclick="editStaff()">Add Employee</button>
+                            <div class="t-header mb-3">
+                                <div class="th-title">
+                                    <div style="">
+                                        <div class="d-flex justify-content-between">
+                                            <span style="margin-top: 5px;">Employee List</span>
+                                            <span class="th-count">
+                                                <a href="{{ route('employee.create') }}"
+                                                    class="btn btn-sm btn-outline-primary" style="background:inherit;"
+                                                    title="Add Employee"><i class="fas fa-plus"
+                                                        style="margin-right: 5px;"></i>Add New</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <hr />
                             <div class="table-responsive">
-                                <table id="Example" class="table custom-table">
+
+                                <table id="Example"
+                                    class="table custom-table dataTable no-footer table-striped table-bordered">
                                     <thead>
                                         <tr>
                                             <th>Name</th>
@@ -78,21 +66,24 @@
                                                     {{ $employee->role->name ?? '' }}
                                                 </td>
                                                 <td>
-                                                    {{-- @if (in_array(13, $permission)) --}}
-                                                    <button class="btn btn-sm" style="background:inherit" title="Edit"
-                                                        onclick="editStaff({{ $employee->id }})" type="submit"><i
-                                                            class="fas fa-edit text-success"></i></button>|
-                                                    {{-- @endif --}}
-                                                    {{-- @if (in_array(14, $permission)) --}}
-                                                    <form action="{{ route('employee.destroy', $employee->id) }}"
-                                                        method="POST" style="display: inline-block">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button class="btn btn-sm" style="background:inherit" title="Delete"
-                                                            onclick="deleteEmployee(event)" type="submit"><i
-                                                                class="fas fa-trash text-danger"></i></button>
-                                                    </form>
-                                                    {{-- @endif --}}
+                                                    <div class="icon-btn">
+                                                        <nobr>
+                                                            <a href="{{ route('employee.edit', $employee->id) }}"
+                                                                class="btn btn-sm btn-outline-info"
+                                                                style="background:inherit;" title="Schedule"><i
+                                                                    class="fas fa-edit text-info"></i></a>
+                                                            <form action="{{ route('employee.destroy', $employee->id) }}"
+                                                                method="POST" style="display: inline-block;">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                                    style="background:inherit;" title="Delete"
+                                                                    onclick="deleteEmployee(event)">
+                                                                    <i class="fas fa-trash text-danger"></i>
+                                                                </button>
+                                                            </form>
+                                                        </nobr>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -110,31 +101,13 @@
         <!-- Content wrapper end -->
     </div>
 
+
     <div class="staffModal"></div>
 @endsection
 
 
 @section('script')
     <script type="text/javascript">
-        // function addStaff() {
-        //     $('#staffModal').modal('show');
-        //     $('#staffModal').closest('.modal-body').find('input').val('');
-        // }
-
-        function editStaff(id) {
-            var url = id ? `/admin/employee/${id}/edit` : "{{ route('employee.create') }}";
-            url = url.replace(':id', id);
-            //get data by ajax
-            $.ajax({
-                url: url,
-                type: "GET",
-                success: function(response) {
-                    $('.staffModal').html(response);
-                    $('#staffModal').modal('show');
-                }
-            });
-        }
-
         function deleteEmployee(e) {
             e.preventDefault();
             Swal.fire({

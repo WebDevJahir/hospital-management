@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('current_problems', function (Blueprint $table) {
             $table->id();
-
+            $table->unsignedBigInteger('patient_id')->cascadeOnDelete();
+            $table->string('problem');
             $table->timestamps();
         });
     }

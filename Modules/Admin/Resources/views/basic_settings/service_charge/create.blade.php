@@ -6,6 +6,10 @@
         $form_heading = 'Add';
         $form_url = route('service-charge.store');
         $form_method = 'POST';
+        $is_old = old('district_id') ? true : false;
+        $district_id = $is_old ? old('district_id') : '';
+        $police_station_id = $is_old ? old('police_station_id') : '';
+        $charge = $is_old ? old('charge') : '';
     @endphp
 
     <div class="main-container">
@@ -24,8 +28,10 @@
                                 <div class="row gutters">
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">District</span>
-                                            <select class="form-control select2" name="city_id" id="city_id">
+                                            <span class="input-group-text custom-group-text">District <span
+                                                    class="text-danger">*</span></span>
+                                            <select class="form-control select2" name="district_id" id="district_id"
+                                                required>
                                                 <option value="">Select District</option>
                                                 @foreach ($districts as $district)
                                                     <option value="{{ $district->id }}">{{ $district->name }}</option>
@@ -35,16 +41,19 @@
                                     </div>
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Police Station</span>
-                                            <select class="form-control" name="police_station_id">
+                                            <span class="input-group-text custom-group-text">Police Station <span
+                                                    class="text-danger">*</span></span>
+                                            <select class="form-control" name="police_station_id" required>
                                                 <option value="">Select Police Station</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-3">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Charge</span>
-                                            <input type="text" class="form-control" placeholder="charge" name="charge">
+                                            <span class="input-group-text custom-group-text">Charge <span
+                                                    class="text-danger">*</span></span>
+                                            <input type="text" class="form-control" placeholder="charge" name="charge"
+                                                value="{{ $charge }}" required>
                                         </div>
                                     </div>
                                     <div class="col-1">
@@ -182,6 +191,21 @@
             $('#Example').DataTable({
                 "order": []
             });
+        });
+
+        $('.districtForm').submit(function(e) {
+            e.preventDefault();
+            let name = $('input[name="name"]').val();
+            if (name == '') {
+                Swal.fire({
+                    title: 'Please fill all the required fields!',
+                    icon: 'error',
+                    confirmButtonColor: '#0d6efd',
+                });
+                return false;
+            } else {
+                this.submit();
+            }
         });
     </script>
 @endsection

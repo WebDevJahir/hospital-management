@@ -13,9 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('roster_staff', function (Blueprint $table) {
+        Schema::create('roster_staffs', function (Blueprint $table) {
             $table->id();
-
+            $table->unsignedBigInteger('roster_id');
+            $table->unsignedBigInteger('employee_id');
+            $table->date('start')->nullable();
+            $table->date('type')->nullable();
+            $table->string('on_duty')->nullable();
+            $table->string('off_duty')->nullable();
             $table->timestamps();
         });
     }

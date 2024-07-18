@@ -6,6 +6,9 @@
         $form_heading = 'Add';
         $form_url = route('delivery-charge.store');
         $form_method = 'POST';
+        $is_old = old('name') ? true : false;
+        $name = $is_old ? old('name') : '';
+        $police_station_id = $is_old ? old('police_station_id') : '';
     @endphp
 
     <div class="main-container">
@@ -19,12 +22,13 @@
                         <div class="table-container">
                             <div class="t-header">Delivery Charge</div>
                             <hr />
-                            <form action="{{ $form_url }}" method="{{ $form_method }}">
+                            <form action="{{ $form_url }}" method="{{ $form_method }}" class="deliveryChargeForm">
                                 @csrf
                                 <div class="row gutters">
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">City</span>
+                                            <span class="input-group-text custom-group-text">City <span
+                                                    class="text-danger">*</span></span>
                                             <select class="form-control" name="city_id" id="city_id">
                                                 <option value="">Select City</option>
                                                 @foreach ($cities as $city)
@@ -35,7 +39,8 @@
                                     </div>
                                     <div class="col-4">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Police Station</span>
+                                            <span class="input-group-text custom-group-text">Police Station <span
+                                                    class="text-danger">*</span></span>
                                             <select class="form-control" name="police_station_id">
                                                 <option value="">Select Police Station</option>
                                             </select>
@@ -43,7 +48,8 @@
                                     </div>
                                     <div class="col-2">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text custom-group-text">Charge</span>
+                                            <span class="input-group-text custom-group-text">Charge <span
+                                                    class="text-danger">*</span></span>
                                             <input type="text" class="form-control" placeholder="charge" name="charge">
                                         </div>
                                     </div>
@@ -181,6 +187,24 @@
             $('#Example').DataTable({
                 "order": []
             });
+        });
+
+
+        $('.deliveryChargeForm').submit(function(e) {
+            e.preventDefault();
+            let city_id = $('select[name="city_id"]').val();
+            let police_station_id = $('select[name="police_station_id"]').val();
+            let charge = $('input[name="charge"]').val();
+            if (city_id == '' || police_station_id == '' || charge == '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'All fields are required!',
+                });
+                return false;
+            } else {
+                this.submit();
+            }
         });
     </script>
 @endsection
