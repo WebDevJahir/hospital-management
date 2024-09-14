@@ -14,7 +14,7 @@ class PatientPortalController extends Controller
      */
     public function index()
     {
-        return view('patientportal::layouts.master');
+        return view('patientportal::master');
     }
 
     /**

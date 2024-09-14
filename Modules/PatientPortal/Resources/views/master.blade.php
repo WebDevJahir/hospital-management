@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Portal Dashboard</title>
     <link rel="stylesheet" href="styles.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    {{-- <link rel="stylesheet" href="{{ asset('Modules/PatientPortal/Resources/assets/css/style.css') }}"> --}}
     <style>
         /* General Reset */
         * {
@@ -177,9 +179,6 @@
             .info-box:hover {
                 transform: none;
             }
-
-
-
         }
 
         .close-btn {
@@ -254,40 +253,10 @@
 
 <body>
     <!-- Top Bar -->
-    <header class="top-bar">
-        <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
-        <h1>Patient Portal</h1>
-        <div class="top-bar-right">
-            <div class="notifications" id="notifications">
-                <i class="fas fa-bell"></i>
-                <!-- Notification Dropdown -->
-                <div class="dropdown" id="notification-dropdown">
-                    <ul>
-                        <li><a href="#">New prescription added</a></li>
-                        <li><a href="#">New investigation report available</a></li>
-                        <li><a href="#">Follow-up scheduled</a></li>
-                        <!-- Add more notification items here -->
-                    </ul>
-                </div>
-            </div>
-            <div class="logout"><button class="btn-logout">Logout</button></div>
-        </div>
-    </header>
+    @include('patientportal::layouts.header')
 
     <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="close-btn" id="close-btn"><i class="fas fa-times"></i></div>
-        <nav>
-            <ul>
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Prescriptions</a></li>
-                <li><a href="#">Medicines</a></li>
-                <li><a href="#">Investigations</a></li>
-                <li><a href="#">Follow Ups</a></li>
-                <li><a href="#">Plan</a></li>
-            </ul>
-        </nav>
-    </aside>
+    @include('patientportal::layouts.sidebar')
 
     <!-- Main Content -->
     <main class="content">
@@ -315,50 +284,7 @@
         </section>
     </main>
 
-    <!-- Bottom Toolbar (for Mobile) -->
-    <footer class="bottom-toolbar">
-        <div class="tool"><i class="fas fa-home"></i>
-            <p>Home</p>
-        </div>
-        <div class="tool"><i class="fas fa-file-medical"></i>
-            <p>Prescriptions</p>
-        </div>
-        <div class="tool"><i class="fas fa-pills"></i>
-            <p>Medicines</p>
-        </div>
-        <div class="tool"><i class="fas fa-calendar-check"></i>
-            <p>Follow Ups</p>
-        </div>
-    </footer>
-    <script>
-
-        const hamburger = document.getElementById('hamburger');
-        const sidebar = document.getElementById('sidebar');
-        const closeBtn = document.getElementById('close-btn');
-
-        hamburger.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-        });
-
-        closeBtn.addEventListener('click', () => {
-            sidebar.classList.remove('active');
-        });
-        const notificationsIcon = document.getElementById('notifications');
-        const notificationDropdown = document.getElementById('notification-dropdown');
-
-        // Toggle the dropdown on clicking the notification icon
-        notificationsIcon.addEventListener('click', (event) => {
-            event.stopPropagation(); // Stop event from propagating to window
-            notificationDropdown.classList.toggle('active');
-        });
-
-        // Close the dropdown if clicking outside the notification area
-        window.addEventListener('click', (event) => {
-            if (!notificationsIcon.contains(event.target)) {
-                notificationDropdown.classList.remove('active');
-            }
-        });
-    </script>
+    @include('patientportal::layouts.footer')
 
 </body>
 
