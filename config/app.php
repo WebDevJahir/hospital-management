@@ -169,6 +169,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         \Chatify\ChatifyServiceProvider::class,
+        InstallerErag\InstallerServiceProvider::class,
+        App\Providers\ExtendedInstallerServiceProvider::class,
 
     ])->toArray(),
 
