@@ -5,6 +5,7 @@ namespace Modules\Monitoring\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Monitoring\Entities\Medicine;
 
 class MedicineController extends Controller
 {
@@ -14,7 +15,8 @@ class MedicineController extends Controller
      */
     public function index()
     {
-        return view('monitoring::index');
+        $medicines = Medicine::all();
+        return view('monitoring::prescription.medicine.create', compact('medicines'));
     }
 
     /**
@@ -23,7 +25,8 @@ class MedicineController extends Controller
      */
     public function create()
     {
-        return view('monitoring::create');
+        $medicines = Medicine::all();
+        return view('monitoring::prescription.medicine.create', compact('medicines'));
     }
 
     /**
@@ -33,7 +36,9 @@ class MedicineController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        Medicine::create($data);
+        return redirect()->back()->with('success', 'Medicine Created Successfully');
     }
 
     /**
@@ -53,7 +58,8 @@ class MedicineController extends Controller
      */
     public function edit($id)
     {
-        return view('monitoring::edit');
+        $medicine = Medicine::find($id);
+        return view('monitoring::prescription.medicine.edit', compact('medicine'));
     }
 
     /**
@@ -64,7 +70,10 @@ class MedicineController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+        $medicine = Medicine::find($id);
+        $medicine->update($data);
+        return redirect()->back()->with('success', 'Medicine Updated Successfully');
     }
 
     /**
@@ -74,6 +83,7 @@ class MedicineController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Medicine::find($id)->delete();
+        return redirect()->back()->with('success', 'Medicine Deleted Successfully');
     }
 }

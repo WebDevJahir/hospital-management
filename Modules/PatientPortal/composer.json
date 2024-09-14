@@ -1,0 +1,31 @@
+{
+    "name": "nwidart/patientportal",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\PatientPortal\\": "",
+            "Modules\\PatientPortal\\App\\": "app/",
+            "Modules\\PatientPortal\\Database\\Factories\\": "database/factories/",
+            "Modules\\PatientPortal\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\PatientPortal\\Tests\\": "tests/"
+        }
+    }
+}

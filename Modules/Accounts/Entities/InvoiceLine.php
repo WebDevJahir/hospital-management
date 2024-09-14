@@ -23,4 +23,9 @@ class InvoiceLine extends Model
         'note',
         'status'
     ];
+
+    public function scopeInvoiceLineMonthAndYearWise($query, $month, $year)
+    {
+        return $query->whereMonth('invoice_date', $month)->whereYear('invoice_date', $year);
+    }
 }

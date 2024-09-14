@@ -18,7 +18,7 @@ use Modules\Monitoring\Http\Controllers\PainMonitoringController;
 use Modules\Monitoring\Http\Controllers\WoundManagementController;
 use Modules\Monitoring\Http\Controllers\PsychoAssesmentController;
 use Modules\Monitoring\Http\Controllers\PsychologicalStatusesController;
-
+use Modules\Monitoring\Http\Controllers\MedicineController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -46,6 +46,7 @@ Route::prefix('monitoring')->group(function () {
         'pain-monitoring' => PainMonitoringController::class,
         'wound-management' => WoundManagementController::class,
         'psychological-status' => PsychologicalStatusesController::class,
+        'medicines' => MedicineController::class,
     ]);
     Route::get('prescription/{patient}/create', [PrescriptionController::class, 'create'])->name('prescription.create');
     Route::get('get-investigation', [PrescriptionController::class, 'getInvestigation'])->name('get-investigation');

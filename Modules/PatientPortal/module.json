@@ -1,0 +1,11 @@
+{
+    "name": "PatientPortal",
+    "alias": "patientportal",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\PatientPortal\\Providers\\PatientPortalServiceProvider"
+    ],
+    "files": []
+}

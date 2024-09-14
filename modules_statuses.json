@@ -5,5 +5,6 @@
     "Lab": true,
     "Accounts": true,
     "Report": true,
-    "Communication": true
+    "Communication": true,
+    "PatientPortal": true
 }
